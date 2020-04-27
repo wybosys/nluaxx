@@ -1027,6 +1027,10 @@ bool Object::has(string const &name) const {
     return true;
 }
 
+bool Object::isnull() const {
+    return !d_ptr->L || !d_ptr->id || d_ptr->name.empty();
+}
+
 return_type Object::invoke(string const &name, args_type const &args) {
     auto L = d_ptr->L;
     NLUA_AUTOSTACK(L);

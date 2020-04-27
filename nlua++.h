@@ -328,6 +328,9 @@ public:
     // 是否存在
     bool has(string const &) const;
 
+    // 是否为空
+    bool isnull() const;
+
     // 执行函数
     return_type invoke(string const &name, args_type const &);
 
