@@ -75,6 +75,7 @@ TEST (test1) {
     clz->add("done", [=](self_type &self) -> return_type {
                 CHECK_EQUAL(self->get("a")->toInteger(), 123);
                 CHECK_EQUAL(self->invoke("proc", 123)->toInteger(), 123);
+                CHECK_EQUAL(self->has("xxxxxxxx"), false);
         return nullptr;
     });
 

@@ -965,39 +965,6 @@ self_type Context::global(string const &name) {
     return r;
 }
 
-return_type Object::invoke(string const &name, args_type const &args) {
-    auto L = d_ptr->L;
-    NLUA_AUTOSTACK(L);
-
-    lua_pushcfunction(L, ContextPrivate::Traceback);
-    int tbid = lua_gettop(L);
-
-    if (d_ptr->id) {
-        // 是局部变量
-        lua_getfield(L, d_ptr->id, name.c_str());
-        lua_pushvalue(L, d_ptr->id);
-    } else {
-        // 获得全局变量
-        lua_getglobal(L, d_ptr->name.c_str());
-        int selfid = lua_gettop(L);
-
-        // 获得的函数
-        lua_getfield(L, -1, name.c_str());
-
-        // push self
-        lua_pushvalue(L, selfid);
-    }
-
-    for (auto &e:args) {
-        push(e, L);
-    }
-
-    int s = lua_pcall(L, args.size() + 1, 1, tbid);
-    if (LUA_OK != s)
-        return nullptr;
-    return at(L, -1);
-}
-
 void Object::setfor(Object &r) const {
     auto L = d_ptr->L;
     NLUA_AUTOSTACK(L);
@@ -1034,6 +1001,69 @@ void Object::setfor(Object &r) const {
         // remove value, keep key for next iterator
         // lua_pop(L, 1);
     }
+}
+
+bool Object::has(string const &name) const {
+    auto L = d_ptr->L;
+    NLUA_AUTOSTACK(L);
+
+    if (d_ptr->id) {
+        // 是局部变量
+        lua_getfield(L, d_ptr->id, name.c_str());
+        if (lua_isnil(L, -1))
+            return false;
+    } else {
+        // 获得全局变量
+        lua_getglobal(L, d_ptr->name.c_str());
+        if (lua_isnil(L, -1))
+            return false;
+
+        // 获得的函数
+        lua_getfield(L, -1, name.c_str());
+        if (lua_isnil(L, -1))
+            return false;
+    }
+
+    return true;
+}
+
+return_type Object::invoke(string const &name, args_type const &args) {
+    auto L = d_ptr->L;
+    NLUA_AUTOSTACK(L);
+
+    lua_pushcfunction(L, ContextPrivate::Traceback);
+    int tbid = lua_gettop(L);
+
+    if (d_ptr->id) {
+        // 是局部变量
+        lua_getfield(L, d_ptr->id, name.c_str());
+        if (lua_isnil(L, -1))
+            return nullptr;
+        lua_pushvalue(L, d_ptr->id);
+    } else {
+        // 获得全局变量
+        lua_getglobal(L, d_ptr->name.c_str());
+        if (lua_isnil(L, -1))
+            return nullptr;
+        int selfid = lua_gettop(L);
+
+        // 获得的函数
+        lua_getfield(L, -1, name.c_str());
+        if (lua_isnil(L, -1))
+            return nullptr;
+
+        // push self
+        lua_pushvalue(L, selfid);
+    }
+
+    for (auto &e:args) {
+        push(e, L);
+    }
+
+    int s = lua_pcall(L, args.size() + 1, 1, tbid);
+    if (LUA_OK != s)
+        return nullptr;
+    return at(L, -1);
 }
 
 return_type Object::invoke(string const &name) {

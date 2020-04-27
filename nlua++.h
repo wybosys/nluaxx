@@ -325,6 +325,9 @@ public:
     // 浅层复制
     void setfor(Object &) const;
 
+    // 是否存在
+    bool has(string const &) const;
+
     // 执行函数
     return_type invoke(string const &name, args_type const &);
 
