@@ -89,9 +89,17 @@ public:
         return _s.c_str();
     }
 
+    inline bool empty() const {
+        return _s.empty();
+    }
+
     path operator+(string const &) const;
 
     path &operator+=(string const &);
+
+    inline bool operator==(path const &r) const {
+        return _s == r._s;
+    }
 
 private:
 

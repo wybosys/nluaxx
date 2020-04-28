@@ -2,6 +2,7 @@
 #include "nlua++.h"
 #include "liblua.h"
 #include "value.h"
+#include "string.h"
 #include <atomic>
 
 NLUA_BEGIN
@@ -31,7 +32,84 @@ struct ContextPrivate {
         return 0;
     }
 
+    path find_file(path const &file) {
+        if (path::isfile(file))
+            return file;
+
+        if (package_paths.empty()) {
+            update_package_paths(nullptr);
+        }
+
+        for (auto e:package_paths) {
+            e = e + "/" + file;
+            if (path::isfile(e))
+                return e;
+        }
+        return path();
+    }
+
+    void update_package_paths(::std::vector<string> const *curs) {
+        if (curs == nullptr) {
+            NLUA_AUTOSTACK(L);
+
+            lua_getglobal(L, "package");
+            int pkgid = lua_gettop(L);
+
+            lua_getfield(L, -1, "path");
+            string cur = lua_tostring(L, -1);
+            auto t = explode(cur, ";");
+            update_package_paths(&t);
+            return;
+        }
+
+        package_paths.clear();
+        for (auto cur: *curs) {
+            if (endwith(cur, "?.lua")) {
+                cur = cur.substr(0, cur.length() - 6);
+            } else if (endwith(cur, "?/init.lua")) {
+                cur = cur.substr(0, cur.length() - 11);
+            }
+            path c = path::absolute(cur);
+            if (path::isdirectory(c)) {
+                if (::std::find(package_paths.begin(), package_paths.end(), c) == package_paths.end()) {
+                    package_paths.emplace_back(c);
+                    // cout << "package path: " << c << endl;
+                }
+            }
+        }
+    }
+
+    void update_cpackage_paths(::std::vector<string> const *curs) {
+        if (curs == nullptr) {
+            NLUA_AUTOSTACK(L);
+
+            lua_getglobal(L, "package");
+            int pkgid = lua_gettop(L);
+
+            lua_getfield(L, -1, "cpath");
+            string cur = lua_tostring(L, -1);
+            auto t = explode(cur, ";");
+            update_cpackage_paths(&t);
+            return;
+        }
+
+        cpackage_paths.clear();
+        for (auto cur: *curs) {
+            if (endwith(cur, "?.so")) {
+                cur = cur.substr(0, cur.length() - 5);
+            }
+            path c = path::absolute(cur);
+            if (path::isdirectory(c)) {
+                if (::std::find(cpackage_paths.begin(), cpackage_paths.end(), c) == cpackage_paths.end()) {
+                    cpackage_paths.emplace_back(c);
+                    // cout << "cpackage path: " << c << endl;
+                }
+            }
+        }
+    }
+
     lua_State *L;
+    ::std::vector<path> package_paths, cpackage_paths;
 };
 
 static lua_State *GetContextL(Context &ctx) {
@@ -40,8 +118,6 @@ static lua_State *GetContextL(Context &ctx) {
 
 Context::Context() {
     NLUA_CLASS_CONSTRUCT()
-
-    libraries_path = path::getcwd();
 }
 
 Context::~Context() {
@@ -49,28 +125,71 @@ Context::~Context() {
 }
 
 bool Context::load(const path &file) {
-    path tgt = file;
-    if (!path::exists(tgt)) {
-        tgt = path::absolute(libraries_path) + "/" + file;
-        if (!path::exists(tgt)) {
-            cerr << "没有找到 " << file << endl;
-            return false;
-        }
+    auto L = d_ptr->L;
+    NLUA_AUTOSTACK(L);
+
+    auto tgt = d_ptr->find_file(file);
+    // cout << tgt << endl;
+
+    if (tgt.empty()) {
+        cerr << "没有找到文件 " << file << endl;
+        return false;
     }
 
-    if (path::isdirectory(tgt)) {
-        auto walk = path::walk(tgt);
-        for (auto &i:walk) {
-            path cur = tgt + "/" + i;
-            if (!load(cur)) {
-                cerr << "加载失败 " << cur << endl;
-                continue;;
-            }
-        }
-        return true;
+    int s = luaL_dofile(L, tgt.c_str());
+    if (LUA_OK != s) {
+        cerr << "加载文件失败 " << file << endl;
+        return false;
     }
+    return true;
+}
 
-    return d_ptr->loadfile(tgt);
+void Context::add_package_path(path const &dir) {
+    auto L = d_ptr->L;
+    NLUA_AUTOSTACK(L);
+
+    lua_getglobal(L, "package");
+    int pkgid = lua_gettop(L);
+
+    lua_getfield(L, -1, "path");
+    string cur = lua_tostring(L, -1);
+    string d = path::absolute(dir) + "/?.lua";
+    string di = path::absolute(dir) + "/?/init.lua";
+
+    auto curs = explode(cur, ";");
+    if (::std::find(curs.begin(), curs.end(), d) == curs.end()) {
+        curs.emplace_back(d);
+        curs.emplace_back(di);
+
+        cur = implode(curs, ";");
+        lua_pushstring(L, cur.c_str());
+        lua_setfield(L, pkgid, "path");
+
+        d_ptr->update_package_paths(&curs);
+    }
+}
+
+void Context::add_cpackage_path(path const &dir) {
+    auto L = d_ptr->L;
+    NLUA_AUTOSTACK(L);
+
+    lua_getglobal(L, "package");
+    int pkgid = lua_gettop(L);
+
+    lua_getfield(L, -1, "cpath");
+    string cur = lua_tostring(L, -1);
+    string d = path::absolute(dir) + "/?.so";
+
+    auto curs = explode(cur, ";");
+    if (::std::find(curs.begin(), curs.end(), d) == curs.end()) {
+        curs.emplace_back(d);
+
+        cur = implode(curs, ";");
+        lua_pushstring(L, cur.c_str());
+        lua_setfield(L, pkgid, "path");
+
+        d_ptr->update_cpackage_paths(&curs);
+    }
 }
 
 return_type Context::invoke(string const &fname, args_type const &args) {

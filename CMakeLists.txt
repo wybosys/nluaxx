@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(NLUA_SRCS
         core.cpp
+        string.cpp
         fs.cpp
         variant.cpp
         value.cpp

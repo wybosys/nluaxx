@@ -74,8 +74,10 @@ public:
 
     return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
 
-    // lua库的目录
-    path libraries_path;
+    // 添加查找包的目录
+    void add_package_path(path const &);
+
+    void add_cpackage_path(path const &);
 
     // 获得全局对象
     self_type global(string const &);
