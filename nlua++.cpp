@@ -81,6 +81,10 @@ return_type Context::invoke(string const &fname, args_type const &args) {
     int tbid = lua_gettop(L);
 
     lua_getglobal(L, fname.c_str());
+    if (lua_isnil(L, -1)) {
+        cerr << "没有找到lua函数 " << fname << endl;
+        return nullptr;
+    }
 
     for (auto &e:args) {
         push(e, L);
