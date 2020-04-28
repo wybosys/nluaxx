@@ -11,13 +11,13 @@ set(NLUA_SRCS
         nlua++.cpp
         )
 macro(build_nlua ver lib DEFS)
-    add_library(nlua++_${ver} STATIC ${NLUA_SRCS})
-    target_compile_definitions(nlua++_${ver} PUBLIC ${DEFS})
-    target_link_libraries(nlua++_${ver} core ${lib})
-    add_executable(test_nlua++_${ver}
+    add_library(nlua++-${ver} STATIC ${NLUA_SRCS})
+    target_compile_definitions(nlua++-${ver} PUBLIC ${DEFS})
+    target_link_libraries(nlua++-${ver} ${lib})
+    add_executable(test_nlua++-${ver}
             timer.cpp
             test.cpp)
-    target_link_libraries(test_nlua++_${ver} core test nlua++_${ver} UnitTest++)
+    target_link_libraries(test_nlua++-${ver} nlua++-${ver} UnitTest++)
 endmacro()
 
 build_nlua(jit luajit-5.1 NLUA_JIT)
