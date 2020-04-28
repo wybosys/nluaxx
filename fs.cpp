@@ -19,7 +19,8 @@ bool path::exists(path const &p) {
 
 path path::absolute(path const &p) {
     char buf[FILENAME_MAX];
-    return path(realpath(p.c_str(), buf));
+    char const *r = realpath(p.c_str(), buf);
+    return r == nullptr ? path() : path(r);
 }
 
 bool path::isfile(path const &p) {

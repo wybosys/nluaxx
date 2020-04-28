@@ -20,11 +20,6 @@ struct ContextPrivate {
         L = nullptr;
     }
 
-    bool loadfile(path const &file) {
-        int s = luaL_dofile(L, file.c_str());
-        return LUA_OK == s;
-    }
-
     static int Traceback(lua_State *L) {
         if (!lua_isstring(L, 1))
             return 1;
@@ -145,6 +140,10 @@ bool Context::load(const path &file) {
 }
 
 void Context::add_package_path(path const &dir) {
+    auto fdir = path::absolute(dir);
+    if (fdir.empty())
+        return;
+
     auto L = d_ptr->L;
     NLUA_AUTOSTACK(L);
 
@@ -153,8 +152,9 @@ void Context::add_package_path(path const &dir) {
 
     lua_getfield(L, -1, "path");
     string cur = lua_tostring(L, -1);
-    string d = path::absolute(dir) + "/?.lua";
-    string di = path::absolute(dir) + "/?/init.lua";
+
+    string d = fdir + "/?.lua";
+    string di = fdir + "/?/init.lua";
 
     auto curs = explode(cur, ";");
     if (::std::find(curs.begin(), curs.end(), d) == curs.end()) {
