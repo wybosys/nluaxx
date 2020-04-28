@@ -35,7 +35,7 @@ struct ContextPrivate {
 };
 
 static lua_State *GetContextL(Context &ctx) {
-    return DPtr < Context, ContextPrivate > (&ctx)->L;
+    return DPtr<Context, ContextPrivate>(&ctx)->L;
 }
 
 Context::Context() {
@@ -90,6 +90,46 @@ return_type Context::invoke(string const &fname, args_type const &args) {
     if (LUA_OK != s)
         return nullptr;
     return at(L, -1);
+}
+
+return_type Context::invoke(string const &name, Variant const &v0) {
+    return invoke(name, {v0});
+}
+
+return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1) {
+    return invoke(name, {v0, v1});
+}
+
+return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2) {
+    return invoke(name, {v0, v1, v2});
+}
+
+return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3) {
+    return invoke(name, {v0, v1, v2, v3});
+}
+
+return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4) {
+    return invoke(name, {v0, v1, v2, v3, v4});
+}
+
+return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5) {
+    return invoke(name, {v0, v1, v2, v3, v4, v5});
+}
+
+return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5, Variant const &v6) {
+    return invoke(name, {v0, v1, v2, v3, v4, v5, v6});
+}
+
+return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5, Variant const &v6, Variant const &v7) {
+    return invoke(name, {v0, v1, v2, v3, v4, v5, v6, v7});
+}
+
+return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5, Variant const &v6, Variant const &v7, Variant const &v8) {
+    return invoke(name, {v0, v1, v2, v3, v4, v5, v6, v7, v8});
+}
+
+return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5, Variant const &v6, Variant const &v7, Variant const &v8, Variant const &v9) {
+    return invoke(name, {v0, v1, v2, v3, v4, v5, v6, v7, v8, v9});
 }
 
 void Field::declare_in(Context &ctx) const {

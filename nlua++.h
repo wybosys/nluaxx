@@ -54,6 +54,26 @@ public:
     // 执行函数
     return_type invoke(string const &fname, args_type const &args = {});
 
+    return_type invoke(string const &name, Variant const &);
+
+    return_type invoke(string const &name, Variant const &, Variant const &);
+
+    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &);
+
+    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &);
+
+    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+
+    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+
+    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+
+    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+
+    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+
+    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+
     // lua库的目录
     path libraries_path;
 
