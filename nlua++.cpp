@@ -1,6 +1,6 @@
 #include "core.h"
 #include "nlua++.h"
-#include NLUA_INCLUDE(lua.hpp)
+#include "liblua.h"
 #include "value.h"
 #include <atomic>
 

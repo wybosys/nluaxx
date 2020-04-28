@@ -5,15 +5,9 @@
 #define NLUA_NS nlua
 #endif
 
-#ifndef NLUA_LIBLUA
-#define NLUA_LIBLUA luajit-2.1
-#endif
-
-#define NLUA_INCLUDE(file) <NLUA_LIBLUA/file>
-
 #define NLUA_BEGIN namespace NLUA_NS {
 #define NLUA_END }
-#define USE_TEST using namespace NLUA_NS;
+#define USE_NLUA using namespace NLUA_NS;
 
 #include <string>
 #include <memory>
@@ -83,6 +77,7 @@ _shared = new cls(); \
 return *_shared; \
 }
 
+#define __NLUA_RAW(L) L
 #define __NLUA_COMBINE(L, R) L##R
 #define _NLUA_COMBINE(L, R) __NLUA_COMBINE(L, R)
 

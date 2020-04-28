@@ -3,7 +3,7 @@
 
 #include "variant.h"
 #include "nlua++.h"
-#include <luajit-2.1/lua.hpp>
+#include "liblua.h"
 
 NLUA_BEGIN
 

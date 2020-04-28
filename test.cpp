@@ -3,7 +3,7 @@
 #include <UnitTest++/TestReporterStdout.h>
 #include "timer.h"
 
-USE_TEST
+USE_NLUA
 
 TEST (main) {
     // 测试原始lua
