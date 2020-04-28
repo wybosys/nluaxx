@@ -1,6 +1,7 @@
 #include "nlua++.h"
 #include <UnitTest++/UnitTest++.h>
 #include <UnitTest++/TestReporterStdout.h>
+#include "timer.h"
 
 USE_TEST
 
@@ -123,6 +124,54 @@ TEST (test3) {
 
     ctx.load("test.lua");
     ctx.invoke("test3");
+}
+
+int test4_a() {
+    return 0;
+}
+
+TEST (test4) {
+    Context ctx;
+    ctx.libraries_path += "/../nlua";
+
+    ctx.load("test.lua");
+
+    auto clz = make_shared<Class>();
+    clz->name = "Test";
+    clz->add_static("proc", [=]() -> return_type {
+        return nullptr;
+    });
+    clz->declare_in(ctx);
+
+    auto Test = ctx.global("Test");
+
+    // 测试耗时
+    TimeCounter tc;
+    tc.start();
+
+    int cnt = 100000;
+
+    cout << "开始测试lua函数执行 " << cnt << " 次" << endl;
+    ctx.invoke("test4_a");
+    cout << "共耗时 " << tc.seconds() << " s" << endl;
+
+    cout << "开始测试c++调用lua函数 " << cnt << " 次" << endl;
+    for (int i = 0; i < cnt; ++i) {
+        ctx.invoke("test4");
+    }
+    cout << "共耗时 " << tc.seconds() << " s" << endl;
+
+    cout << "开始测试c++调用 " << cnt << " 次" << endl;
+    for (int i = 0; i < cnt; ++i) {
+        test4_a();
+    }
+    cout << "共耗时 " << tc.seconds() << " s" << endl;
+
+    cout << "开始测试c++调用c++实现的lua函数 " << cnt << " 次" << endl;
+    for (int i = 0; i < cnt; ++i) {
+        Test->invoke("proc");
+    }
+    cout << "共耗时 " << tc.seconds() << " s" << endl;
 }
 
 int main() {

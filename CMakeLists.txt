@@ -13,6 +13,7 @@ add_library(nlua++
 target_link_libraries(nlua++ lua5.1)
 
 add_executable(test_nlua++
+        timer.cpp
         test.cpp)
 target_link_libraries(test_nlua++ nlua++ UnitTest++)
 

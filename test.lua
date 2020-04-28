@@ -102,3 +102,15 @@ function test3()
     assert(t0 ~= t1, "shared unequal")
     return 0
 end
+
+function test4()
+    return 0
+end
+
+function test4_a()
+    local cnt = 10000
+    for i = 0, cnt do
+        test4()
+    end
+end
+
