@@ -2,7 +2,7 @@
 #include "nlua++.h"
 #include "liblua.h"
 #include "value.h"
-#include "string.h"
+#include "stringt.h"
 #include <atomic>
 
 NLUA_BEGIN

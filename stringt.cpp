@@ -1,5 +1,5 @@
 #include "core.h"
-#include "string.h"
+#include "stringt.h"
 
 NLUA_BEGIN
 
