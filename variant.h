@@ -139,7 +139,7 @@ public:
 
     void *toPointer() const;
 
-    typedef shared_ptr<::std::vector<shared_ptr < Variant>>>
+    typedef shared_ptr<vector<shared_ptr < Variant>>>
     array_type;
 
     array_type toArray() const;
@@ -159,12 +159,12 @@ private:
         bool b;
     } _pod;
 
-    ::std::string _str;
+    string _str;
     array_type _arr;
 };
 
 template<typename _CharT, typename _Traits>
-inline ::std::basic_ostream<_CharT, _Traits> &operator<<(::std::basic_ostream<_CharT, _Traits> &stm, Variant const &v) {
+inline basic_ostream<_CharT, _Traits> &operator<<(basic_ostream<_CharT, _Traits> &stm, Variant const &v) {
     switch (v.type()) {
         case VariantType::STRING:
             stm << v.toString();
@@ -188,7 +188,7 @@ inline ::std::basic_ostream<_CharT, _Traits> &operator<<(::std::basic_ostream<_C
 }
 
 template<typename _CharT, typename _Traits>
-inline ::std::basic_ostream<_CharT, _Traits> &operator<<(::std::basic_ostream<_CharT, _Traits> &stm, shared_ptr <Variant> const &v) {
+inline basic_ostream<_CharT, _Traits> &operator<<(basic_ostream<_CharT, _Traits> &stm, shared_ptr <Variant> const &v) {
     if (!v)
         return stm;
     return stm << *v;

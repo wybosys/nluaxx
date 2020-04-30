@@ -18,21 +18,10 @@
 
 NLUA_BEGIN
 
+using namespace ::std;
+
 // 执行main循环
 extern int Exec();
-
-using ::std::string;
-using ::std::unique_ptr;
-using ::std::shared_ptr;
-using ::std::weak_ptr;
-using ::std::make_shared;
-using ::std::make_pair;
-using ::std::cin;
-using ::std::cout;
-using ::std::endl;
-using ::std::cerr;
-using ::std::exception;
-using ::std::stringstream;
 
 typedef long long longlong;
 typedef unsigned long long ulonglong;
@@ -80,7 +69,7 @@ return *_shared; \
 #define __NLUA_COMBINE(L, R) L##R
 #define _NLUA_COMBINE(L, R) __NLUA_COMBINE(L, R)
 
-#define NLUA_AUTOGUARD(obj, ...) ::std::lock_guard<::std::mutex> _NLUA_COMBINE(__auto_guard_, __LINE__)(obj);
+#define NLUA_AUTOGUARD(obj, ...) ::lock_guard<::mutex> _NLUA_COMBINE(__auto_guard_, __LINE__)(obj);
 
 class error : public exception {
 public:

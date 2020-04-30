@@ -20,17 +20,17 @@ string Variant::toString() const {
         case VariantType::STRING:
             return _str;
         case VariantType::INTEGER: {
-            ::std::stringstream ss;
+            stringstream ss;
             ss << _pod.i;
             return ss.str();
         }
         case VariantType::DECIMAL: {
-            ::std::stringstream ss;
+            stringstream ss;
             ss << _pod.n;
             return ss.str();
         }
         case VariantType::POINTER: {
-            ::std::stringstream ss;
+            stringstream ss;
             ss << (pointer) _pod.ptr;
             return ss.str();
         }
@@ -47,7 +47,7 @@ string Variant::toString() const {
 number Variant::toNumber() const {
     switch (_type) {
         case VariantType::STRING: {
-            ::std::stringstream ss;
+            stringstream ss;
             ss << _str;
             number n;
             ss >> n;
@@ -71,7 +71,7 @@ number Variant::toNumber() const {
 integer Variant::toInteger() const {
     switch (_type) {
         case VariantType::STRING: {
-            ::std::stringstream ss;
+            stringstream ss;
             ss << _str;
             integer n;
             ss >> n;

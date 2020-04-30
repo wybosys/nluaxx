@@ -5,9 +5,9 @@
 
 NLUA_BEGIN
 
-extern ::std::vector<string> explode(string const &str, string const &delimeter);
+extern vector<string> explode(string const &str, string const &delimeter);
 
-extern string implode(::std::vector<string> const &, string const &delimeter);
+extern string implode(vector<string> const &, string const &delimeter);
 
 extern bool endwith(string const &str, string const &tgt);
 

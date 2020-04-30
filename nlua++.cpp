@@ -43,7 +43,7 @@ struct ContextPrivate {
         return path();
     }
 
-    void update_package_paths(::std::vector<string> const *curs) {
+    void update_package_paths(vector<string> const *curs) {
         if (curs == nullptr) {
             NLUA_AUTOSTACK(L);
 
@@ -66,7 +66,7 @@ struct ContextPrivate {
             }
             path c = path::absolute(cur);
             if (path::isdirectory(c)) {
-                if (::std::find(package_paths.begin(), package_paths.end(), c) == package_paths.end()) {
+                if (find(package_paths.begin(), package_paths.end(), c) == package_paths.end()) {
                     package_paths.emplace_back(c);
                     // cout << "package path: " << c << endl;
                 }
@@ -74,7 +74,7 @@ struct ContextPrivate {
         }
     }
 
-    void update_cpackage_paths(::std::vector<string> const *curs) {
+    void update_cpackage_paths(vector<string> const *curs) {
         if (curs == nullptr) {
             NLUA_AUTOSTACK(L);
 
@@ -95,7 +95,7 @@ struct ContextPrivate {
             }
             path c = path::absolute(cur);
             if (path::isdirectory(c)) {
-                if (::std::find(cpackage_paths.begin(), cpackage_paths.end(), c) == cpackage_paths.end()) {
+                if (find(cpackage_paths.begin(), cpackage_paths.end(), c) == cpackage_paths.end()) {
                     cpackage_paths.emplace_back(c);
                     // cout << "cpackage path: " << c << endl;
                 }
@@ -104,7 +104,7 @@ struct ContextPrivate {
     }
 
     lua_State *L;
-    ::std::vector<path> package_paths, cpackage_paths;
+    vector<path> package_paths, cpackage_paths;
 };
 
 static lua_State *GetContextL(Context &ctx) {
@@ -157,7 +157,7 @@ void Context::add_package_path(path const &dir) {
     string di = fdir + "/?/init.lua";
 
     auto curs = explode(cur, ";");
-    if (::std::find(curs.begin(), curs.end(), d) == curs.end()) {
+    if (find(curs.begin(), curs.end(), d) == curs.end()) {
         curs.emplace_back(d);
         curs.emplace_back(di);
 
@@ -181,7 +181,7 @@ void Context::add_cpackage_path(path const &dir) {
     string d = path::absolute(dir) + "/?.so";
 
     auto curs = explode(cur, ";");
-    if (::std::find(curs.begin(), curs.end(), d) == curs.end()) {
+    if (find(curs.begin(), curs.end(), d) == curs.end()) {
         curs.emplace_back(d);
 
         cur = implode(curs, ";");
@@ -298,14 +298,14 @@ struct FunctionPrivate {
     // 生成的函数唯一id
     ulonglong id;
 
-    typedef ::std::function<return_type(lua_State *L, self_type &self, args_type const &)> classfunc_type;
-    typedef ::std::function<return_type(lua_State *L, args_type const &)> func_type;
+    typedef function<return_type(lua_State *L, self_type &self, args_type const &)> classfunc_type;
+    typedef function<return_type(lua_State *L, args_type const &)> func_type;
 
-    typedef ::std::function<int(lua_State *)> lua_cfunction_type;
-    typedef ::std::atomic<ulonglong> lua_cfunction_refid_type;
+    typedef function<int(lua_State *)> lua_cfunction_type;
+    typedef atomic<ulonglong> lua_cfunction_refid_type;
 
-    typedef ::std::map<ulonglong, classfunc_type> lua_ref_classfuncs_type;
-    typedef ::std::map<ulonglong, func_type> lua_ref_funcs_type;
+    typedef map<ulonglong, classfunc_type> lua_ref_classfuncs_type;
+    typedef map<ulonglong, func_type> lua_ref_funcs_type;
 
     static lua_cfunction_refid_type RefId;
     static lua_ref_classfuncs_type ClassFuncs;
@@ -720,7 +720,7 @@ Class::~Class() {
 Class &Class::add(string const &fname, Function::classfunc_type func) {
     auto f = make_shared<Function>();
     f->name = fname;
-    f->classfunc = ::std::move(func);
+    f->classfunc = move(func);
     _functions.insert(make_pair(f->name, f));
     return *this;
 }
@@ -842,7 +842,7 @@ Class &Class::add(string const &fname, Function::classfunc9_type func) {
 Class &Class::add_static(string const &fname, Function::func_type func) {
     auto f = make_shared<Function>();
     f->name = fname;
-    f->func = ::std::move(func);
+    f->func = move(func);
     _functions.insert(make_pair(f->name, f));
     return *this;
 }

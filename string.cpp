@@ -3,8 +3,8 @@
 
 NLUA_BEGIN
 
-::std::vector<std::string> explode(string const &str, string const &delimeter) {
-    ::std::vector<std::string> ret;
+vector<std::string> explode(string const &str, string const &delimeter) {
+    vector<std::string> ret;
     int sid = 0, eid = 0;
     while ((eid = str.find(delimeter, sid)) < str.size()) {
         string val = str.substr(sid, eid - sid);
@@ -18,7 +18,7 @@ NLUA_BEGIN
     return ret;
 }
 
-string implode(::std::vector<string> const &str, string const &delimeter) {
+string implode(vector<string> const &str, string const &delimeter) {
     string r;
     for (auto &i:str)
         r += delimeter + i;

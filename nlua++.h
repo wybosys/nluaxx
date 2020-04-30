@@ -21,7 +21,7 @@ class Module;
 
 typedef shared_ptr<Variant> return_type;
 typedef shared_ptr<Variant> value_type;
-typedef ::std::initializer_list<Variant> args_type;
+typedef initializer_list<Variant> args_type;
 typedef shared_ptr<Object> self_type;
 
 class Any {
@@ -97,32 +97,32 @@ public:
     string name;
 
     // 类函数
-    typedef ::std::function<return_type(self_type &self, args_type const &)> classfunc_type;
+    typedef function<return_type(self_type &self, args_type const &)> classfunc_type;
 
-    typedef ::std::function<return_type(self_type &self)> classfunc0_type;
-    typedef ::std::function<return_type(self_type &self, Variant const &)> classfunc1_type;
-    typedef ::std::function<return_type(self_type &self, Variant const &, Variant const &)> classfunc2_type;
-    typedef ::std::function<return_type(self_type &self, Variant const &, Variant const &, Variant const &)> classfunc3_type;
-    typedef ::std::function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc4_type;
-    typedef ::std::function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc5_type;
-    typedef ::std::function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc6_type;
-    typedef ::std::function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc7_type;
-    typedef ::std::function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc8_type;
-    typedef ::std::function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc9_type;
+    typedef function<return_type(self_type &self)> classfunc0_type;
+    typedef function<return_type(self_type &self, Variant const &)> classfunc1_type;
+    typedef function<return_type(self_type &self, Variant const &, Variant const &)> classfunc2_type;
+    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &)> classfunc3_type;
+    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc4_type;
+    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc5_type;
+    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc6_type;
+    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc7_type;
+    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc8_type;
+    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc9_type;
 
     // 静态函数
-    typedef ::std::function<return_type(args_type const &)> func_type;
+    typedef function<return_type(args_type const &)> func_type;
 
-    typedef ::std::function<return_type()> func0_type;
-    typedef ::std::function<return_type(Variant const &)> func1_type;
-    typedef ::std::function<return_type(Variant const &, Variant const &)> func2_type;
-    typedef ::std::function<return_type(Variant const &, Variant const &, Variant const &)> func3_type;
-    typedef ::std::function<return_type(Variant const &, Variant const &, Variant const &, Variant const &)> func4_type;
-    typedef ::std::function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func5_type;
-    typedef ::std::function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func6_type;
-    typedef ::std::function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func7_type;
-    typedef ::std::function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func8_type;
-    typedef ::std::function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func9_type;
+    typedef function<return_type()> func0_type;
+    typedef function<return_type(Variant const &)> func1_type;
+    typedef function<return_type(Variant const &, Variant const &)> func2_type;
+    typedef function<return_type(Variant const &, Variant const &, Variant const &)> func3_type;
+    typedef function<return_type(Variant const &, Variant const &, Variant const &, Variant const &)> func4_type;
+    typedef function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func5_type;
+    typedef function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func6_type;
+    typedef function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func7_type;
+    typedef function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func8_type;
+    typedef function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func9_type;
 
     // 实现的成员函数
     classfunc_type classfunc;
@@ -161,7 +161,7 @@ public:
 
 class Singleton {
 public:
-    typedef ::std::function<void()> func_type;
+    typedef function<void()> func_type;
 
     string name;
     func_type init, fini;
@@ -187,9 +187,9 @@ public:
     string name;
 
     typedef shared_ptr<Field> field_type;
-    typedef ::std::map<string, field_type> fields_type;
+    typedef map<string, field_type> fields_type;
     typedef shared_ptr<Function> function_type;
-    typedef ::std::map<string, function_type> functions_type;
+    typedef map<string, function_type> functions_type;
 
     // 添加成员函数
     Class &add(string const &, Function::classfunc_type);
@@ -253,12 +253,12 @@ public:
     // 设置为单件模式，名称为 name 和 free_name
     inline Class &singleton(string const &_name, Singleton::func_type _init = nullptr, Singleton::func_type _fini = nullptr) {
         _singleton.name = _name;
-        _singleton.init = ::std::move(_init);
-        _singleton.fini = ::std::move(_fini);
+        _singleton.init = move(_init);
+        _singleton.fini = move(_fini);
         return *this;
     }
 
-    typedef ::std::vector<Any> supers_type;
+    typedef vector<Any> supers_type;
 
     // 继承，多次调用则为多继承
     inline Class &inherit(Any const &par) {
@@ -267,7 +267,7 @@ public:
     }
 
     // 多继承
-    inline Class &inherit(::std::initializer_list<Any> const &pars) {
+    inline Class &inherit(initializer_list<Any> const &pars) {
         for (auto &e:pars) {
             _supers.emplace_back(e);
         }
@@ -292,7 +292,7 @@ public:
     string name;
 
     typedef shared_ptr<Class> class_type;
-    typedef ::std::map<string, class_type> classes_type;
+    typedef map<string, class_type> classes_type;
 
     Module &add_class(class_type &);
 
