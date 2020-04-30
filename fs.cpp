@@ -8,9 +8,11 @@
 
 NLUA_BEGIN
 
+#if NLUA_MOBILE
 path path::getcwd() {
     return path(get_current_dir_name());
 }
+#endif
 
 bool path::exists(path const &p) {
     struct stat st = {0};

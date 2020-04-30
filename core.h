@@ -16,6 +16,12 @@
 #include <algorithm>
 #include <functional>
 
+#if defined(__ANDROID__) || defined(__OBJC__)
+#define NLUA_MOBILE 1
+#else
+#define NLUA_MOBILE 0
+#endif
+
 NLUA_BEGIN
 
 using namespace ::std;
