@@ -9,6 +9,7 @@ set(NLUA_SRCS
         fs.cpp
         variant.cpp
         value.cpp
+        timer.cpp
         nlua++.cpp
         )
 macro(build_nlua ver lib DEFS)
@@ -16,7 +17,6 @@ macro(build_nlua ver lib DEFS)
     target_compile_definitions(nlua++-${ver} PUBLIC ${DEFS})
     target_link_libraries(nlua++-${ver} ${lib})
     add_executable(test_nlua++-${ver}
-            timer.cpp
             test.cpp)
     target_link_libraries(test_nlua++-${ver} nlua++-${ver} UnitTest++)
 endmacro()

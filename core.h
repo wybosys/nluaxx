@@ -14,7 +14,6 @@
 #include <iostream>
 #include <cstring>
 #include <algorithm>
-#include <filesystem>
 #include <functional>
 
 NLUA_BEGIN
@@ -38,7 +37,7 @@ using ::std::stringstream;
 typedef long long longlong;
 typedef unsigned long long ulonglong;
 typedef longlong integer;
-typedef ulonglong uinteger;
+typedef ulonglong uinteger, pointer;
 typedef double number;
 
 #define NLUA_FRIEND(cls) friend class cls;
@@ -88,7 +87,7 @@ public:
 
     explicit error(int code, string const &msg = "") : _code(code), _msg(msg) {}
 
-    virtual const char *what() const _GLIBCXX_TXN_SAFE_DYN _GLIBCXX_NOTHROW override {
+    virtual const char *what() const throw() {
         return _msg.c_str();
     }
 

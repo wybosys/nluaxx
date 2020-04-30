@@ -31,7 +31,7 @@ string Variant::toString() const {
         }
         case VariantType::POINTER: {
             ::std::stringstream ss;
-            ss << (ptrdiff_t) _pod.ptr;
+            ss << (pointer) _pod.ptr;
             return ss.str();
         }
         case VariantType::BOOLEAN: {
@@ -58,7 +58,7 @@ number Variant::toNumber() const {
         case VariantType::DECIMAL:
             return _pod.n;
         case VariantType::POINTER:
-            return (ptrdiff_t) _pod.ptr;
+            return (pointer) _pod.ptr;
         case VariantType::BOOLEAN:
             return _pod.b ? 1 : 0;
         default:
@@ -82,7 +82,7 @@ integer Variant::toInteger() const {
         case VariantType::DECIMAL:
             return _pod.n;
         case VariantType::POINTER:
-            return (ptrdiff_t) _pod.ptr;
+            return (pointer) _pod.ptr;
         case VariantType::BOOLEAN:
             return _pod.b ? 1 : 0;
         default:
