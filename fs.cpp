@@ -8,7 +8,7 @@
 
 NLUA_BEGIN
 
-#if NLUA_MOBILE
+#if NLUA_SHELL
 path path::getcwd() {
     return path(get_current_dir_name());
 }

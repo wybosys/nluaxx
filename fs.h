@@ -59,7 +59,7 @@ public:
 
     path(char const *s) : _s(s) {}
 
-#if NLUA_MOBILE
+#if NLUA_SHELL
     // 获得当前目录
     static path getcwd();
 #endif

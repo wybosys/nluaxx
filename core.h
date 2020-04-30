@@ -18,8 +18,10 @@
 
 #if defined(__ANDROID__) || defined(__OBJC__)
 #define NLUA_MOBILE 1
+#define NLUA_SHELL 0
 #else
 #define NLUA_MOBILE 0
+#define NLUA_SHELL 1
 #endif
 
 NLUA_BEGIN
