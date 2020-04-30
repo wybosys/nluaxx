@@ -10,7 +10,7 @@ Variant::~Variant() {
 
 void Variant::_clear() {
     _type = VariantType::UNKNOWN;
-    ::bzero(&_pod, sizeof(_pod));
+    bzero(&_pod, sizeof(_pod));
     _arr = nullptr;
     _str.clear();
 }
