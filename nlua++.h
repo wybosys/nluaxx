@@ -44,7 +44,11 @@ NLUA_CLASS_DECL(Context);
 
 public:
 
+    // 初始化
     Context();
+
+    // 连接一个已经存在的
+    explicit Context(void *);
 
     ~Context();
 
@@ -187,9 +191,9 @@ public:
     string name;
 
     typedef shared_ptr<Field> field_type;
-    typedef map<string, field_type> fields_type;
+    typedef map <string, field_type> fields_type;
     typedef shared_ptr<Function> function_type;
-    typedef map<string, function_type> functions_type;
+    typedef map <string, function_type> functions_type;
 
     // 添加成员函数
     Class &add(string const &, Function::classfunc_type);
@@ -258,7 +262,7 @@ public:
         return *this;
     }
 
-    typedef vector<Any> supers_type;
+    typedef vector <Any> supers_type;
 
     // 继承，多次调用则为多继承
     inline Class &inherit(Any const &par) {
@@ -292,7 +296,7 @@ public:
     string name;
 
     typedef shared_ptr<Class> class_type;
-    typedef map<string, class_type> classes_type;
+    typedef map <string, class_type> classes_type;
 
     Module &add_class(class_type &);
 

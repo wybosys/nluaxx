@@ -10,13 +10,22 @@ NLUA_BEGIN
 #define IMPFUNC_CHECK_ARGS(count) do { if (args.size() < count) throw error(-1, "缺少参数"); } while(0);
 
 struct ContextPrivate {
-    ContextPrivate() {
-        L = luaL_newstate();
-        luaL_openlibs(L);
+
+    explicit ContextPrivate(lua_State *_l) {
+        if (_l) {
+            L = _l;
+            _freel = false;
+        } else {
+            L = luaL_newstate();
+            luaL_openlibs(L);
+            _freel = true;
+        }
     }
 
     ~ContextPrivate() {
-        lua_close(L);
+        if (_freel) {
+            lua_close(L);
+        }
         L = nullptr;
     }
 
@@ -103,7 +112,9 @@ struct ContextPrivate {
         }
     }
 
-    lua_State *L;
+    lua_State *L = nullptr;
+    bool _freel = false;
+
     vector<path> package_paths, cpackage_paths;
 };
 
@@ -112,7 +123,11 @@ static lua_State *GetContextL(Context &ctx) {
 }
 
 Context::Context() {
-    NLUA_CLASS_CONSTRUCT()
+    NLUA_CLASS_CONSTRUCT(nullptr)
+}
+
+Context::Context(void *l) {
+    NLUA_CLASS_CONSTRUCT((lua_State *) l)
 }
 
 Context::~Context() {
