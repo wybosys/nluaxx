@@ -91,6 +91,24 @@ public:
 
     // 获得全局对象
     self_type global(string const &);
+
+    typedef shared_ptr<Module> module_type;
+    typedef ::std::map<string, module_type> modules_type;
+
+    typedef shared_ptr<Class> class_type;
+    typedef ::std::map<string, class_type> classes_type;
+
+    // 清空
+    void clear();
+
+    // 增加类定义
+    void add(class_type &);
+
+    // 增加模块定义
+    void add(module_type &);
+
+    // 声明
+    void declare();
 };
 
 NLUA_CLASS_PREPARE(Function)
@@ -154,7 +172,7 @@ public:
         val = make_shared<Variant>(_v);
     }
 
-    Field(string const &_name) {
+    explicit Field(string const &_name) {
         name = _name;
     }
 
@@ -251,70 +269,53 @@ public:
     Class &add(field_type const &);
 
     [[nodiscard]]
-    inline fields_type const &fields() const {
-        return _fields;
-    }
+    fields_type const &fields() const;
 
     [[nodiscard]]
-    inline functions_type const &functions() const {
-        return _functions;
-    }
+    functions_type const &functions() const;
 
     // 设置为单件模式，名称为 name 和 free_name
-    inline Class &singleton(string const &_name, Singleton::func_type _init = nullptr, Singleton::func_type _fini = nullptr) {
-        _singleton.name = _name;
-        _singleton.init = move(_init);
-        _singleton.fini = move(_fini);
-        return *this;
-    }
+    Class &singleton(string const &_name, Singleton::func_type _init = nullptr, Singleton::func_type _fini = nullptr);
 
-    typedef vector <Any> supers_type;
+    typedef ::std::vector<Any> supers_type;
 
     // 继承，多次调用则为多继承
-    inline Class &inherit(Any const &par) {
-        _supers.emplace_back(par);
-        return *this;
-    }
+    Class &inherit(Any const &par);
 
     // 多继承
-    inline Class &inherit(initializer_list<Any> const &pars) {
-        for (auto &e:pars) {
-            _supers.emplace_back(e);
-        }
-        return *this;
-    }
+    Class &inherit(::std::initializer_list<Any> const &pars);
 
-
+    // 直接声明
     void declare_in(Context &) const;
 
+    // 声明到模块中
     void declare_in(Context &, Module const &) const;
-
-private:
-    Singleton _singleton;
-    fields_type _fields;
-    functions_type _functions;
-    supers_type _supers;
 };
 
+NLUA_CLASS_PREPARE(Module)
+
 class Module {
+NLUA_CLASS_DECL(Module)
+
 public:
+
+    Module();
+
+    ~Module();
 
     string name;
 
     typedef shared_ptr<Class> class_type;
     typedef map <string, class_type> classes_type;
 
-    Module &add_class(class_type &);
+    // 将类添加到模块中
+    Module &add(class_type &);
 
     [[nodiscard]]
-    inline classes_type const &classes() const {
-        return _classes;
-    }
+    classes_type const &classes() const;
 
+    // 声明模块
     void declare_in(Context &) const;
-
-private:
-    classes_type _classes;
 };
 
 // 映射C++的实例

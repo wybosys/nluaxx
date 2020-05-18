@@ -127,6 +127,8 @@ struct ContextPrivate {
     bool _freel = false;
 
     vector<path> package_paths, cpackage_paths;
+    Context::classes_type classes;
+    Context::modules_type modules;
 };
 
 static lua_State *GetContextL(Context &ctx) {
@@ -219,6 +221,29 @@ void Context::add_cpackage_path(path const &dir) {
         lua_setfield(L, pkgid, "path");
 
         d_ptr->update_cpackage_paths(&curs);
+    }
+}
+
+void Context::clear() {
+    d_ptr->classes.clear();
+    d_ptr->modules.clear();
+}
+
+void Context::add(class_type &cls) {
+    d_ptr->classes.insert(make_pair(cls->name, cls));
+}
+
+void Context::add(module_type &m) {
+    d_ptr->modules.insert(make_pair(m->name, m));
+}
+
+void Context::declare() {
+    for (auto &e : d_ptr->classes) {
+        e.second->declare_in(*this);
+    }
+
+    for (auto &e:d_ptr->modules) {
+        e.second->declare_in(*this);
     }
 }
 
@@ -639,7 +664,7 @@ struct ClassPrivate {
         auto L = GetContextL(ctx);
         NLUA_AUTOSTACK(L);
 
-        for (auto &e:d_owner->_supers) {
+        for (auto &e:supers) {
             if (e.clazz) {
                 e.clazz->d_ptr->body_declare_in(ctx, _curclass);
             } else if (e.object) {
@@ -649,11 +674,11 @@ struct ClassPrivate {
             }
         }
 
-        for (auto &e:d_owner->_functions) {
+        for (auto &e:functions) {
             e.second->declare_in(ctx, _curclass);
         }
 
-        for (auto &e:d_owner->_fields) {
+        for (auto &e:fields) {
             e.second->declare_in(ctx, _curclass);
         }
     }
@@ -735,6 +760,11 @@ struct ClassPrivate {
         }
         return 1;
     }
+
+    Singleton singleton;
+    Class::fields_type fields;
+    Class::functions_type functions;
+    Class::supers_type supers;
 };
 
 Class::Class() {
@@ -747,11 +777,38 @@ Class::~Class() {
     NLUA_CLASS_DESTORY()
 }
 
+Class::fields_type const &Class::fields() const {
+    return d_ptr->fields;
+}
+
+Class::functions_type const &Class::functions() const {
+    return d_ptr->functions;
+}
+
+Class &Class::singleton(string const &_name, Singleton::func_type _init, Singleton::func_type _fini) {
+    d_ptr->singleton.name = _name;
+    d_ptr->singleton.init = ::std::move(_init);
+    d_ptr->singleton.fini = ::std::move(_fini);
+    return *this;
+}
+
+Class &Class::inherit(Any const &par) {
+    d_ptr->supers.emplace_back(par);
+    return *this;
+}
+
+Class &Class::inherit(::std::initializer_list<Any> const &pars) {
+    for (auto &e:pars) {
+        d_ptr->supers.emplace_back(e);
+    }
+    return *this;
+}
+
 Class &Class::add(string const &fname, Function::classfunc_type func) {
     auto f = make_shared<Function>();
     f->name = fname;
     f->classfunc = move(func);
-    _functions.insert(make_pair(f->name, f));
+    d_ptr->functions.insert(make_pair(f->name, f));
     return *this;
 }
 
@@ -873,7 +930,7 @@ Class &Class::add_static(string const &fname, Function::func_type func) {
     auto f = make_shared<Function>();
     f->name = fname;
     f->func = move(func);
-    _functions.insert(make_pair(f->name, f));
+    d_ptr->functions.insert(make_pair(f->name, f));
     return *this;
 }
 
@@ -992,8 +1049,8 @@ Class &Class::add_static(string const &fname, Function::func9_type func) {
 }
 
 Class &Class::add(field_type const &f) {
-    if (_fields.find(f->name) == _fields.end()) {
-        _fields.insert(make_pair(f->name, f));
+    if (d_ptr->fields.find(f->name) == d_ptr->fields.end()) {
+        d_ptr->fields.insert(make_pair(f->name, f));
     }
     return *this;
 }
@@ -1030,12 +1087,12 @@ void Class::declare_in(Context &ctx) const {
     lua_newtable(L);
     int clzid = lua_gettop(L);
 
-    if (_singleton.empty()) {
+    if (d_ptr->singleton.empty()) {
         lua_pushstring(L, "new");
         lua_pushcfunction(L, ClassPrivate::ImpNew);
         lua_rawset(L, clzid);
     } else {
-        _singleton.declare_in(ctx);
+        d_ptr->singleton.declare_in(ctx);
     }
 
     // 类对象放到栈顶
@@ -1054,12 +1111,12 @@ void Class::declare_in(Context &ctx, Module const &mod) const {
     lua_newtable(L);
     int clzid = lua_gettop(L);
 
-    if (_singleton.empty()) {
+    if (d_ptr->singleton.empty()) {
         lua_pushstring(L, "new");
         lua_pushcfunction(L, ClassPrivate::ImpNew);
         lua_rawset(L, clzid);
     } else {
-        _singleton.declare_in(ctx);
+        d_ptr->singleton.declare_in(ctx);
     }
 
     // 类对象放到栈顶
@@ -1075,8 +1132,20 @@ void Class::declare_in(Context &ctx, Module const &mod) const {
     lua_rawset(L, modid);
 }
 
-Module &Module::add_class(class_type &c) {
-    _classes.insert(make_pair(c->name, c));
+struct ModulePrivate {
+    Module::classes_type classes;
+};
+
+Module::Module() {
+    NLUA_CLASS_CONSTRUCT()
+}
+
+Module::~Module() {
+    NLUA_CLASS_DESTORY()
+}
+
+Module &Module::add(class_type &c) {
+    d_ptr->classes.insert(make_pair(c->name, c));
     return *this;
 }
 
@@ -1098,7 +1167,7 @@ void Module::declare_in(Context &ctx) const {
     lua_rawset(L, modid);
     lua_setglobal(L, name.c_str());
 
-    for (auto &e:_classes) {
+    for (auto &e:d_ptr->classes) {
         e.second->declare_in(ctx, *this);
     }
 };
