@@ -1229,6 +1229,10 @@ return_type Object::invoke(string const &name, args_type const &args) {
             cerr << "没有找到函数" << name << endl;
             return nullptr;
         }
+        if (!lua_isfunction(L, -1)) {
+            cerr << name << "当前不是函数" << endl;
+            return nullptr;
+        }
 
         // push self
         lua_pushvalue(L, d_ptr->id);
@@ -1246,6 +1250,10 @@ return_type Object::invoke(string const &name, args_type const &args) {
         lua_getfield(L, -1, name.c_str());
         if (lua_isnil(L, -1)) {
             cerr << "没有找到函数" << name << endl;
+            return nullptr;
+        }
+        if (!lua_isfunction(L, -1)) {
+            cerr << name << "当前不是函数" << endl;
             return nullptr;
         }
 
