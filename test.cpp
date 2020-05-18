@@ -38,8 +38,8 @@ TEST (test0) {
     // 继承C++构造的lua类
     clz2->inherit(clz);
 
-    module->add_class(clz);
-    module->add_class(clz2);
+    module->add(clz);
+    module->add(clz2);
     module->declare_in(ctx);
 
     ctx.load("test.lua");
@@ -80,7 +80,7 @@ TEST (test1) {
         return nullptr;
     });
 
-    module->add_class(clz);
+    module->add(clz);
     module->declare_in(ctx);
 
     ctx.load("test.lua");

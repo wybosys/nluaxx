@@ -234,6 +234,9 @@ void Context::add(class_type &cls) {
 }
 
 void Context::add(module_type &m) {
+    auto fnd = d_ptr->modules.find(m->name);
+    if (fnd != d_ptr->modules.end())
+        m->merge(*fnd->second);
     d_ptr->modules.insert(make_pair(m->name, m));
 }
 
@@ -1170,7 +1173,13 @@ void Module::declare_in(Context &ctx) const {
     for (auto &e:d_ptr->classes) {
         e.second->declare_in(ctx, *this);
     }
-};
+}
+
+void Module::merge(Module const &r) {
+    for (auto &e:r.d_ptr->classes) {
+        d_ptr->classes.insert(e);
+    }
+}
 
 Object::Object() {
     NLUA_CLASS_CONSTRUCT()

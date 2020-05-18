@@ -316,6 +316,9 @@ public:
 
     // 声明模块
     void declare_in(Context &) const;
+
+    // 合并其他模块
+    void merge(Module const &r);
 };
 
 // 映射C++的实例
