@@ -662,7 +662,6 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
 }
 
 struct ClassPrivate {
-    Class *d_owner;
 
     // 仅输出定义段
     void body_declare_in(Context &ctx, Class const &_curclass) {
@@ -774,11 +773,9 @@ struct ClassPrivate {
 
 Class::Class() {
     NLUA_CLASS_CONSTRUCT()
-    d_ptr->d_owner = this;
 }
 
 Class::~Class() {
-    d_ptr->d_owner = nullptr;
     NLUA_CLASS_DESTORY()
 }
 
