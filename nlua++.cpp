@@ -1225,20 +1225,29 @@ return_type Object::invoke(string const &name, args_type const &args) {
     if (d_ptr->id) {
         // 是局部变量
         lua_getfield(L, d_ptr->id, name.c_str());
-        if (lua_isnil(L, -1))
+        if (lua_isnil(L, -1)) {
+            cerr << "没有找到函数" << name << endl;
             return nullptr;
+        }
+
+        // push self
         lua_pushvalue(L, d_ptr->id);
+
     } else {
         // 获得全局变量
         lua_getglobal(L, d_ptr->name.c_str());
-        if (lua_isnil(L, -1))
+        if (lua_isnil(L, -1)) {
+            cerr << "没有找到变量" << name << endl;
             return nullptr;
+        }
         int selfid = lua_gettop(L);
 
         // 获得的函数
         lua_getfield(L, -1, name.c_str());
-        if (lua_isnil(L, -1))
+        if (lua_isnil(L, -1)) {
+            cerr << "没有找到函数" << name << endl;
             return nullptr;
+        }
 
         // push self
         lua_pushvalue(L, selfid);
