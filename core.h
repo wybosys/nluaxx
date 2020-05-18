@@ -16,7 +16,7 @@
 #include <algorithm>
 #include <functional>
 
-#if defined(__ANDROID__) || defined(__OBJC__)
+#if defined(__ANDROID__) || defined(__APPLE__)
 #define NLUA_MOBILE 1
 #define NLUA_SHELL 0
 #else
