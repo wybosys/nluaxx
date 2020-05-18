@@ -1069,6 +1069,12 @@ void Module::declare_in(Context &ctx) const {
     auto L = GetContextL(ctx);
     NLUA_AUTOSTACK(L);
 
+    // 判断是否已经被定义, module不允许覆盖
+    lua_getglobal(L, name.c_str());
+    if (!lua_isnil(L, -1)) {
+        return;
+    }
+
     lua_newtable(L);
     int modid = lua_gettop(L);
 
