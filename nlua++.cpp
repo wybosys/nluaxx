@@ -235,9 +235,11 @@ void Context::add(class_type &cls) {
 
 void Context::add(module_type &m) {
     auto fnd = d_ptr->modules.find(m->name);
-    if (fnd != d_ptr->modules.end())
-        m->merge(*fnd->second);
-    d_ptr->modules.insert(make_pair(m->name, m));
+    if (fnd != d_ptr->modules.end()) {
+        fnd->second->merge(*m);
+    } else {
+        d_ptr->modules.insert(make_pair(m->name, m));
+    }
 }
 
 void Context::declare() {
