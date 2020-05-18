@@ -29,6 +29,15 @@ struct ContextPrivate {
         L = nullptr;
     }
 
+    void attach(lua_State *_l) {
+        if (L && _freel) {
+            lua_close(L);
+        }
+
+        L = _l;
+        _freel = false;
+    }
+
     static int Traceback(lua_State *L) {
         if (!lua_isstring(L, 1))
             return 1;
@@ -132,6 +141,10 @@ Context::Context(void *l) {
 
 Context::~Context() {
     NLUA_CLASS_DESTORY()
+}
+
+void Context::attach(void *_l) {
+    d_ptr->attach((lua_State *) _l);
 }
 
 bool Context::load(const path &file) {
@@ -1230,7 +1243,7 @@ return_type Object::invoke(string const &name, args_type const &args) {
             return nullptr;
         }
         if (!lua_isfunction(L, -1)) {
-            cerr << name << "当前不是函数" << endl;
+            // cerr << name << "当前不是函数" << endl;
             return nullptr;
         }
 
@@ -1253,7 +1266,7 @@ return_type Object::invoke(string const &name, args_type const &args) {
             return nullptr;
         }
         if (!lua_isfunction(L, -1)) {
-            cerr << name << "当前不是函数" << endl;
+            // cerr << name << "当前不是函数" << endl;
             return nullptr;
         }
 

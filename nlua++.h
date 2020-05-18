@@ -50,6 +50,9 @@ public:
     // 连接一个已经存在的
     explicit Context(void *);
 
+    // 以null初始化后可以连接一个已经存在的
+    void attach(void *);
+
     ~Context();
 
     // 加载文件
