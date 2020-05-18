@@ -9,6 +9,8 @@ NLUA_BEGIN
 
 #define IMPFUNC_CHECK_ARGS(count) do { if (args.size() < count) throw error(-1, "缺少参数"); } while(0);
 
+Context Context::shared(nullptr);
+
 struct ContextPrivate {
 
     explicit ContextPrivate(lua_State *_l) {

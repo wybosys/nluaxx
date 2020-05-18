@@ -44,6 +44,9 @@ NLUA_CLASS_DECL(Context);
 
 public:
 
+    // 初始化一个全局的 *为了业务
+    static Context shared;
+
     // 初始化
     Context();
 
