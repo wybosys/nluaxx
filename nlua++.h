@@ -1,4 +1,4 @@
-#ifndef __NLUA_XX_H_INCLUDED
+﻿#ifndef __NLUA_XX_H_INCLUDED
 #define __NLUA_XX_H_INCLUDED
 
 #include "core.h"

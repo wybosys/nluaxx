@@ -1,4 +1,4 @@
-#include "core.h"
+﻿#include "core.h"
 #include "nlua++.h"
 #include "liblua.h"
 #include "value.h"

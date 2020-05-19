@@ -1,4 +1,4 @@
-#ifndef __NLUA_FS_H_INCLUDED
+﻿#ifndef __NLUA_FS_H_INCLUDED
 #define __NLUA_FS_H_INCLUDED
 
 NLUA_BEGIN
