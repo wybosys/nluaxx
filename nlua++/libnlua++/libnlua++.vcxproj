@@ -159,7 +159,6 @@
     <ClInclude Include="..\..\timer.h" />
     <ClInclude Include="..\..\value.h" />
     <ClInclude Include="..\..\variant.h" />
-    <ClInclude Include="framework.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

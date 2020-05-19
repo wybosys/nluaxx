@@ -1,6 +1,10 @@
 #ifndef __NLUA_H_INCLUDED
 #define __NLUA_H_INCLUDED
 
+#if defined(WIN32)
+#include "stdafx.h"
+#endif
+
 #ifndef NLUA_NS
 #define NLUA_NS nlua
 #endif
