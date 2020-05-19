@@ -1,7 +1,7 @@
 #ifndef __NLUA_H_INCLUDED
 #define __NLUA_H_INCLUDED
 
-#if defined(WIN32)
+#ifdef WIN32
 #include "stdafx.h"
 #endif
 

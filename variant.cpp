@@ -10,7 +10,11 @@ Variant::~Variant() {
 
 void Variant::_clear() {
     _type = VariantType::UNKNOWN;
+#ifdef WIN32
+    memset(&_pod, 0, sizeof(_pod));
+#else
     bzero(&_pod, sizeof(_pod));
+#endif
     _arr = nullptr;
     _str.clear();
 }
@@ -54,11 +58,11 @@ number Variant::toNumber() const {
             return n;
         }
         case VariantType::INTEGER:
-            return _pod.i;
+            return (number)_pod.i;
         case VariantType::DECIMAL:
             return _pod.n;
         case VariantType::POINTER:
-            return (pointer) _pod.ptr;
+            return (number)(pointer) _pod.ptr;
         case VariantType::BOOLEAN:
             return _pod.b ? 1 : 0;
         default:
@@ -80,7 +84,7 @@ integer Variant::toInteger() const {
         case VariantType::INTEGER:
             return _pod.i;
         case VariantType::DECIMAL:
-            return _pod.n;
+            return (integer)_pod.n;
         case VariantType::POINTER:
             return (pointer) _pod.ptr;
         case VariantType::BOOLEAN:
