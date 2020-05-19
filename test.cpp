@@ -1,4 +1,4 @@
-#include "nlua++.h"
+﻿#include "nlua++.h"
 #include <UnitTest++/UnitTest++.h>
 #include <UnitTest++/TestReporterStdout.h>
 #include "timer.h"
