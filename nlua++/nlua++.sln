@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libnlua++", "libnlua++\libnlua++.vcxproj", "{0A8AAEC6-BB6D-4669-8DE8-DB15B8EB3EB3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{4A3F00AE-5664-4D27-9DD8-9C681865938E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0A8AAEC6-BB6D-4669-8DE8-DB15B8EB3EB3} = {0A8AAEC6-BB6D-4669-8DE8-DB15B8EB3EB3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
