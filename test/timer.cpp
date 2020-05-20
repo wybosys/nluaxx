@@ -57,9 +57,9 @@ struct CoTimerItem
 struct CoTimersPrivate
 {
 
-    CoTimersPrivate() : thd(new thread(Tick, this))
+    CoTimersPrivate()
     {
-        thd->detach();
+        thd = make_shared<thread>(Tick, this);
     }
 
     ~CoTimersPrivate()
@@ -113,7 +113,7 @@ struct CoTimersPrivate
     CoTimers::timer_t counter = 0;
     map<CoTimers::timer_t, shared_ptr<CoTimerItem>> timers;
     mutex mtx;
-    unique_ptr<thread> thd;
+    shared_ptr<thread> thd;
     bool running = true;
 };
 
@@ -135,7 +135,6 @@ CoTimers::timer_t CoTimers::add(double interval, int repeat, tick_t cb)
     t->seconds = interval;
     t->left = interval;
     t->tick = move(cb);
-    cb();
     t->repeat = repeat;
     d_ptr->timers.insert(make_pair(t->id, t));
 
