@@ -5,7 +5,7 @@ function sleep(n)
 end
 
 function test999()
-    print("²âÊÔcoroutine")
+    print("å¯åŠ¨coroutine")
 
     fn_produ = function()
         while true do

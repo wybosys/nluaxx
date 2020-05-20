@@ -3,7 +3,7 @@ function test6()
     local t = test.Test:new()
     t.onend = function(self)
         if self.ondone then
-           print("没有实现ondone")
+           print("娌℃湁瀹炵幇ondone")
         end
     end
     t:play()
