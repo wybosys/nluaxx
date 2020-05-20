@@ -268,10 +268,8 @@ public:
     // 添加成员变量
     Class &add(field_type const &);
 
-    [[nodiscard]]
     fields_type const &fields() const;
 
-    [[nodiscard]]
     functions_type const &functions() const;
 
     // 设置为单件模式，名称为 name 和 free_name
@@ -311,7 +309,6 @@ public:
     // 将类添加到模块中
     Module &add(class_type &);
 
-    [[nodiscard]]
     classes_type const &classes() const;
 
     // 声明模块

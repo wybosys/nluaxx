@@ -113,7 +113,6 @@ public:
         _str = str;
     }
 
-    [[nodiscard]]
     inline VariantType type() const {
         return _type;
     }
@@ -130,16 +129,12 @@ public:
         return toInteger();
     }
 
-    [[nodiscard]]
     string toString() const;
 
-    [[nodiscard]]
     number toNumber() const;
 
-    [[nodiscard]]
     integer toInteger() const;
 
-    [[nodiscard]]
     bool toBoolean() const;
 
     void *toPointer() const;

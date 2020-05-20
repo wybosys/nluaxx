@@ -5,10 +5,14 @@
 
 USE_NLUA
 
+#define TEST_CTX_PACKAGES \
+ctx.add_package_path("../test"); \
+ctx.add_package_path("D:\\sdks\\opt\\share\\lua");
+
 TEST (main) {
     // 测试原始lua
     Context ctx;
-    ctx.add_package_path("../test");
+    TEST_CTX_PACKAGES;
 
     ctx.load("test.lua");
     ctx.invoke("main");
@@ -60,7 +64,7 @@ TEST (test0) {
 TEST (test1) {
     // 测试 c++ 变量
     Context ctx;
-    ctx.add_package_path("../test");
+    TEST_CTX_PACKAGES;
 
     {
         auto module = make_shared<Module>();
@@ -105,7 +109,7 @@ TEST (test1) {
 TEST (test2) {
     // 测试c++调lua函数
     Context ctx;
-    ctx.add_package_path("../test");
+    TEST_CTX_PACKAGES;
 
     ctx.load("test.lua");
     ctx.invoke("test2");
@@ -123,7 +127,7 @@ TEST (test2) {
 TEST (test3) {
     // 定义 lua 的单件
     Context ctx;
-    ctx.add_package_path("../test");
+    TEST_CTX_PACKAGES;
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
@@ -147,7 +151,7 @@ int test4_a() {
 
 TEST (test4) {
     Context ctx;
-    ctx.add_package_path("../test");
+    TEST_CTX_PACKAGES;
 
     ctx.load("test.lua");
 
@@ -192,7 +196,7 @@ TEST (test4) {
 TEST (test5) {
     // 测试 ss
     Context ctx;
-    ctx.add_package_path("../test");
+    TEST_CTX_PACKAGES;
 
     ctx.load("signalslots.lua");
     ctx.load("test.lua");
@@ -201,7 +205,7 @@ TEST (test5) {
 
 TEST (test6) {
     auto &ctx = Context::shared;
-    ctx.add_package_path("../test");
+    TEST_CTX_PACKAGES;
 
     auto m = make_shared<Module>();
     m->name = "test";
@@ -230,7 +234,7 @@ TEST (test6) {
 TEST (test999) {
     // 测试协程
     Context ctx;
-    ctx.add_package_path("../test");
+    TEST_CTX_PACKAGES;
 
     ctx.load("test.lua");
     ctx.invoke("test999");
