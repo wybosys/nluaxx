@@ -1,3 +1,11 @@
+-- require("mobdebug").start()
+socket = require("socket")
+ss = require("signalslots")
+
+function sleep(n)
+    socket.select(nil, nil, n)
+end
+
 function main()
     local cls = {
         a = "a",
@@ -53,6 +61,9 @@ function test1()
     assert(t0.a == "a", "obj0 a")
     assert(t0.sa == "sa", "obj0 sa")
     t0.a = 123
+    t0.b = function(self)
+        return self.a
+    end
     assert(t0.a == 123, "obj0 a 123")
     assert(t1.a == "a", "obj1 a a")
     test.Test.a = 456
@@ -107,10 +118,73 @@ function test4()
     return 0
 end
 
-function test4_a()
-    local cnt = 10000
+function test4_a(cnt)
     for i = 0, cnt do
         test4()
     end
 end
 
+function test5()
+    -- print("signals slots")
+    local B = {}
+    function B:proc()
+        print("signal b: member function")
+    end
+    ss.Object:Declare(B)
+
+    local C = {}
+    function C:proc()
+        print("signal c: member function")
+    end
+    ss.Object:Declare(C)
+
+    local a = ss.Object:new()
+    a:signals():register("a")
+
+    -- 从C++的测试用例抄来
+    local cb = function()
+        print("signal a: lambda")
+    end
+    a:signals():connect("a", cb)
+
+    local b = B:new()
+    b:signals():register("b")
+
+    cb = function()
+        print("signal b: lambda")
+    end
+    b:signals():connect("b", cb)
+    a:signals():connect("a", b.proc, b)
+
+    local c = C:new()
+    c:signals():register("c")
+    a:signals():connect("a", c.proc, c)
+    c:drop()
+
+    a:signals():emit("a")
+    b:signals():emit("b")
+end
+
+function test6()
+    print("测试coroutine")
+
+    fn_produ = function()
+        while true do
+            sleep(1)
+            local value = math.random()
+            print("produce: ", value)
+            coroutine.yield(value)
+        end
+    end
+
+    consumer = function(produ)
+        while true do
+            local status, value = coroutine.resume(produ);
+            print("consume: ", value)
+        end
+    end
+
+    co_produ = coroutine.create(fn_produ)
+    consumer(co_produ)
+
+end

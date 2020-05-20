@@ -8,7 +8,7 @@ USE_NLUA
 TEST (main) {
     // 测试原始lua
     Context ctx;
-    ctx.add_package_path("../");
+    ctx.add_package_path("..");
 
     ctx.load("test.lua");
     ctx.invoke("main");
@@ -17,7 +17,7 @@ TEST (main) {
 TEST (test0) {
     // 测试c++定义lua类，以及从lua调用c++
     Context ctx;
-    ctx.add_package_path("../");
+    ctx.add_package_path("..");
 
     auto module = make_shared<Module>();
     module->name = "test";
@@ -41,6 +41,8 @@ TEST (test0) {
     module->add(clz);
     module->add(clz2);
     module->declare_in(ctx);
+    // 重复declare, 应该被跳过
+    module->declare_in(ctx);
 
     ctx.load("test.lua");
     ctx.invoke("test0");
@@ -58,30 +60,43 @@ TEST (test0) {
 TEST (test1) {
     // 测试 c++ 变量
     Context ctx;
-    ctx.add_package_path("../");
+    ctx.add_package_path("..");
 
-    auto module = make_shared<Module>();
-    module->name = "test";
+    {
+        auto module = make_shared<Module>();
+        module->name = "test";
 
-    auto clz = make_shared<Class>();
-    clz->name = "Test";
+        auto clz = make_shared<Class>();
+        clz->name = "Test";
 
-    clz->add(make_shared<Field>("a", "a"));
-    clz->add(make_shared<Field>("sa", "sa"));
+        clz->add(make_shared<Field>("a", "a"));
+        clz->add(make_shared<Field>("sa", "sa"));
+        clz->add(make_shared<Field>("b", nullptr));
 
-    clz->add("proc", [=](self_type &self, Variant const &v) -> return_type {
-        return make_shared<Variant>(v);
-    });
+        /*
+        clz->add("b", [=](self_type &self) -> return_type {
+            return nullptr;
+        });
+         */
 
-    clz->add("done", [=](self_type &self) -> return_type {
-                CHECK_EQUAL(self->get("a")->toInteger(), 123);
-                CHECK_EQUAL(self->invoke("proc", 123)->toInteger(), 123);
-                CHECK_EQUAL(self->has("xxxxxxxx"), false);
-        return nullptr;
-    });
+        clz->add("proc", [=](self_type &self, Variant const &v) -> return_type {
+            return make_shared<Variant>(v);
+        });
 
-    module->add(clz);
-    module->declare_in(ctx);
+        clz->add("done", [=](self_type &self) -> return_type {
+                    CHECK_EQUAL(self->get("a")->toInteger(), 123);
+                    CHECK_EQUAL(self->invoke("b")->toInteger(), 123);
+                    CHECK_EQUAL(self->invoke("proc", 123)->toInteger(), 123);
+                    CHECK_EQUAL(self->has("xxxxxxxx"), false);
+            return nullptr;
+        });
+
+        module->add(clz);
+        ctx.add(module); // 如果使用declare_in, 则需要保证将module加入ctx,否则生命期结束后会被释放
+        // module->declare_in(ctx);
+    }
+
+    ctx.declare(); // 可以独立declarein也可以通过ctx一次性declare
 
     ctx.load("test.lua");
     ctx.invoke("test1");
@@ -90,7 +105,7 @@ TEST (test1) {
 TEST (test2) {
     // 测试c++调lua函数
     Context ctx;
-    ctx.add_package_path("../");
+    ctx.add_package_path("..");
 
     ctx.load("test.lua");
     ctx.invoke("test2");
@@ -108,7 +123,7 @@ TEST (test2) {
 TEST (test3) {
     // 定义 lua 的单件
     Context ctx;
-    ctx.add_package_path("../");
+    ctx.add_package_path("..");
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
@@ -132,7 +147,7 @@ int test4_a() {
 
 TEST (test4) {
     Context ctx;
-    ctx.add_package_path("../");
+    ctx.add_package_path("..");
 
     ctx.load("test.lua");
 
@@ -152,7 +167,7 @@ TEST (test4) {
     int cnt = 100000;
 
     cout << "开始测试lua函数执行 " << cnt << " 次" << endl;
-    ctx.invoke("test4_a");
+    ctx.invoke("test4_a", cnt);
     cout << "共耗时 " << tc.seconds() << " s" << endl;
 
     cout << "开始测试c++调用lua函数 " << cnt << " 次" << endl;
@@ -174,10 +189,28 @@ TEST (test4) {
     cout << "共耗时 " << tc.seconds() << " s" << endl;
 }
 
+TEST (test5) {
+    // 测试 ss
+    Context ctx;
+    ctx.add_package_path("..");
+
+    ctx.load("signalslots.lua");
+    ctx.load("test.lua");
+    ctx.invoke("test5");
+}
+
+TEST (test6) {
+    // 测试协程
+    Context ctx;
+    ctx.add_package_path("..");
+
+    ctx.load("test.lua");
+    ctx.invoke("test6");
+}
+
 int main() {
     ::UnitTest::TestReporterStdout rpt;
     ::UnitTest::TestRunner runner(rpt);
     runner.RunTestsIf(::UnitTest::Test::GetTestList(), nullptr, ::UnitTest::True(), 0);
     return Exec();
 }
-
