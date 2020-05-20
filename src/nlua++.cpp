@@ -1171,14 +1171,24 @@ void Class::declare_in(Context &ctx, Module const &mod) const {
 }
 
 struct ModulePrivate {
+    Module* d_owner;
     Module::classes_type classes;
+
+    void body_declare_in(Context &ctx)
+    {
+        for (auto &e : classes) {
+            e.second->declare_in(ctx, *d_owner);
+        }
+    }
 };
 
 Module::Module() {
-    NLUA_CLASS_CONSTRUCT()
+    NLUA_CLASS_CONSTRUCT();
+    d_ptr->d_owner = this;
 }
 
 Module::~Module() {
+    d_ptr->d_owner = nullptr;
     NLUA_CLASS_DESTORY()
 }
 
@@ -1194,6 +1204,7 @@ void Module::declare_in(Context &ctx) const {
     // 判断是否已经被定义, module不允许覆盖
     lua_getglobal(L, name.c_str());
     if (!lua_isnil(L, -1)) {
+        d_ptr->body_declare_in(ctx);
         return;
     }
 
@@ -1205,9 +1216,7 @@ void Module::declare_in(Context &ctx) const {
     lua_rawset(L, modid);
     lua_setglobal(L, name.c_str());
 
-    for (auto &e:d_ptr->classes) {
-        e.second->declare_in(ctx, *this);
-    }
+    d_ptr->body_declare_in(ctx);
 }
 
 void Module::merge(Module const &r) {
