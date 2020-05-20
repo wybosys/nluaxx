@@ -7,8 +7,10 @@
 
 NLUA_BEGIN
 
-struct TimeCounterPrivate
+class TimeCounterPrivate
 {
+public:
+
     chrono::high_resolution_clock::time_point t0;
 };
 
@@ -54,8 +56,9 @@ struct CoTimerItem
     CoTimers::tick_t proc;
 };
 
-struct CoTimersPrivate
+class CoTimersPrivate
 {
+public:
 
     CoTimersPrivate()
     {
@@ -70,40 +73,45 @@ struct CoTimersPrivate
 
     static void Tick(CoTimersPrivate *self)
     {
-        while (self->running)
-        {
-            NLUA_AUTOGUARD(self->mtx)
+        while (self->running) {
             Time::Sleep(self->interval);
-            bool needclean = false;
+            _DoTick(self);
+        }
+    }
 
-            for (auto &e : self->timers)
+    static void _DoTick(CoTimersPrivate *self)
+    {
+        NLUA_AUTOGUARD(self->mtx);
+
+        bool needclean = false;
+
+        for (auto &e : self->timers)
+        {
+            auto &item = *e.second;
+            item.left -= self->interval;
+            if (item.left <= 0)
             {
-                auto &item = *e.second;
-                item.left -= self->interval;
-                if (item.left <= 0)
+                if (item.repeat != -1)
                 {
-                    if (item.repeat != -1)
-                    {
-                        if (--item.repeat == 0)
-                            needclean = true;
-                    }
-                    // 先做为同步调用
-                    item.proc();
-                    item.left = item.seconds;
+                    if (--item.repeat == 0)
+                        needclean = true;
                 }
+                // 先做为同步调用
+                item.proc();
+                item.left = item.seconds;
             }
+        }
 
-            // 移除失效的
-            if (needclean)
+        // 移除失效的
+        if (needclean)
+        {
+            for (auto i = self->timers.begin(); i != self->timers.end();)
             {
-                for (auto i = self->timers.begin(); i != self->timers.end();)
-                {
-                    if (i->second->repeat <= 0) {
-                        i = self->timers.erase(i);
-                    }
-                    else {
-                        ++i;
-                    }
+                if (i->second->repeat <= 0) {
+                    i = self->timers.erase(i);
+                }
+                else {
+                    ++i;
                 }
             }
         }
@@ -128,7 +136,7 @@ CoTimers::~CoTimers() noexcept {
 
 CoTimers::timer_t CoTimers::add(double interval, int repeat, tick_t cb)
 {
-    NLUA_AUTOGUARD(d_ptr->mtx)
+    NLUA_AUTOGUARD(d_ptr->mtx);
 
     auto t = make_shared<CoTimerItem>();
     t->id = ++d_ptr->counter;
