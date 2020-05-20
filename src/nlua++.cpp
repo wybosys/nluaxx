@@ -4,6 +4,7 @@
 #include "value.h"
 #include "stringt.h"
 #include <atomic>
+#include <sstream>
 
 NLUA_BEGIN
 
@@ -436,7 +437,12 @@ public:
 
     // 对象名
     string name;
+
+    typedef atomic<lua_Integer> lua_global_refid_type;
+    static lua_global_refid_type RefId;
 };
+
+ObjectPrivate::lua_global_refid_type ObjectPrivate::RefId(1);
 
 class FunctionPrivate {
 public:
@@ -1407,6 +1413,75 @@ bool Object::has(string const &name) const {
 
 bool Object::isnull() const {
     return !d_ptr->L || !d_ptr->id || d_ptr->name.empty();
+}
+
+void Object::grab()
+{
+    auto L = d_ptr->L;
+    NLUA_AUTOSTACK(L);
+
+    if (d_ptr->id) {
+        // 设置生命期到全局，避免被局部释放
+        ostringstream oss;
+        oss << "__nluaxx_global_objects_" << ObjectPrivate::RefId.fetch_add(1);
+        d_ptr->name = oss.str();
+
+        lua_pushvalue(L, d_ptr->id);
+        lua_setglobal(L, d_ptr->name.c_str());
+        d_ptr->id = 0;
+    }
+
+    // 已经是全局变量
+    lua_getglobal(L, d_ptr->name.c_str());
+    if (lua_isnil(L, -1)) {
+        cerr << "没有找到变量" << d_ptr->name << endl;
+        return;
+    }
+    int selfid = lua_gettop(L);
+    lua_getfield(L, selfid, "__refs");
+    if (lua_isnumber(L, -1)) {
+        lua_pushinteger(L, lua_tointeger(L, -1) + 1);
+    }
+    else {
+        lua_pushinteger(L, 1);
+    }
+    lua_setfield(L, selfid, "__refs");
+}
+
+bool Object::drop()
+{
+    auto L = d_ptr->L;
+    NLUA_AUTOSTACK(L);
+
+    if (d_ptr->id) {
+        cerr << "该变量是局部变量，不支持drop" << endl;
+        return false;
+    }
+
+    lua_getglobal(L, d_ptr->name.c_str());
+    if (lua_isnil(L, -1)) {
+        cerr << "没有找到变量" << d_ptr->name << endl;
+        return false;
+    }
+    int selfid = lua_gettop(L);
+    lua_getfield(L, selfid, "__refs");
+    if (!lua_isnumber(L, -1)) {
+        cerr << "该变量没有进行过grab操作" << endl;
+        return false;
+    }
+
+    auto refs = lua_tointeger(L, -1);
+
+    if (--refs == 0) {
+        // 需要释放
+        lua_pushnil(L);
+        lua_setglobal(L, d_ptr->name.c_str());
+        return true;
+    }
+
+    lua_pushinteger(L, refs);
+    lua_setfield(L, selfid, "__refs");
+    return false;
 }
 
 return_type Object::invoke(string const &name, args_type const &args) {

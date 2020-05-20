@@ -364,6 +364,12 @@ public:
     // 是否为空
     bool isnull() const;
 
+    // 提升生命期
+    void grab();
+
+    // 释放
+    bool drop();
+
     // 执行函数
     return_type invoke(string const &name, args_type const &);
 

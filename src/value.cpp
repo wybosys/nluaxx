@@ -23,7 +23,7 @@ void push(Variant const &v, lua_State *L) {
             lua_pushnumber(L, v.toNumber());
             break;
         case VariantType::INTEGER:
-            lua_pushinteger(L, v.toInteger());
+            lua_pushinteger(L, (lua_Integer)v.toInteger());
             break;
         case VariantType::STRING: {
             auto s = v.toString();
