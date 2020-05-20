@@ -530,8 +530,8 @@ public:
     typedef function<int(lua_State *)> lua_cfunction_type;
     typedef atomic<lua_Integer> lua_cfunction_refid_type;
 
-    typedef map<ulonglong, classfunc_type> lua_ref_classfuncs_type;
-    typedef map<ulonglong, func_type> lua_ref_funcs_type;
+    typedef map<lua_Integer, classfunc_type> lua_ref_classfuncs_type;
+    typedef map<lua_Integer, func_type> lua_ref_funcs_type;
 
     static lua_cfunction_refid_type RefId;
     static lua_ref_classfuncs_type ClassFuncs;
@@ -539,7 +539,7 @@ public:
 
     static int ImpClassFunction(lua_State *L)
     {
-        ulonglong id = lua_tointeger(L, lua_upvalueindex(1));
+        auto id = lua_tointeger(L, lua_upvalueindex(1));
         auto fnd = ClassFuncs.find(id);
         if (fnd == ClassFuncs.end())
         {
@@ -666,7 +666,7 @@ public:
 
     static int ImpStaticFunction(lua_State *L)
     {
-        ulonglong id = lua_tointeger(L, lua_upvalueindex(1));
+        auto id = lua_tointeger(L, lua_upvalueindex(1));
         auto fnd = Funcs.find(id);
         if (fnd == Funcs.end())
         {
