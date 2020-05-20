@@ -48,6 +48,8 @@ public:
 
     // 取消定时器
     void cancel(timer_t);
+
+    NLUA_SINGLETON_DECL(CoTimers);
 };
 
 // 定时器

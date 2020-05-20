@@ -68,11 +68,11 @@ inline TP *DPtr(T *obj) {
 
 #define NLUA_SINGLETON_DECL(cls) \
 public: static cls& shared();
-#define NLUA_SINGLETON_IMPL(cls) \
+#define NLUA_SINGLETON_IMPL(cls, ...) \
 static cls* _shared = nullptr; \
 cls& cls::shared() { \
 if (_shared == nullptr) { \
-_shared = new cls(); \
+_shared = new cls(__VA_ARGS__); \
 } \
 return *_shared; \
 }

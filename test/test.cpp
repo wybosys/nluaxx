@@ -214,7 +214,8 @@ TEST (test6) {
     clz->add(make_shared<Field>("ondone", -1));
     clz->add("play", [=](self_type &self) -> return_type {
         // 测试长生命周期异步调用
-        Timer::SetTimeout(1, [=]() {
+        Timer::SetTimeout(1, [=]()->void {
+            cout << "xxxxxxxxxxxxx" << endl;
             self->invoke("ondone");
         });
         return nullptr;
@@ -231,6 +232,8 @@ TEST (test6) {
 }
 
 TEST (test999) {
+    return;
+
     // 测试协程
     Context ctx;
     TEST_CTX_PACKAGES;

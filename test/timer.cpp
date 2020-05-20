@@ -45,9 +45,6 @@ void Time::Sleep(double seconds)
     this_thread::sleep_for(chrono::microseconds(long(seconds * 1e6)));
 }
 
-// 最小粒度定时器
-static CoTimers __gs_timer(0.01);
-
 struct CoTimerItem
 {
     CoTimers::timer_t id;
@@ -62,7 +59,7 @@ struct CoTimersPrivate
 
     CoTimersPrivate() : thd(new thread(Tick, this))
     {
-        // pass
+        thd->detach();
     }
 
     ~CoTimersPrivate()
@@ -82,14 +79,14 @@ struct CoTimersPrivate
             for (auto &e : self->timers)
             {
                 auto &item = *e.second;
-                if (item.repeat != -1)
-                {
-                    if (--item.repeat == 0)
-                        needclean = true;
-                }
                 item.left -= self->interval;
                 if (item.left <= 0)
                 {
+                    if (item.repeat != -1)
+                    {
+                        if (--item.repeat == 0)
+                            needclean = true;
+                    }
                     // 先做为同步调用
                     item.tick();
                     item.left = item.seconds;
@@ -99,10 +96,14 @@ struct CoTimersPrivate
             // 移除失效的
             if (needclean)
             {
-                for (auto i = self->timers.begin(); i != self->timers.end(); ++i)
+                for (auto i = self->timers.begin(); i != self->timers.end();)
                 {
-                    if (i->second->repeat <= 0)
+                    if (i->second->repeat <= 0) {
                         i = self->timers.erase(i);
+                    }
+                    else {
+                        ++i;
+                    }
                 }
             }
         }
@@ -134,7 +135,7 @@ CoTimers::timer_t CoTimers::add(double interval, int repeat, tick_t cb)
     t->seconds = interval;
     t->left = interval;
     t->tick = move(cb);
-    t->repeat = 0;
+    t->repeat = repeat;
     d_ptr->timers.insert(make_pair(t->id, t));
 
     return t->id;
@@ -146,24 +147,27 @@ void CoTimers::cancel(timer_t id)
     d_ptr->timers.erase(id);
 }
 
+// 最小粒度定时器
+NLUA_SINGLETON_IMPL(CoTimers, 0.1);
+
 Timer::timer_t Timer::SetTimeout(double time, tick_t cb)
 {
-    return __gs_timer.add(time, 1, cb);
+    return CoTimers::shared().add(time, 1, cb);
 }
 
 void Timer::CancelTimeout(timer_t id)
 {
-    __gs_timer.cancel(id);
+    CoTimers::shared().cancel(id);
 }
 
 Timer::timer_t Timer::SetInterval(double time, tick_t cb)
 {
-    return __gs_timer.add(time, -1, cb);
+    return CoTimers::shared().add(time, -1, cb);
 }
 
 void Timer::CancelInterval(timer_t id)
 {
-    __gs_timer.cancel(id);
+    CoTimers::shared().cancel(id);
 }
 
 NLUA_END
