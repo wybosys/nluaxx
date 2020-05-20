@@ -5,7 +5,7 @@ function sleep(n)
 end
 
 function test999()
-    print("启动coroutine")
+    print("running coroutine")
 
     fn_produ = function()
         while true do
