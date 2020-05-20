@@ -3,21 +3,23 @@ project(nlua++)
 
 set(CMAKE_CXX_STANDARD 11)
 
+include_directories(src)
 set(NLUA_SRCS
-        core.cpp
-        stringt.cpp
-        fs.cpp
-        variant.cpp
-        value.cpp
-        timer.cpp
-        nlua++.cpp
+        src/core.cpp
+        src/stringt.cpp
+        src/fs.cpp
+        src/variant.cpp
+        src/value.cpp
+        src/timer.cpp
+        src/nlua++.cpp
         )
+
 macro(build_nlua ver lib DEFS)
     add_library(nlua++-${ver} STATIC ${NLUA_SRCS})
     target_compile_definitions(nlua++-${ver} PUBLIC ${DEFS})
     target_link_libraries(nlua++-${ver} ${lib})
     add_executable(test_nlua++-${ver}
-            test.cpp)
+            test/test.cpp)
     target_link_libraries(test_nlua++-${ver} nlua++-${ver} UnitTest++)
 endmacro()
 
