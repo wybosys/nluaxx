@@ -200,12 +200,40 @@ TEST (test5) {
 }
 
 TEST (test6) {
+    auto &ctx = Context::shared;
+    ctx.add_package_path("../test");
+
+    auto m = make_shared<Module>();
+    m->name = "test";
+
+    auto clz = make_shared<Class>();
+    clz->name = "Test";
+    clz->add(make_shared<Field>("ondone", -1));
+    clz->add("play", [=](self_type &self) -> return_type {
+        // 测试长生命周期异步调用
+        Timer::SetTimeout(1, [=]() {
+            self->invoke("ondone");
+        });
+        return nullptr;
+    });
+
+    // 实现类
+    m->add(clz);
+    m->declare_in(ctx);
+    ctx.add(m);
+
+    // 启动
+    ctx.load("test.lua");
+    ctx.invoke("test6");
+}
+
+TEST (test999) {
     // 测试协程
     Context ctx;
     ctx.add_package_path("../test");
 
     ctx.load("test.lua");
-    ctx.invoke("test6");
+    ctx.invoke("test999");
 }
 
 int main() {

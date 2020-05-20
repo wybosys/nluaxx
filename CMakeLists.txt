@@ -10,7 +10,6 @@ set(NLUA_SRCS
         src/fs.cpp
         src/variant.cpp
         src/value.cpp
-        src/timer.cpp
         src/nlua++.cpp
         )
 
@@ -19,8 +18,9 @@ macro(build_nlua ver lib DEFS)
     target_compile_definitions(nlua++-${ver} PUBLIC ${DEFS})
     target_link_libraries(nlua++-${ver} ${lib})
     add_executable(test_nlua++-${ver}
+            test/timer.cpp
             test/test.cpp)
-    target_link_libraries(test_nlua++-${ver} nlua++-${ver} UnitTest++)
+    target_link_libraries(test_nlua++-${ver} nlua++-${ver} UnitTest++ pthread)
 endmacro()
 
 build_nlua(jit luajit-5.1 NLUA_JIT)

@@ -81,7 +81,7 @@ return *_shared; \
 #define __NLUA_COMBINE(L, R) L##R
 #define _NLUA_COMBINE(L, R) __NLUA_COMBINE(L, R)
 
-#define NLUA_AUTOGUARD(obj, ...) ::lock_guard<::mutex> _NLUA_COMBINE(__auto_guard_, __LINE__)(obj);
+#define NLUA_AUTOGUARD(obj, ...) ::std::lock_guard<::std::mutex> _NLUA_COMBINE(__auto_guard_, __LINE__)(obj);
 
 class error : public exception {
 public:
