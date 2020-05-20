@@ -56,7 +56,11 @@ struct ContextPrivate {
         }
 
         for (auto e:package_paths) {
+#ifdef WIN32
+            e = e + "\\" + file;
+#else
             e = e + "/" + file;
+#endif
             if (path::isfile(e))
                 return e;
         }
@@ -79,11 +83,20 @@ struct ContextPrivate {
 
         package_paths.clear();
         for (auto cur: *curs) {
+#ifdef WIN32
+            if (endwith(cur, "?.lua")) {
+                cur = cur.substr(0, cur.length() - 6);
+            }
+            else if (endwith(cur, "?\\init.lua")) {
+                cur = cur.substr(0, cur.length() - 11);
+            }
+#else
             if (endwith(cur, "?.lua")) {
                 cur = cur.substr(0, cur.length() - 6);
             } else if (endwith(cur, "?/init.lua")) {
                 cur = cur.substr(0, cur.length() - 11);
             }
+#endif
             path c = path::absolute(cur);
             if (path::isdirectory(c)) {
                 if (find(package_paths.begin(), package_paths.end(), c) == package_paths.end()) {
@@ -110,6 +123,18 @@ struct ContextPrivate {
 
         cpackage_paths.clear();
         for (auto cur: *curs) {
+#ifndef WIN32
+            if (endwith(cur, "?.dll")) {
+                cur = cur.substr(0, cur.length() - 5);
+            }
+            path c = path::absolute(cur);
+            if (path::isdirectory(c)) {
+                if (find(cpackage_paths.begin(), cpackage_paths.end(), c) == cpackage_paths.end()) {
+                    cpackage_paths.emplace_back(c);
+                    // cout << "cpackage path: " << c << endl;
+                }
+            }
+#else
             if (endwith(cur, "?.so")) {
                 cur = cur.substr(0, cur.length() - 5);
             }
@@ -120,6 +145,7 @@ struct ContextPrivate {
                     // cout << "cpackage path: " << c << endl;
                 }
             }
+#endif
         }
     }
 
@@ -215,7 +241,12 @@ void Context::add_cpackage_path(path const &dir) {
 
     lua_getfield(L, -1, "cpath");
     string cur = lua_tostring(L, -1);
+
+#ifdef WIN32
+    string d = path::absolute(dir) + "\\?.dll";
+#else
     string d = path::absolute(dir) + "/?.so";
+#endif
 
     auto curs = explode(cur, ";");
     if (find(curs.begin(), curs.end(), d) == curs.end()) {
