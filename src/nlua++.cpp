@@ -11,7 +11,8 @@ NLUA_BEGIN
 
 Context Context::shared(nullptr);
 
-struct ContextPrivate {
+class ContextPrivate {
+public:
 
     explicit ContextPrivate(lua_State *_l) {
         if (_l) {
@@ -421,7 +422,9 @@ void Field::declare_in(Context &ctx, Class const &clz) const {
     lua_rawset(L, clzid);
 }
 
-struct ObjectPrivate {
+class ObjectPrivate {
+public:
+
     // 对象内存指针
     void *self;
 
@@ -435,20 +438,21 @@ struct ObjectPrivate {
     string name;
 };
 
-struct FunctionPrivate {
+class FunctionPrivate {
+public:
 
     FunctionPrivate() {
         id = RefId.fetch_add(1);
     }
 
     // 生成的函数唯一id
-    ulonglong id;
+    lua_Integer id;
 
     typedef function<return_type(lua_State *L, self_type &self, args_type const &)> classfunc_type;
     typedef function<return_type(lua_State *L, args_type const &)> func_type;
 
     typedef function<int(lua_State *)> lua_cfunction_type;
-    typedef atomic<ulonglong> lua_cfunction_refid_type;
+    typedef atomic<lua_Integer> lua_cfunction_refid_type;
 
     typedef map<ulonglong, classfunc_type> lua_ref_classfuncs_type;
     typedef map<ulonglong, func_type> lua_ref_funcs_type;
@@ -747,7 +751,8 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
     lua_rawset(L, clzid);
 }
 
-struct ClassPrivate {
+class ClassPrivate {
+public:
 
     // 仅输出定义段
     void body_declare_in(Context &ctx, Class const &_curclass) {
@@ -1220,7 +1225,9 @@ void Class::declare_in(Context &ctx, Module const &mod) const {
     lua_rawset(L, modid);
 }
 
-struct ModulePrivate {
+class ModulePrivate {
+public:
+
     Module* d_owner;
     Module::classes_type classes;
 

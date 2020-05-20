@@ -1,4 +1,4 @@
-#include "nlua++.h"
+﻿#include "nlua++.h"
 #include "timer.h"
 #include <chrono>
 #include <thread>
@@ -51,7 +51,7 @@ struct CoTimerItem
     double seconds;
     double left;
     int repeat;
-    CoTimers::tick_t tick;
+    CoTimers::tick_t proc;
 };
 
 struct CoTimersPrivate
@@ -88,7 +88,7 @@ struct CoTimersPrivate
                             needclean = true;
                     }
                     // 先做为同步调用
-                    item.tick();
+                    item.proc();
                     item.left = item.seconds;
                 }
             }
@@ -134,7 +134,7 @@ CoTimers::timer_t CoTimers::add(double interval, int repeat, tick_t cb)
     t->id = ++d_ptr->counter;
     t->seconds = interval;
     t->left = interval;
-    t->tick = move(cb);
+    t->proc = cb;
     t->repeat = repeat;
     d_ptr->timers.insert(make_pair(t->id, t));
 
