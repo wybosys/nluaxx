@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>../../;D:\sdks\opt\include;$(IncludePath)</IncludePath>
+    <IncludePath>../../src;D:\sdks\opt\include;$(IncludePath)</IncludePath>
     <SourcePath>../../;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -80,7 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>../../;D:\sdks\opt\include;$(IncludePath)</IncludePath>
+    <IncludePath>../../src;D:\sdks\opt\include;$(IncludePath)</IncludePath>
     <SourcePath>../../;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -155,24 +155,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\core.h" />
-    <ClInclude Include="..\..\fs.h" />
-    <ClInclude Include="..\..\liblua.h" />
-    <ClInclude Include="..\..\nlua++.h" />
-    <ClInclude Include="..\..\stringt.h" />
-    <ClInclude Include="..\..\timer.h" />
-    <ClInclude Include="..\..\value.h" />
-    <ClInclude Include="..\..\variant.h" />
+    <ClInclude Include="..\..\src\core.h" />
+    <ClInclude Include="..\..\src\fs.h" />
+    <ClInclude Include="..\..\src\liblua.h" />
+    <ClInclude Include="..\..\src\nlua++.h" />
+    <ClInclude Include="..\..\src\stringt.h" />
+    <ClInclude Include="..\..\src\value.h" />
+    <ClInclude Include="..\..\src\variant.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\core.cpp" />
-    <ClCompile Include="..\..\fs.cpp" />
-    <ClCompile Include="..\..\nlua++.cpp" />
-    <ClCompile Include="..\..\stringt.cpp" />
-    <ClCompile Include="..\..\timer.cpp" />
-    <ClCompile Include="..\..\value.cpp" />
-    <ClCompile Include="..\..\variant.cpp" />
+    <ClCompile Include="..\..\src\core.cpp" />
+    <ClCompile Include="..\..\src\fs.cpp" />
+    <ClCompile Include="..\..\src\nlua++.cpp" />
+    <ClCompile Include="..\..\src\stringt.cpp" />
+    <ClCompile Include="..\..\src\value.cpp" />
+    <ClCompile Include="..\..\src\variant.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

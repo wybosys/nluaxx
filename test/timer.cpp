@@ -1,4 +1,4 @@
-#include "core.h"
+#include "nlua++.h"
 #include "timer.h"
 #include <chrono>
 #include <thread>
@@ -7,41 +7,49 @@
 
 NLUA_BEGIN
 
-struct TimeCounterPrivate {
+struct TimeCounterPrivate
+{
     chrono::high_resolution_clock::time_point t0;
 };
 
-TimeCounter::TimeCounter() {
+TimeCounter::TimeCounter()
+{
     NLUA_CLASS_CONSTRUCT();
 }
 
-TimeCounter::~TimeCounter() {
+TimeCounter::~TimeCounter()
+{
     NLUA_CLASS_DESTORY();
 }
 
-void TimeCounter::start() {
+void TimeCounter::start()
+{
     d_ptr->t0 = chrono::high_resolution_clock::now();
 }
 
-double TimeCounter::seconds(bool reset) {
+double TimeCounter::seconds(bool reset)
+{
     auto t1 = chrono::high_resolution_clock::now();
     auto dur = t1 - d_ptr->t0;
 
-    if (reset) {
+    if (reset)
+    {
         d_ptr->t0 = t1;
     }
 
     return chrono::duration_cast<chrono::microseconds>(dur).count() * 0.000001;
 }
 
-void Time::Sleep(double seconds) {
+void Time::Sleep(double seconds)
+{
     this_thread::sleep_for(chrono::microseconds(long(seconds * 1e6)));
 }
 
 // 最小粒度定时器
 static CoTimers __gs_timer(0.01);
 
-struct CoTimerItem {
+struct CoTimerItem
+{
     CoTimers::timer_t id;
     double seconds;
     double left;
@@ -49,31 +57,39 @@ struct CoTimerItem {
     CoTimers::tick_t tick;
 };
 
-struct CoTimersPrivate {
+struct CoTimersPrivate
+{
 
-    CoTimersPrivate() : thd(new thread(Tick, this)) {
+    CoTimersPrivate() : thd(new thread(Tick, this))
+    {
         // pass
     }
 
-    ~CoTimersPrivate() {
+    ~CoTimersPrivate()
+    {
         running = false;
         thd->join();
     }
 
-    static void Tick(CoTimersPrivate *self) {
-        while (self->running) {
+    static void Tick(CoTimersPrivate *self)
+    {
+        while (self->running)
+        {
             NLUA_AUTOGUARD(self->mtx)
             Time::Sleep(self->interval);
             bool needclean = false;
 
-            for (auto &e:self->timers) {
+            for (auto &e : self->timers)
+            {
                 auto &item = *e.second;
-                if (item.repeat != -1) {
+                if (item.repeat != -1)
+                {
                     if (--item.repeat == 0)
                         needclean = true;
                 }
                 item.left -= self->interval;
-                if (item.left <= 0) {
+                if (item.left <= 0)
+                {
                     // 先做为同步调用
                     item.tick();
                     item.left = item.seconds;
@@ -81,8 +97,10 @@ struct CoTimersPrivate {
             }
 
             // 移除失效的
-            if (needclean) {
-                for (auto i = self->timers.begin(); i != self->timers.end(); ++i) {
+            if (needclean)
+            {
+                for (auto i = self->timers.begin(); i != self->timers.end(); ++i)
+                {
                     if (i->second->repeat <= 0)
                         i = self->timers.erase(i);
                 }
@@ -98,16 +116,17 @@ struct CoTimersPrivate {
     bool running = true;
 };
 
-CoTimers::CoTimers(double interval) {
+CoTimers::CoTimers(double interval)
+{
     NLUA_CLASS_CONSTRUCT()
     d_ptr->interval = interval;
 }
 
 CoTimers::~CoTimers() noexcept {
-    NLUA_CLASS_DESTORY()
-}
+    NLUA_CLASS_DESTORY()}
 
-CoTimers::timer_t CoTimers::add(double interval, int repeat, tick_t cb) {
+CoTimers::timer_t CoTimers::add(double interval, int repeat, tick_t cb)
+{
     NLUA_AUTOGUARD(d_ptr->mtx)
 
     auto t = make_shared<CoTimerItem>();
@@ -121,24 +140,29 @@ CoTimers::timer_t CoTimers::add(double interval, int repeat, tick_t cb) {
     return t->id;
 }
 
-void CoTimers::cancel(timer_t id) {
+void CoTimers::cancel(timer_t id)
+{
     NLUA_AUTOGUARD(d_ptr->mtx)
     d_ptr->timers.erase(id);
 }
 
-Timer::timer_t Timer::SetTimeout(double time, tick_t cb) {
+Timer::timer_t Timer::SetTimeout(double time, tick_t cb)
+{
     return __gs_timer.add(time, 1, cb);
 }
 
-void Timer::CancelTimeout(timer_t id) {
+void Timer::CancelTimeout(timer_t id)
+{
     __gs_timer.cancel(id);
 }
 
-Timer::timer_t Timer::SetInterval(double time, tick_t cb) {
+Timer::timer_t Timer::SetInterval(double time, tick_t cb)
+{
     return __gs_timer.add(time, -1, cb);
 }
 
-void Timer::CancelInterval(timer_t id) {
+void Timer::CancelInterval(timer_t id)
+{
     __gs_timer.cancel(id);
 }
 

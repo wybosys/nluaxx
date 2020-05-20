@@ -41,7 +41,7 @@ public:
     ~CoTimers() noexcept;
 
     typedef function<void()> tick_t;
-    typedef uint timer_t;
+    typedef unsigned int timer_t;
 
     // 添加一个定时器
     timer_t add(double interval, int repeat, tick_t cb);
