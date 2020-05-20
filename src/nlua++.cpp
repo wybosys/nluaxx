@@ -185,8 +185,13 @@ void Context::add_package_path(path const &dir) {
     lua_getfield(L, -1, "path");
     string cur = lua_tostring(L, -1);
 
+#ifdef WIN32
+    string d = fdir + "\\?.lua";
+    string di = fdir + "\\?\\init.lua";
+#else
     string d = fdir + "/?.lua";
     string di = fdir + "/?/init.lua";
+#endif
 
     auto curs = explode(cur, ";");
     if (find(curs.begin(), curs.end(), d) == curs.end()) {

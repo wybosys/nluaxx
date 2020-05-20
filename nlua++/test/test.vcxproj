@@ -169,7 +169,6 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\test.lua" />
     <None Include="..\..\test\signalslots.lua" />
     <None Include="..\..\test\test.lua" />
   </ItemGroup>
