@@ -228,8 +228,6 @@ TEST (test6) {
 }
 
 TEST (test999) {
-    return;
-
     // 测试协程
     auto &ctx = Context::shared;
 
