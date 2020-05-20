@@ -1628,9 +1628,9 @@ void Object::grab()
 
     // 已经是全局变量
     lua_getglobal(L, d_ptr->name.c_str());
-    if (lua_isnil(L, -1))
+    if (!lua_istable(L, -1))
     {
-        cerr << "没有找到变量" << d_ptr->name << endl;
+        cerr << "当前变量不是对象" << d_ptr->name << endl;
         return;
     }
     int selfid = lua_gettop(L);
