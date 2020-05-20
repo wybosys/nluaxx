@@ -201,7 +201,7 @@ TEST (test6) {
     clz->name = "Test";
     clz->add(make_shared<Field>("ondone", nullptr));
     clz->add(make_shared<Field>("onend", nullptr));
-    clz->add("play", [=](self_type &self) -> return_type {
+    clz->add("play", [=](self_type &self, Variant const& msg) -> return_type {
         // 保护变量，避免被局部释放
         self->grab();
 
@@ -212,6 +212,8 @@ TEST (test6) {
 
             self->drop();
         });
+
+        cout << msg << endl;
         return nullptr;
     });
 
@@ -226,6 +228,8 @@ TEST (test6) {
 }
 
 TEST (test999) {
+    return;
+
     // 测试协程
     auto &ctx = Context::shared;
 

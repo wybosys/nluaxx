@@ -549,11 +549,11 @@ public:
 
         return_type rv;
         self_type self = make_shared<Object>();
-        self->d_ptr->id = lua_gettop(L);
+        self->d_ptr->id = 1; //  first argument (if any) is at index 1
         self->d_ptr->self = (void *)lua_topointer(L, -1);
         self->d_ptr->L = L;
 
-        int count = lua_gettop(L) - 1;
+        int count = lua_gettop(L) - 1; // last argument is at index lua_gettop(L)
         switch (count)
         {
         case 0:
