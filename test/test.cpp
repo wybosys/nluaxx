@@ -6,8 +6,7 @@
 USE_NLUA
 
 #define TEST_CTX_PACKAGES \
-ctx.add_package_path("../test"); \
-ctx.add_package_path("D:\\sdks\\opt\\share\\lua");
+ctx.add_package_path("../test");
 
 TEST (main) {
     // 测试原始lua

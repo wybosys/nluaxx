@@ -21,6 +21,56 @@ struct ContextPrivate {
             L = luaL_newstate();
             luaL_openlibs(L);
             _freel = true;
+
+#ifdef WIN32
+            // windows中需要额外设置lua的package.path保证可以拿到全局安装的库 
+            char *val;
+            size_t len;
+            errno_t err = _dupenv_s(&val, &len, "LUA_DEV");
+            if (!err) {
+                NLUA_AUTOSTACK(L);
+
+                // 拼上查找目录
+                vector<string> dirs = {
+                    "\\?.lua",
+                    "\\?\\init.lua",
+                    "\\lua\\?.lua",
+                    "\\lua\\?\\init.lua"
+                };
+                for (auto &e : dirs) {
+                    e = val + e;
+                }
+
+                vector<string> cdirs = {
+                    "\\?.dll",
+                    "\\loadall.dll",
+                    "\\clibs\\?.dll",
+                    "\\clibs\\loadall.dll",
+                    "\\?51.dll",
+                    "\\clibs\\?51.dll"
+                };
+                for (auto &e : cdirs) {
+                    e = val + e;
+                }
+
+                lua_getglobal(L, "package");
+                int pkgid = lua_gettop(L);
+
+                lua_getfield(L, pkgid, "path");
+                string cur = lua_tostring(L, -1);
+                cur += ";" + implode(dirs, ";");
+                lua_pushlstring(L, cur.c_str(), cur.length());
+                lua_setfield(L, pkgid, "path");
+
+                lua_getfield(L, pkgid, "cpath");
+                cur = lua_tostring(L, -1);
+                cur += ";" + implode(cdirs, ";");
+                lua_pushlstring(L, cur.c_str(), cur.length());
+                lua_setfield(L, pkgid, "cpath");
+
+                free(val);
+            }
+#endif
         }
     }
 
