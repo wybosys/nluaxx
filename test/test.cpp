@@ -5,22 +5,17 @@
 
 USE_NLUA
 
-#define TEST_CTX_PACKAGES \
-ctx.add_package_path("../test");
-
 TEST (main) {
     // 测试原始lua
-    Context ctx;
-    TEST_CTX_PACKAGES;
+    auto &ctx = Context::shared;
 
-    ctx.load("test.lua");
+    ctx.load("main.lua");
     ctx.invoke("main");
 }
 
 TEST (test0) {
     // 测试c++定义lua类，以及从lua调用c++
-    Context ctx;
-    ctx.add_package_path("../test");
+    auto &ctx = Context::shared;
 
     auto module = make_shared<Module>();
     module->name = "test";
@@ -47,7 +42,7 @@ TEST (test0) {
     // 重复declare, 应该被跳过
     module->declare_in(ctx);
 
-    ctx.load("test.lua");
+    ctx.load("test0.lua");
     ctx.invoke("test0");
 
     auto clz3 = make_shared<Class>();
@@ -62,8 +57,7 @@ TEST (test0) {
 
 TEST (test1) {
     // 测试 c++ 变量
-    Context ctx;
-    TEST_CTX_PACKAGES;
+    auto &ctx = Context::shared;
 
     {
         auto module = make_shared<Module>();
@@ -101,16 +95,15 @@ TEST (test1) {
 
     ctx.declare(); // 可以独立declarein也可以通过ctx一次性declare
 
-    ctx.load("test.lua");
+    ctx.load("test1.lua");
     ctx.invoke("test1");
 }
 
 TEST (test2) {
     // 测试c++调lua函数
-    Context ctx;
-    TEST_CTX_PACKAGES;
+    auto &ctx = Context::shared;
 
-    ctx.load("test.lua");
+    ctx.load("test2.lua");
     ctx.invoke("test2");
 
     auto gs_test = ctx.global("gs_test");
@@ -125,8 +118,7 @@ TEST (test2) {
 
 TEST (test3) {
     // 定义 lua 的单件
-    Context ctx;
-    TEST_CTX_PACKAGES;
+    auto &ctx = Context::shared;
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
@@ -140,7 +132,7 @@ TEST (test3) {
     });
     clz->declare_in(ctx);
 
-    ctx.load("test.lua");
+    ctx.load("test3.lua");
     ctx.invoke("test3");
 }
 
@@ -149,10 +141,9 @@ int test4_a() {
 }
 
 TEST (test4) {
-    Context ctx;
-    TEST_CTX_PACKAGES;
+    auto &ctx = Context::shared;
 
-    ctx.load("test.lua");
+    ctx.load("test4.lua");
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
@@ -194,17 +185,14 @@ TEST (test4) {
 
 TEST (test5) {
     // 测试 ss
-    Context ctx;
-    TEST_CTX_PACKAGES;
+    auto &ctx = Context::shared;
 
-    ctx.load("signalslots.lua");
-    ctx.load("test.lua");
+    ctx.load("test5.lua");
     ctx.invoke("test5");
 }
 
 TEST (test6) {
     auto &ctx = Context::shared;
-    TEST_CTX_PACKAGES;
 
     auto m = make_shared<Module>();
     m->name = "test";
@@ -214,7 +202,7 @@ TEST (test6) {
     clz->add(make_shared<Field>("ondone", -1));
     clz->add("play", [=](self_type &self) -> return_type {
         // 测试长生命周期异步调用
-        Timer::SetTimeout(1, [=]()->void {
+        Timer::SetTimeout(1, [=]() {
             cout << "xxxxxxxxxxxxx" << endl;
             self->invoke("ondone");
         });
@@ -227,22 +215,21 @@ TEST (test6) {
     ctx.add(m);
 
     // 启动
-    ctx.load("test.lua");
+    ctx.load("test6.lua");
     ctx.invoke("test6");
 }
 
 TEST (test999) {
-    return;
-
     // 测试协程
-    Context ctx;
-    TEST_CTX_PACKAGES;
+    auto &ctx = Context::shared;
 
-    ctx.load("test.lua");
+    ctx.load("test999.lua");
     ctx.invoke("test999");
 }
 
 int main() {
+    Context::shared.add_package_path("../test");
+
     ::UnitTest::TestReporterStdout rpt;
     ::UnitTest::TestRunner runner(rpt);
     runner.RunTestsIf(::UnitTest::Test::GetTestList(), nullptr, ::UnitTest::True(), 0);

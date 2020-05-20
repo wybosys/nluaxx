@@ -172,8 +172,17 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\test\main.lua" />
     <None Include="..\..\test\signalslots.lua" />
     <None Include="..\..\test\test.lua" />
+    <None Include="..\..\test\test0.lua" />
+    <None Include="..\..\test\test1.lua" />
+    <None Include="..\..\test\test2.lua" />
+    <None Include="..\..\test\test3.lua" />
+    <None Include="..\..\test\test4.lua" />
+    <None Include="..\..\test\test5.lua" />
+    <None Include="..\..\test\test6.lua" />
+    <None Include="..\..\test\test999.lua" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\test\timer.h" />

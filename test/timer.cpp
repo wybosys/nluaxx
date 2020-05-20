@@ -135,6 +135,7 @@ CoTimers::timer_t CoTimers::add(double interval, int repeat, tick_t cb)
     t->seconds = interval;
     t->left = interval;
     t->tick = move(cb);
+    cb();
     t->repeat = repeat;
     d_ptr->timers.insert(make_pair(t->id, t));
 

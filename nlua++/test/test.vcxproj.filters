@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="lua">
+      <UniqueIdentifier>{a75c296a-42a4-4bc6-93de-5a6e088026d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\test\test.cpp">
@@ -26,8 +29,39 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\test\signalslots.lua" />
-    <None Include="..\..\test\test.lua" />
+    <None Include="..\..\test\signalslots.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\test\test.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\test\test0.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\test\test1.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\test\test2.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\test\test3.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\test\test4.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\test\test5.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\test\test6.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\test\test999.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\test\main.lua">
+      <Filter>lua</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\test\timer.h">
