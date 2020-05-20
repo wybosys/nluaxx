@@ -199,8 +199,8 @@ TEST (test6) {
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
-    clz->add(make_shared<Field>("ondone", -1));
-    clz->add(make_shared<Field>("onend", -1));
+    clz->add(make_shared<Field>("ondone", nullptr));
+    clz->add(make_shared<Field>("onend", nullptr));
     clz->add("play", [=](self_type &self) -> return_type {
         // 保护变量，避免被局部释放
         self->grab();
