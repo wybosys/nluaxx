@@ -373,8 +373,32 @@ public:
     // 获得隐含的指针地址
     void *payload() const;
 
+    template<class T>
+    inline T &payload() const {
+        return *(T *) payload();
+    }
+
     // 设置隐含的指针地址
     void payload(void *);
+
+    // 实例化连接对象
+    template<class T>
+    inline T &bind() {
+        unbind<T>();
+        auto pl = new T();
+        payload(pl);
+        return *pl;
+    }
+
+    // 释放连接对象
+    template<class T>
+    inline void unbind() {
+        auto pl = (T *) payload();
+        if (pl) {
+            delete pl;
+            payload(nullptr);
+        }
+    }
 
     // 获得数据
     return_type get(string const &name);

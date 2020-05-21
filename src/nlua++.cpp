@@ -836,6 +836,8 @@ public:
         if (has_fini) {
             // 申请一小段的内存
             lua_newuserdata(L, sizeof(ObjectPrivate::UserData));
+            auto ud = (ObjectPrivate::UserData *) lua_touserdata(L, -1);
+            ud->data = nullptr;
         } else {
             lua_newtable(L);
         }

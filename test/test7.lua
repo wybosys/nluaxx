@@ -1,6 +1,6 @@
 function test7_a()
     local t = test.Test:new(1, 2)
-    -- t:delete()
+    assert(t:proc() == "test7", "test7 proc is test7")
     t = nil
 end
 

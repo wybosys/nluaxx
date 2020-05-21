@@ -236,6 +236,8 @@ public:
     ~Test7Object() {
         cout << "析构 Test7Object" << endl;
     }
+
+    string txt;
 };
 
 TEST (test7) {
@@ -247,11 +249,13 @@ TEST (test7) {
     clz->init([=](self_type &self, Variant const &v0, Variant const &v1) {
                 CHECK_EQUAL(v0.toInteger(), 1);
                 CHECK_EQUAL(v1.toInteger(), 2);
-        self->payload(new Test7Object());
+        self->bind<Test7Object>().txt = "test7";
     });
     clz->fini([=](self_type &self) {
-        auto obj = (Test7Object *) self->payload();
-        delete obj;
+        self->unbind<Test7Object>();
+    });
+    clz->add("proc", [=](self_type &self) -> return_type {
+        return make_shared<Variant>(self->payload<Test7Object>().txt);
     });
 
     auto m = make_shared<Module>();
