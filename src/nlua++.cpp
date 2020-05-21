@@ -810,21 +810,38 @@ public:
         int clzid = 1;
         int args = lua_gettop(L) - 1;
 
+        // 构造metatable
         lua_newtable(L);
-        int metaclzid = lua_gettop(L);
+        int metaid = lua_gettop(L);
 
-        // instance
-        lua_newtable(L);
-        int objid = lua_gettop(L);
+        // 设置析构函数
+        lua_pushstring(L, "delete");
+        lua_rawget(L, clzid);
+        const bool has_fini = lua_iscfunction(L, -1);
+        if (has_fini) {
+            lua_pushstring(L, "__gc");
+            lua_pushvalue(L, -2);
+            lua_rawset(L, metaid);
+        }
+        lua_pop(L, 1);
 
         // {__index=x}
         lua_pushstring(L, "__index");
         lua_pushvalue(L, clzid);
-        lua_rawset(L, objid);
+        lua_rawset(L, metaid);
+
+        // instance
+        if (has_fini) {
+            // 申请一小段的内存
+            lua_newuserdata(L, 1);
+        } else {
+            lua_newtable(L);
+        }
+        int objid = lua_gettop(L);
 
         // 绑定原型到对象
-        lua_setmetatable(L, metaclzid);
-        objid -= 1; // Pops a table from the stack and sets it as the new metatable for the value at the given acceptable index.
+        lua_pushvalue(L, metaid);
+        lua_setmetatable(L, objid);
 
         // 根据传入的参数个数，调用构造函数
         ostringstream oss;
@@ -846,7 +863,7 @@ public:
 
             // 输入参数
             for (int i = 0; i < args; ++i) {
-                lua_pushvalue(L, i + 1);
+                lua_pushvalue(L, i + 2); // 1 号位为objid，从2开始才是参数
             }
 
             int s = lua_pcall(L, args + 1, 0, tbid);
@@ -863,12 +880,12 @@ public:
     }
 
     // 调用原始的new函数实例化
-    static void CallNew(lua_State *L) {
+    static void CallSingletonNew(lua_State *L) {
         // 1 clzid
         lua_pushcfunction(L, ContextPrivate::Traceback);
 
         // 2 tbid
-        lua_pushstring(L, "__new__");
+        lua_pushstring(L, "__singleton_new__");
         lua_rawget(L, 1);
         lua_pushvalue(L, 1);
 
@@ -876,6 +893,30 @@ public:
         if (s != LUA_OK) {
             lua_pushnil(L);
         }
+    }
+
+    // 析构函数实现
+    static int ImpDestroy(lua_State *L) {
+        // self 1
+        lua_pushcfunction(L, ContextPrivate::Traceback);
+        // tbid 2
+
+        // 从metatable提取fini函数
+        lua_getmetatable(L, 1);
+        // meta 3
+
+        lua_pushstring(L, "__index");
+        lua_rawget(L, 3);
+        // index 4
+
+        // 调用对象的fini函数
+        lua_pushstring(L, "__fini__");
+        lua_rawget(L, 4);
+        // func 4
+
+        lua_pushvalue(L, 1);
+        lua_pcall(L, 1, 0, 2);
+        return 0;
     }
 
     // 单件实现
@@ -887,7 +928,7 @@ public:
             lua_pop(L, 1);
 
             // 调用new函数
-            CallNew(L);
+            CallSingletonNew(L);
 
             int objid = lua_gettop(L);
 
@@ -1375,7 +1416,7 @@ void Singleton::declare_in(Context &ctx) const {
     lua_pushnil(L);
     lua_rawset(L, clzid);
 
-    lua_pushstring(L, "__new__");
+    lua_pushstring(L, "__singleton_new__");
     lua_pushcfunction(L, ClassPrivate::ImpNew);
     lua_rawset(L, clzid);
 }
@@ -1393,6 +1434,13 @@ void Class::declare_in(Context &ctx) const {
         lua_rawset(L, clzid);
     } else {
         d_ptr->singleton.declare_in(ctx);
+    }
+
+    // 定义析构函数
+    if (d_ptr->fini) {
+        lua_pushstring(L, "delete");
+        lua_pushcfunction(L, ClassPrivate::ImpDestroy);
+        lua_rawset(L, clzid);
     }
 
     // 类对象放到栈顶
@@ -1419,6 +1467,13 @@ void Class::declare_in(Context &ctx, Module const &mod) const {
         d_ptr->singleton.declare_in(ctx);
     }
 
+    // 定义析构函数
+    if (d_ptr->fini) {
+        lua_pushstring(L, "delete");
+        lua_pushcfunction(L, ClassPrivate::ImpDestroy);
+        lua_rawset(L, clzid);
+    }
+
     // 类对象放到栈顶
     lua_pushvalue(L, clzid);
     d_ptr->body_declare_in(ctx, *this);
@@ -1426,7 +1481,6 @@ void Class::declare_in(Context &ctx, Module const &mod) const {
     // 定义到module中
     lua_getglobal(L, mod.name.c_str());
     int modid = lua_gettop(L);
-
     lua_pushstring(L, name.c_str());
     lua_pushvalue(L, clzid);
     lua_rawset(L, modid);

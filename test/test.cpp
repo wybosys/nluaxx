@@ -237,6 +237,9 @@ TEST (test7) {
                 CHECK_EQUAL(v0.toInteger(), 1);
                 CHECK_EQUAL(v1.toInteger(), 2);
     });
+    clz->fini([=](self_type &self) {
+        cout << "test7 对象析构" << endl;
+    });
 
     auto m = make_shared<Module>();
     m->name = "test";
