@@ -24,8 +24,7 @@ typedef shared_ptr<Variant> value_type;
 typedef initializer_list<Variant> args_type;
 typedef shared_ptr<Object> self_type;
 
-class Any
-{
+class Any {
 public:
     Any(shared_ptr<Class> const &r) : clazz(r) {}
 
@@ -37,9 +36,8 @@ public:
 
 NLUA_CLASS_PREPARE(Context);
 
-class Context
-{
-    NLUA_CLASS_DECL(Context);
+class Context {
+NLUA_CLASS_DECL(Context);
 
 public:
     // 初始化一个全局的 *为了业务
@@ -111,9 +109,8 @@ public:
 
 NLUA_CLASS_PREPARE(Function)
 
-class Function
-{
-    NLUA_CLASS_DECL(Function)
+class Function {
+NLUA_CLASS_DECL(Function)
 
 public:
     Function();
@@ -170,26 +167,20 @@ public:
     // 实现的静态函数
     func_type func;
 
-    // 实现的基础函数
-    basefunc_type bfunc;
-
     void declare_in(Context &) const;
 
     void declare_in(Context &, Class const &) const;
 };
 
-class Field
-{
+class Field {
 public:
-    template <typename T>
-    Field(string const &_name, T const &_v)
-    {
+    template<typename T>
+    Field(string const &_name, T const &_v) {
         name = _name;
         val = make_shared<Variant>(_v);
     }
 
-    explicit Field(string const &_name)
-    {
+    explicit Field(string const &_name) {
         name = _name;
     }
 
@@ -204,16 +195,14 @@ public:
     void declare_in(Context &, Class const &) const;
 };
 
-class Singleton
-{
+class Singleton {
 public:
     typedef function<void()> func_type;
 
     string name;
     func_type init, fini;
 
-    inline bool empty() const
-    {
+    inline bool empty() const {
         return name.empty();
     }
 
@@ -222,9 +211,8 @@ public:
 
 NLUA_CLASS_PREPARE(Class)
 
-class Class
-{
-    NLUA_CLASS_DECL(Class)
+class Class {
+NLUA_CLASS_DECL(Class)
 
 public:
     Class();
@@ -237,18 +225,29 @@ public:
     typedef map<string, field_type> fields_type;
     typedef shared_ptr<Function> function_type;
     typedef map<string, function_type> functions_type;
+    typedef vector<function_type> initfunctions_type;
 
     // 定义构造函数
-    Class &init(Function::basefunc_type);
+    Class &init(Function::basefunc_type, size_t args);
+
     Class &init(Function::basefunc0_type);
+
     Class &init(Function::basefunc1_type);
+
     Class &init(Function::basefunc2_type);
+
     Class &init(Function::basefunc3_type);
+
     Class &init(Function::basefunc4_type);
+
     Class &init(Function::basefunc5_type);
+
     Class &init(Function::basefunc6_type);
+
     Class &init(Function::basefunc7_type);
+
     Class &init(Function::basefunc8_type);
+
     Class &init(Function::basefunc9_type);
 
     // 定义析构函数
@@ -327,9 +326,8 @@ public:
 
 NLUA_CLASS_PREPARE(Module)
 
-class Module
-{
-    NLUA_CLASS_DECL(Module)
+class Module {
+NLUA_CLASS_DECL(Module)
 
 public:
     Module();
@@ -357,9 +355,8 @@ public:
 
 NLUA_CLASS_PREPARE(Object)
 
-class Object
-{
-    NLUA_CLASS_DECL(Object)
+class Object {
+NLUA_CLASS_DECL(Object)
 
     friend class Context;
 
@@ -375,8 +372,7 @@ public:
     // 获得隐含的指针地址
     void *pointer() const;
 
-    inline operator void *() const
-    {
+    inline operator void *() const {
         return pointer();
     }
 
@@ -386,9 +382,8 @@ public:
     // 设置数据
     void set(string const &, value_type const &);
 
-    template <typename T>
-    void set(string const &name, T const &v)
-    {
+    template<typename T>
+    void set(string const &name, T const &v) {
         set(name, make_shared<Variant>(v));
     }
 
