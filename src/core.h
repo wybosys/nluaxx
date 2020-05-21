@@ -70,7 +70,7 @@ private:                                                             \
     d_ptr = nullptr;
 
 template <class T, class TP = typename T::private_class_type>
-inline TP *DPtr(T *obj)
+static TP *DPtr(T *obj)
 {
     return obj->d_ptr;
 }
