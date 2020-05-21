@@ -439,6 +439,7 @@ public:
     // 如果传入自定义C数据结构，则self指针将指向该结构
     struct UserData {
         void *data = nullptr;
+        bool freed = false; // 已经释放
     };
 
     // 当前栈
@@ -838,6 +839,7 @@ public:
             lua_newuserdata(L, sizeof(ObjectPrivate::UserData));
             auto ud = (ObjectPrivate::UserData *) lua_touserdata(L, -1);
             ud->data = nullptr;
+            ud->freed = false;
         } else {
             lua_newtable(L);
         }
@@ -902,6 +904,11 @@ public:
     // 析构函数实现
     static int ImpDestroy(lua_State *L) {
         // self 1
+        // 如果已经释放，则不调用
+        auto ud = (ObjectPrivate::UserData *) lua_touserdata(L, -1);
+        if (ud->freed)
+            return 0;
+
         lua_pushcfunction(L, ContextPrivate::Traceback);
         // tbid 2
 
@@ -920,6 +927,9 @@ public:
 
         lua_pushvalue(L, 1);
         lua_pcall(L, 1, 0, 2);
+
+        ud->data = nullptr;
+        ud->freed = true;
         return 0;
     }
 
@@ -1562,6 +1572,9 @@ void *Object::payload() const {
     } else {
         lua_getglobal(L, d_ptr->name.c_str());
     }
+
+    if (!lua_isuserdata(L, -1))
+        return nullptr;
 
     auto ud = (ObjectPrivate::UserData *) lua_touserdata(L, -1);
     return ud->data;

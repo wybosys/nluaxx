@@ -246,6 +246,7 @@ TEST (test7) {
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
+
     clz->init([=](self_type &self, Variant const &v0, Variant const &v1) {
                 CHECK_EQUAL(v0.toInteger(), 1);
                 CHECK_EQUAL(v1.toInteger(), 2);
