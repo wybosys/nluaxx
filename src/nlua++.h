@@ -365,16 +365,16 @@ NLUA_CLASS_DECL(Object)
     friend class FunctionPrivate;
 
 public:
+
     Object();
 
     ~Object();
 
     // 获得隐含的指针地址
-    void *pointer() const;
+    void *payload() const;
 
-    inline operator void *() const {
-        return pointer();
-    }
+    // 设置隐含的指针地址
+    void payload(void *);
 
     // 获得数据
     return_type get(string const &name);

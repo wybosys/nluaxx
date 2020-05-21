@@ -128,7 +128,7 @@ TEST (test3) {
         // cout << "析构" << endl;
     });
     clz->add("proc", [=](self_type &self) -> return_type {
-        return make_shared<Variant>(self->pointer());
+        return nullptr;
     });
     clz->declare_in(ctx);
 
@@ -227,6 +227,17 @@ TEST (test6) {
     ctx.invoke("test6");
 }
 
+class Test7Object {
+public:
+    Test7Object() {
+        cout << "实例化 Test7Object" << endl;
+    }
+
+    ~Test7Object() {
+        cout << "析构 Test7Object" << endl;
+    }
+};
+
 TEST (test7) {
     // 测试c++生命期绑定至lua对象
     auto &ctx = Context::shared;
@@ -236,9 +247,11 @@ TEST (test7) {
     clz->init([=](self_type &self, Variant const &v0, Variant const &v1) {
                 CHECK_EQUAL(v0.toInteger(), 1);
                 CHECK_EQUAL(v1.toInteger(), 2);
+        self->payload(new Test7Object());
     });
     clz->fini([=](self_type &self) {
-        cout << "test7 对象析构" << endl;
+        auto obj = (Test7Object *) self->payload();
+        delete obj;
     });
 
     auto m = make_shared<Module>();

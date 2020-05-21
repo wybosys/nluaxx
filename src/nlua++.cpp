@@ -435,8 +435,11 @@ void Field::declare_in(Context &ctx, Class const &clz) const {
 
 class ObjectPrivate {
 public:
-    // 对象内存指针
-    void *self = nullptr;
+
+    // 如果传入自定义C数据结构，则self指针将指向该结构
+    struct UserData {
+        void *data = nullptr;
+    };
 
     // 当前栈
     lua_State *L = nullptr;
@@ -486,7 +489,6 @@ public:
         return_type rv;
         self_type self = make_shared<Object>();
         self->d_ptr->id = 1; //  first argument (if any) is at index 1
-        self->d_ptr->self = (void *) lua_topointer(L, -1);
         self->d_ptr->L = L;
 
         int count = lua_gettop(L) - 1; // last argument is at index lua_gettop(L)
@@ -833,7 +835,7 @@ public:
         // instance
         if (has_fini) {
             // 申请一小段的内存
-            lua_newuserdata(L, 1);
+            lua_newuserdata(L, sizeof(ObjectPrivate::UserData));
         } else {
             lua_newtable(L);
         }
@@ -1549,8 +1551,32 @@ Object::~Object() {
     NLUA_CLASS_DESTORY()
 }
 
-void *Object::pointer() const {
-    return (void *) d_ptr->self;
+void *Object::payload() const {
+    auto L = d_ptr->L;
+    NLUA_AUTOSTACK(L);
+
+    if (d_ptr->id) {
+        lua_pushvalue(L, d_ptr->id);
+    } else {
+        lua_getglobal(L, d_ptr->name.c_str());
+    }
+
+    auto ud = (ObjectPrivate::UserData *) lua_touserdata(L, -1);
+    return ud->data;
+}
+
+void Object::payload(void *data) {
+    auto L = d_ptr->L;
+    NLUA_AUTOSTACK(L);
+
+    if (d_ptr->id) {
+        lua_pushvalue(L, d_ptr->id);
+    } else {
+        lua_getglobal(L, d_ptr->name.c_str());
+    }
+
+    auto ud = (ObjectPrivate::UserData *) lua_touserdata(L, -1);
+    ud->data = data;
 }
 
 return_type Object::get(string const &name) {
@@ -1597,7 +1623,6 @@ self_type Context::global(string const &name) {
 
     self_type r = make_shared<Object>();
     r->d_ptr->name = name;
-    r->d_ptr->self = (void *) lua_topointer(L, -1);
     r->d_ptr->L = L;
     return r;
 }
