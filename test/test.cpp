@@ -227,6 +227,25 @@ TEST (test6) {
     ctx.invoke("test6");
 }
 
+TEST(test7)
+{
+    // 测试c++生命期绑定至lua对象
+    auto &ctx = Context::shared;
+
+    auto clz = make_shared<Class>();
+    clz->name = "Test";
+
+    auto m = make_shared<Module>();
+    m->name = "test";
+    m->add(clz);
+
+    m->declare_in(ctx);
+    ctx.add(m);
+
+    ctx.load("test7.lua");
+    ctx.invoke("test7");
+}
+
 TEST (test999) {
     // 测试协程
     auto &ctx = Context::shared;

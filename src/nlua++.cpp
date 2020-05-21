@@ -992,13 +992,19 @@ public:
     Class::fields_type fields;
     Class::functions_type functions;
     Class::supers_type supers;
+    Class::functions_type inits;
+    Class::function_type fini;
 };
 
-Class::Class(){
-    NLUA_CLASS_CONSTRUCT()}
+Class::Class()
+{
+    NLUA_CLASS_CONSTRUCT();
+}
 
-Class::~Class(){
-    NLUA_CLASS_DESTORY()}
+Class::~Class()
+{
+    NLUA_CLASS_DESTORY();
+}
 
 Class::fields_type const &Class::fields() const
 {
@@ -1030,6 +1036,21 @@ Class &Class::inherit(::std::initializer_list<Any> const &pars)
     {
         d_ptr->supers.emplace_back(e);
     }
+    return *this;
+}
+
+Class &Class::init(Function::basefunc_type func) 
+{
+
+}
+
+Class &Class::fini(Function::basefunc0_type func) 
+{
+    auto f = make_shared<Function>();
+    f->bfunc = [=](self_type& self, args_type const& args) {
+        func(self);
+    };
+    d_ptr->fini = move(f);
     return *this;
 }
 

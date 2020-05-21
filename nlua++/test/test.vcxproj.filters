@@ -62,6 +62,9 @@
     <None Include="..\..\test\main.lua">
       <Filter>lua</Filter>
     </None>
+    <None Include="..\..\test\test7.lua">
+      <Filter>lua</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\test\timer.h">

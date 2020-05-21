@@ -122,6 +122,20 @@ public:
 
     string name;
 
+    // 构造析构函数
+    typedef function<void(self_type &self, args_type const &)> basefunc_type;
+
+    typedef function<void(self_type &self)> basefunc0_type;
+    typedef function<void(self_type &self, Variant const &)> basefunc1_type;
+    typedef function<void(self_type &self, Variant const &, Variant const &)> basefunc2_type;
+    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &)> basefunc3_type;
+    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &)> basefunc4_type;
+    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> basefunc5_type;
+    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> basefunc6_type;
+    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> basefunc7_type;
+    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> basefunc8_type;
+    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> basefunc9_type;
+
     // 类函数
     typedef function<return_type(self_type &self, args_type const &)> classfunc_type;
 
@@ -155,6 +169,9 @@ public:
 
     // 实现的静态函数
     func_type func;
+
+    // 实现的基础函数
+    basefunc_type bfunc;
 
     void declare_in(Context &) const;
 
@@ -220,6 +237,22 @@ public:
     typedef map<string, field_type> fields_type;
     typedef shared_ptr<Function> function_type;
     typedef map<string, function_type> functions_type;
+
+    // 定义构造函数
+    Class &init(Function::basefunc_type);
+    Class &init(Function::basefunc0_type);
+    Class &init(Function::basefunc1_type);
+    Class &init(Function::basefunc2_type);
+    Class &init(Function::basefunc3_type);
+    Class &init(Function::basefunc4_type);
+    Class &init(Function::basefunc5_type);
+    Class &init(Function::basefunc6_type);
+    Class &init(Function::basefunc7_type);
+    Class &init(Function::basefunc8_type);
+    Class &init(Function::basefunc9_type);
+
+    // 定义析构函数
+    Class &fini(Function::basefunc0_type);
 
     // 添加成员函数
     Class &add(string const &, Function::classfunc_type);
