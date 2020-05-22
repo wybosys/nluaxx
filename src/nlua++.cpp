@@ -17,9 +17,18 @@ NLUA_BEGIN
 
 Context Context::shared(nullptr);
 
+typedef atomic<lua_Integer> lua_refid_type;
+typedef function<return_type(lua_State *L, self_type &self, args_type const &)> luaref_classfunc_type;
+typedef function<return_type(lua_State *L, args_type const &)> luaref_func_type;
+typedef map<lua_Integer, luaref_classfunc_type> luaref_classfuncs_type;
+typedef map<lua_Integer, luaref_func_type> luaref_funcs_type;
+
 class ContextPrivate {
 public:
-    explicit ContextPrivate(lua_State *_l) {
+
+    explicit ContextPrivate(lua_State *_l)
+    : refId(1)
+    {
         if (_l) {
             L = _l;
             _freel = false;
@@ -217,6 +226,10 @@ public:
     vector<path> package_paths, cpackage_paths;
     Context::classes_type classes;
     Context::modules_type modules;
+
+    lua_refid_type refId;
+    luaref_funcs_type refFuncs;
+    luaref_classfuncs_type refClassFuncs;
 };
 
 static lua_State *GetContextL(Context &ctx) {
@@ -459,30 +472,16 @@ ObjectPrivate::lua_global_refid_type ObjectPrivate::RefId(1);
 
 class FunctionPrivate {
 public:
-    FunctionPrivate() {
-        id = RefId.fetch_add(1);
-    }
 
     // 生成的函数唯一id
     lua_Integer id;
 
-    typedef function<return_type(lua_State *L, self_type &self, args_type const &)> classfunc_type;
-    typedef function<return_type(lua_State *L, args_type const &)> func_type;
-
-    typedef function<int(lua_State *)> lua_cfunction_type;
-    typedef atomic<lua_Integer> lua_cfunction_refid_type;
-
-    typedef map<lua_Integer, classfunc_type> lua_ref_classfuncs_type;
-    typedef map<lua_Integer, func_type> lua_ref_funcs_type;
-
-    static lua_cfunction_refid_type RefId;
-    static lua_ref_classfuncs_type ClassFuncs;
-    static lua_ref_funcs_type Funcs;
-
     static int ImpClassFunction(lua_State *L) {
-        auto id = lua_tointeger(L, lua_upvalueindex(1));
-        auto fnd = ClassFuncs.find(id);
-        if (fnd == ClassFuncs.end()) {
+        auto pctx = (ContextPrivate*)lua_topointer(L, lua_upvalueindex(1));
+        auto id = lua_tointeger(L, lua_upvalueindex(2));
+
+        auto fnd = pctx->refClassFuncs.find(id);
+        if (fnd == pctx->refClassFuncs.end()) {
             cerr << "没有找到对应的回调函数" << endl;
             return 0;
         }
@@ -592,9 +591,11 @@ public:
     }
 
     static int ImpStaticFunction(lua_State *L) {
-        auto id = lua_tointeger(L, lua_upvalueindex(1));
-        auto fnd = Funcs.find(id);
-        if (fnd == Funcs.end()) {
+        auto pctx = (ContextPrivate*)lua_topointer(L, lua_upvalueindex(1));
+        auto id = lua_tointeger(L, lua_upvalueindex(2));
+
+        auto fnd = pctx->refFuncs.find(id);
+        if (fnd == pctx->refFuncs.end()) {
             cerr << "没有找到对应的回调函数" << endl;
             return 0;
         }
@@ -700,10 +701,6 @@ public:
     }
 };
 
-FunctionPrivate::lua_cfunction_refid_type FunctionPrivate::RefId(1);
-FunctionPrivate::lua_ref_classfuncs_type FunctionPrivate::ClassFuncs;
-FunctionPrivate::lua_ref_funcs_type FunctionPrivate::Funcs;
-
 Function::Function() {
     NLUA_CLASS_CONSTRUCT()
 }
@@ -716,8 +713,11 @@ void Function::declare_in(Context &ctx) const {
     auto L = GetContextL(ctx);
     NLUA_AUTOSTACK(L);
 
+    auto pctx = DPtr<Context, ContextPrivate>(&ctx);
+    d_ptr->id = pctx->refId.fetch_add(1);
+
     // 注册到全局对照表中，用于激活函数时查找真正的执行函数
-    private_class_type::Funcs.insert(make_pair(d_ptr->id, [=](lua_State *L, args_type const &args) -> return_type {
+    pctx->refFuncs.insert(make_pair(d_ptr->id, [=](lua_State *L, args_type const &args) -> return_type {
         try {
             return this->func(args);
         }
@@ -727,8 +727,9 @@ void Function::declare_in(Context &ctx) const {
         return nullptr;
     }));
 
+    lua_pushlightuserdata(L, pctx);
     lua_pushinteger(L, d_ptr->id);
-    lua_pushcclosure(L, private_class_type::ImpStaticFunction, 1);
+    lua_pushcclosure(L, private_class_type::ImpStaticFunction, 2);
 
     lua_setglobal(L, name.c_str());
 }
@@ -737,14 +738,18 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
     auto L = GetContextL(ctx);
     NLUA_AUTOSTACK(L);
 
+    auto pctx = DPtr<Context, ContextPrivate>(&ctx);
+    d_ptr->id = pctx->refId.fetch_add(1);
+
     // 绑定到类
     int clzid = lua_gettop(L);
     lua_pushstring(L, name.c_str());
+    lua_pushlightuserdata(L, pctx);
     lua_pushinteger(L, d_ptr->id);
 
     if (classfunc) {
         // 注册到全局对照表中，用于激活函数时查找真正的执行函数
-        private_class_type::ClassFuncs.insert(make_pair(d_ptr->id, [=](lua_State *L, self_type &self, args_type const &args) -> return_type {
+        pctx->refClassFuncs.insert(make_pair(d_ptr->id, [=](lua_State *L, self_type &self, args_type const &args) -> return_type {
             try {
                 return this->classfunc(self, args);
             }
@@ -753,10 +758,10 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
             }
             return nullptr;
         }));
-        lua_pushcclosure(L, private_class_type::ImpClassFunction, 1);
+        lua_pushcclosure(L, private_class_type::ImpClassFunction, 2);
     } else {
         // 注册静态函数
-        private_class_type::Funcs.insert(make_pair(d_ptr->id, [=](lua_State *L, args_type const &args) -> return_type {
+        pctx->refFuncs.insert(make_pair(d_ptr->id, [=](lua_State *L, args_type const &args) -> return_type {
             try {
                 return this->func(args);
             }
@@ -765,7 +770,7 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
             }
             return nullptr;
         }));
-        lua_pushcclosure(L, private_class_type::ImpStaticFunction, 1);
+        lua_pushcclosure(L, private_class_type::ImpStaticFunction, 2);
     }
 
     lua_rawset(L, clzid);
@@ -773,6 +778,11 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
 
 class ClassPrivate {
 public:
+    
+    ClassPrivate()
+    {
+        // pass
+    }
 
     // 仅输出定义段
     void body_declare_in(Context &ctx, Class const &_curclass) {
