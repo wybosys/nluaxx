@@ -220,6 +220,7 @@ TEST (test6) {
     // 实现类
     m->add(clz);
     m->declare_in(ctx);
+
     ctx.add(m);
 
     // 启动

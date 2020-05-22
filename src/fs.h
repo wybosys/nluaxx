@@ -8,7 +8,7 @@ class path;
 class path_iterator
 {
 public:
-    class iterator : public ::std::iterator<forward_iterator_tag, path>
+    class iterator
     {
     public:
         ~iterator();
