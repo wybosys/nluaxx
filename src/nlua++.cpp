@@ -355,7 +355,7 @@ void Context::clear() {
 }
 
 void Context::add(class_type &cls) {
-    d_ptr->classes.insert(make_pair(cls->name, cls));
+    d_ptr->classes[cls->name] = cls;
 }
 
 void Context::add(module_type &m) {
@@ -363,7 +363,7 @@ void Context::add(module_type &m) {
     if (fnd != d_ptr->modules.end()) {
         fnd->second->merge(*m);
     } else {
-        d_ptr->modules.insert(make_pair(m->name, m));
+        d_ptr->modules[m->name] = m;
     }
 }
 
@@ -728,7 +728,7 @@ void Function::declare_in(Context &ctx) const {
     auto id = pctx->refId.fetch_add(1);
 
     // 注册到全局对照表中，用于激活函数时查找真正的执行函数
-    pctx->refFuncs.insert(make_pair(id, [=](lua_State *L, args_type const &args) -> return_type {
+    pctx->refFuncs[id] = [=](lua_State *L, args_type const &args) -> return_type {
         try {
             return this->func(args);
         }
@@ -736,7 +736,7 @@ void Function::declare_in(Context &ctx) const {
             luaL_error(L, e.what());
         }
         return nullptr;
-    }));
+    };
 
     lua_pushlightuserdata(L, pctx);
     lua_pushinteger(L, id);
@@ -760,7 +760,7 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
 
     if (classfunc) {
         // 注册到全局对照表中，用于激活函数时查找真正的执行函数
-        pctx->refClassFuncs.insert(make_pair(id, [=](lua_State *L, self_type &self, args_type const &args) -> return_type {
+        pctx->refClassFuncs[id] = [=](lua_State *L, self_type &self, args_type const &args) -> return_type {
             try {
                 return this->classfunc(self, args);
             }
@@ -768,11 +768,11 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
                 luaL_error(L, e.what());
             }
             return nullptr;
-        }));
+        };
         lua_pushcclosure(L, private_class_type::ImpClassFunction, 2);
     } else {
         // 注册静态函数
-        pctx->refFuncs.insert(make_pair(id, [=](lua_State *L, args_type const &args) -> return_type {
+        pctx->refFuncs[id] = [=](lua_State *L, args_type const &args) -> return_type {
             try {
                 return this->func(args);
             }
@@ -780,7 +780,7 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
                 luaL_error(L, e.what());
             }
             return nullptr;
-        }));
+        };
         lua_pushcclosure(L, private_class_type::ImpStaticFunction, 2);
     }
 
@@ -1184,7 +1184,7 @@ Class &Class::add(string const &fname, Function::classfunc_type func) {
     auto f = make_shared<Function>();
     f->name = fname;
     f->classfunc = move(func);
-    d_ptr->functions.insert(make_pair(f->name, f));
+    d_ptr->functions[f->name] = f;
     return *this;
 }
 
@@ -1306,7 +1306,7 @@ Class &Class::add_static(string const &fname, Function::func_type func) {
     auto f = make_shared<Function>();
     f->name = fname;
     f->func = move(func);
-    d_ptr->functions.insert(make_pair(f->name, f));
+    d_ptr->functions[f->name] = f;
     return *this;
 }
 
@@ -1425,9 +1425,7 @@ Class &Class::add_static(string const &fname, Function::func9_type func) {
 }
 
 Class &Class::add(field_type const &f) {
-    if (d_ptr->fields.find(f->name) == d_ptr->fields.end()) {
-        d_ptr->fields.insert(make_pair(f->name, f));
-    }
+    d_ptr->fields[f->name] = f;
     return *this;
 }
 
@@ -1544,7 +1542,7 @@ Module::~Module() {
 }
 
 Module &Module::add(class_type &c) {
-    d_ptr->classes.insert(make_pair(c->name, c));
+    d_ptr->classes[c->name] = c;
     return *this;
 }
 
@@ -1572,7 +1570,7 @@ void Module::declare_in(Context &ctx) const {
 
 void Module::merge(Module const &r) {
     for (auto &e : r.d_ptr->classes) {
-        d_ptr->classes.insert(e);
+        d_ptr->classes[e.first] = e.second;
     }
 }
 
