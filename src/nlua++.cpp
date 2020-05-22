@@ -224,9 +224,12 @@ public:
     bool _freel = false;
 
     vector<path> package_paths, cpackage_paths;
+
+    // 当前声明中的类和模块
     Context::classes_type classes;
     Context::modules_type modules;
 
+    // 保存lua实现的成员函数、类函数和C++实现之间的关系
     lua_refid_type refId;
     luaref_funcs_type refFuncs;
     luaref_classfuncs_type refClassFuncs;
@@ -473,9 +476,6 @@ ObjectPrivate::lua_global_refid_type ObjectPrivate::RefId(1);
 class FunctionPrivate {
 public:
 
-    // 生成的函数唯一id
-    lua_Integer id;
-
     static int ImpClassFunction(lua_State *L) {
         auto pctx = (ContextPrivate*)lua_topointer(L, lua_upvalueindex(1));
         auto id = lua_tointeger(L, lua_upvalueindex(2));
@@ -714,10 +714,10 @@ void Function::declare_in(Context &ctx) const {
     NLUA_AUTOSTACK(L);
 
     auto pctx = DPtr<Context, ContextPrivate>(&ctx);
-    d_ptr->id = pctx->refId.fetch_add(1);
+    auto id = pctx->refId.fetch_add(1);
 
     // 注册到全局对照表中，用于激活函数时查找真正的执行函数
-    pctx->refFuncs.insert(make_pair(d_ptr->id, [=](lua_State *L, args_type const &args) -> return_type {
+    pctx->refFuncs.insert(make_pair(id, [=](lua_State *L, args_type const &args) -> return_type {
         try {
             return this->func(args);
         }
@@ -728,7 +728,7 @@ void Function::declare_in(Context &ctx) const {
     }));
 
     lua_pushlightuserdata(L, pctx);
-    lua_pushinteger(L, d_ptr->id);
+    lua_pushinteger(L, id);
     lua_pushcclosure(L, private_class_type::ImpStaticFunction, 2);
 
     lua_setglobal(L, name.c_str());
@@ -739,17 +739,17 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
     NLUA_AUTOSTACK(L);
 
     auto pctx = DPtr<Context, ContextPrivate>(&ctx);
-    d_ptr->id = pctx->refId.fetch_add(1);
+    auto id = pctx->refId.fetch_add(1);
 
     // 绑定到类
     int clzid = lua_gettop(L);
     lua_pushstring(L, name.c_str());
     lua_pushlightuserdata(L, pctx);
-    lua_pushinteger(L, d_ptr->id);
+    lua_pushinteger(L, id);
 
     if (classfunc) {
         // 注册到全局对照表中，用于激活函数时查找真正的执行函数
-        pctx->refClassFuncs.insert(make_pair(d_ptr->id, [=](lua_State *L, self_type &self, args_type const &args) -> return_type {
+        pctx->refClassFuncs.insert(make_pair(id, [=](lua_State *L, self_type &self, args_type const &args) -> return_type {
             try {
                 return this->classfunc(self, args);
             }
@@ -761,7 +761,7 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
         lua_pushcclosure(L, private_class_type::ImpClassFunction, 2);
     } else {
         // 注册静态函数
-        pctx->refFuncs.insert(make_pair(d_ptr->id, [=](lua_State *L, args_type const &args) -> return_type {
+        pctx->refFuncs.insert(make_pair(id, [=](lua_State *L, args_type const &args) -> return_type {
             try {
                 return this->func(args);
             }
