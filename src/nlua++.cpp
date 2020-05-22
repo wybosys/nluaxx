@@ -91,10 +91,22 @@ public:
     }
 
     ~ContextPrivate() {
+        clear();
+    }
+
+    void clear() {
         if (_freel) {
             lua_close(L);
         }
         L = nullptr;
+        _freel = false;
+
+        classes.clear();
+        modules.clear();
+
+        refId.store(1);
+        refClassFuncs.clear();
+        refFuncs.clear();
     }
 
     void attach(lua_State *_l) {
@@ -339,8 +351,7 @@ void Context::add_cpackage_path(path const &dir) {
 }
 
 void Context::clear() {
-    d_ptr->classes.clear();
-    d_ptr->modules.clear();
+    d_ptr->clear();
 }
 
 void Context::add(class_type &cls) {
