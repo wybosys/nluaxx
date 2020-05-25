@@ -3,6 +3,12 @@
 #include <UnitTest++/TestReporterStdout.h>
 #include "timer.h"
 
+#define CHECK_EQUAL_SAFE(type, l, r) \
+{ auto t = l; \
+if (t == nullptr) { CHECK_EQUAL(true, false); } \
+else { CHECK_EQUAL((type)*t, r); } \
+}
+
 USE_NLUA
 
 TEST (main) {
@@ -81,10 +87,10 @@ TEST (test1) {
         });
 
         clz->add("done", [=](self_type &self) -> return_type {
-                    CHECK_EQUAL((int)*self->get("a"), 123);
-                    CHECK_EQUAL((int)*self->invoke("b"), 123);
-                    CHECK_EQUAL((int)*self->invoke("proc", 123), 123);
-                    CHECK_EQUAL(self->has("xxxxxxxx"), false);
+            CHECK_EQUAL_SAFE(int, self->get("a"), 123);
+            CHECK_EQUAL_SAFE(int, self->invoke("b"), 123);
+            CHECK_EQUAL_SAFE(int, self->invoke("proc", 123), 123);
+            CHECK_EQUAL(self->has("xxxxxxxx"), false);
             return nullptr;
         });
 
