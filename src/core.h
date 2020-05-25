@@ -25,6 +25,11 @@
 #include "com++.h"
 #include "macro.h"
 
+#define NLUA_STATIC_INVOKE(func) \
+[=](args_type const& args)->return_type { \
+return make_shared<Variant>(com::function_proxy<decltype(&func)>()(&func, args)); \
+}
+
 NLUA_BEGIN
 
 using namespace ::std;
