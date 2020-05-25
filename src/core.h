@@ -22,13 +22,8 @@
 #include <algorithm>
 #include <functional>
 
-#if defined(__ANDROID__) || defined(__APPLE__)
-#define NLUA_MOBILE 1
-#define NLUA_SHELL 0
-#else
-#define NLUA_MOBILE 0
-#define NLUA_SHELL 1
-#endif
+#include "com++.h"
+#include "macro.h"
 
 NLUA_BEGIN
 
@@ -42,70 +37,6 @@ typedef unsigned long long ulonglong;
 typedef longlong integer;
 typedef ulonglong uinteger, pointer;
 typedef double number;
-
-#define NLUA_FRIEND(cls) friend class cls;
-#define NLUA_NOCOPY(cls) \
-private:                 \
-    cls(cls &) = delete;
-#define NLUA_PRIVATECLASS(cls) cls##Private
-
-#define NLUA_CLASS_PREPARE(cls) \
-    class cls;                  \
-    class NLUA_PRIVATECLASS(cls);
-
-#define NLUA_CLASS_DECL(cls)                                         \
-protected:                                                           \
-    typedef NLUA_PRIVATECLASS(cls) private_class_type;               \
-    friend class NLUA_PRIVATECLASS(cls);                             \
-    private_class_type *d_ptr = nullptr;                             \
-    friend private_class_type *DPtr<cls, private_class_type>(cls *); \
-                                                                     \
-private:                                                             \
-    NLUA_NOCOPY(cls);
-
-#define NLUA_CLASS_CONSTRUCT(...) \
-    d_ptr = new private_class_type(__VA_ARGS__);
-#define NLUA_CLASS_DESTORY() \
-    delete d_ptr;            \
-    d_ptr = nullptr;
-
-template <class T, class TP = typename T::private_class_type>
-static TP *DPtr(T *obj)
-{
-    return obj->d_ptr;
-}
-
-#define NLUA_SINGLETON_DECL(cls) \
-public:                          \
-    static cls &shared();
-#define NLUA_SINGLETON_IMPL(cls, ...)       \
-    static cls *_shared = nullptr;          \
-    cls &cls::shared()                      \
-    {                                       \
-        if (_shared == nullptr)             \
-        {                                   \
-            _shared = new cls(__VA_ARGS__); \
-        }                                   \
-        return *_shared;                    \
-    }
-
-#define __NLUA_RAW(L) L
-#define __NLUA_COMBINE(L, R) L##R
-#define _NLUA_COMBINE(L, R) __NLUA_COMBINE(L, R)
-
-#define NLUA_AUTOGUARD(obj, ...) ::std::lock_guard<::std::mutex> _NLUA_COMBINE(__auto_guard_, __LINE__)(obj);
-
-#define NLUA_PPARGS_0(args)
-#define NLUA_PPARGS_1(args) *args.begin()
-#define NLUA_PPARGS_2(args) NLUA_PPARGS_1(args), *(args.begin() + 1)
-#define NLUA_PPARGS_3(args) NLUA_PPARGS_2(args), *(args.begin() + 2)
-#define NLUA_PPARGS_4(args) NLUA_PPARGS_3(args), *(args.begin() + 3)
-#define NLUA_PPARGS_5(args) NLUA_PPARGS_4(args), *(args.begin() + 4)
-#define NLUA_PPARGS_6(args) NLUA_PPARGS_5(args), *(args.begin() + 5)
-#define NLUA_PPARGS_7(args) NLUA_PPARGS_6(args), *(args.begin() + 6)
-#define NLUA_PPARGS_8(args) NLUA_PPARGS_7(args), *(args.begin() + 7)
-#define NLUA_PPARGS_9(args) NLUA_PPARGS_8(args), *(args.begin() + 8)
-#define NLUA_PPARGS_10(args) NLUA_PPARGS_9(args), *(args.begin() + 9)
 
 class error : public exception
 {

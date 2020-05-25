@@ -32,7 +32,7 @@ private:
     int _old;
 };
 
-#define NLUA_AUTOSTACK(L, ...) AutoStackRecover _NLUA_COMBINE(__nlua_autostack_, __LINE__)(L);
+#define NLUA_AUTOSTACK(L, ...) AutoStackRecover _NNT_COMBINE(__nlua_autostack_, __LINE__)(L);
 
 NLUA_END
 

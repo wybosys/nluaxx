@@ -3,12 +3,12 @@
 
 NLUA_BEGIN
 
-NLUA_CLASS_PREPARE(TimeCounter)
+NNT_CLASS_PREPARE(TimeCounter)
 
 // 计时器
 class TimeCounter
 {
-    NLUA_CLASS_DECL(TimeCounter)
+    NNT_CLASS_DECL(TimeCounter)
 
 public:
     TimeCounter();
@@ -29,12 +29,12 @@ public:
     static void Sleep(double seconds);
 };
 
-NLUA_CLASS_PREPARE(CoTimers)
+NNT_CLASS_PREPARE(CoTimers)
 
 // 最小粒度定时器
 class CoTimers
 {
-    NLUA_CLASS_DECL(CoTimers)
+    NNT_CLASS_DECL(CoTimers)
 public:
     explicit CoTimers(double interval);
 
@@ -49,7 +49,7 @@ public:
     // 取消定时器
     void cancel(timer_t);
 
-    NLUA_SINGLETON_DECL(CoTimers);
+    NNT_SINGLETON_DECL(CoTimers);
 };
 
 // 定时器

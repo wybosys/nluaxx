@@ -153,9 +153,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\com++.h" />
     <ClInclude Include="..\..\src\core.h" />
     <ClInclude Include="..\..\src\fs.h" />
     <ClInclude Include="..\..\src\liblua.h" />
+    <ClInclude Include="..\..\src\macro.h" />
     <ClInclude Include="..\..\src\nlua++.h" />
     <ClInclude Include="..\..\src\stringt.h" />
     <ClInclude Include="..\..\src\value.h" />

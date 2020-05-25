@@ -34,10 +34,10 @@ public:
     shared_ptr<Object> object;
 };
 
-NLUA_CLASS_PREPARE(Context);
+NNT_CLASS_PREPARE(Context);
 
 class Context {
-NLUA_CLASS_DECL(Context);
+NNT_CLASS_DECL(Context);
 
 public:
     // 初始化一个全局的 *为了业务
@@ -107,10 +107,10 @@ public:
     void declare();
 };
 
-NLUA_CLASS_PREPARE(Function)
+NNT_CLASS_PREPARE(Function)
 
 class Function {
-NLUA_CLASS_DECL(Function)
+NNT_CLASS_DECL(Function)
 
 public:
     Function();
@@ -209,10 +209,10 @@ public:
     void declare_in(Context &) const;
 };
 
-NLUA_CLASS_PREPARE(Class)
+NNT_CLASS_PREPARE(Class)
 
 class Class {
-NLUA_CLASS_DECL(Class)
+NNT_CLASS_DECL(Class)
 
 public:
     Class();
@@ -324,10 +324,10 @@ public:
     void declare_in(Context &, Module const &) const;
 };
 
-NLUA_CLASS_PREPARE(Module)
+NNT_CLASS_PREPARE(Module)
 
 class Module {
-NLUA_CLASS_DECL(Module)
+NNT_CLASS_DECL(Module)
 
 public:
     Module();
@@ -353,10 +353,10 @@ public:
 
 // 映射C++的实例
 
-NLUA_CLASS_PREPARE(Object)
+NNT_CLASS_PREPARE(Object)
 
 class Object {
-NLUA_CLASS_DECL(Object)
+NNT_CLASS_DECL(Object)
 
     friend class Context;
 

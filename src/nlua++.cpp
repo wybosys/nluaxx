@@ -248,19 +248,19 @@ public:
 };
 
 static lua_State *GetContextL(Context &ctx) {
-    return DPtr<Context, ContextPrivate>(&ctx)->L;
+    return nnt::DPtr<Context, ContextPrivate>(&ctx)->L;
 }
 
 Context::Context() {
-    NLUA_CLASS_CONSTRUCT(nullptr)
+    NNT_CLASS_CONSTRUCT(nullptr)
 }
 
 Context::Context(void *l) {
-    NLUA_CLASS_CONSTRUCT((lua_State *) l)
+    NNT_CLASS_CONSTRUCT((lua_State *) l)
 }
 
 Context::~Context() {
-    NLUA_CLASS_DESTORY()
+    NNT_CLASS_DESTORY()
 }
 
 void Context::attach(void *_l) {
@@ -713,18 +713,18 @@ public:
 };
 
 Function::Function() {
-    NLUA_CLASS_CONSTRUCT()
+    NNT_CLASS_CONSTRUCT()
 }
 
 Function::~Function() {
-    NLUA_CLASS_DESTORY()
+    NNT_CLASS_DESTORY()
 }
 
 void Function::declare_in(Context &ctx) const {
     auto L = GetContextL(ctx);
     NLUA_AUTOSTACK(L);
 
-    auto pctx = DPtr<Context, ContextPrivate>(&ctx);
+    auto pctx = nnt::DPtr<Context, ContextPrivate>(&ctx);
     auto id = pctx->refId.fetch_add(1);
 
     // 注册到全局对照表中，用于激活函数时查找真正的执行函数
@@ -749,7 +749,7 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
     auto L = GetContextL(ctx);
     NLUA_AUTOSTACK(L);
 
-    auto pctx = DPtr<Context, ContextPrivate>(&ctx);
+    auto pctx = nnt::DPtr<Context, ContextPrivate>(&ctx);
     auto id = pctx->refId.fetch_add(1);
 
     // 绑定到类
@@ -1008,11 +1008,11 @@ public:
 };
 
 Class::Class() {
-    NLUA_CLASS_CONSTRUCT();
+    NNT_CLASS_CONSTRUCT();
 }
 
 Class::~Class() {
-    NLUA_CLASS_DESTORY();
+    NNT_CLASS_DESTORY();
 }
 
 Class::fields_type const &Class::fields() const {
@@ -1064,63 +1064,63 @@ Class &Class::init(Function::basefunc0_type func) {
 Class &Class::init(Function::basefunc1_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(1);
-        return func(self, NLUA_PPARGS_1(args));
+        return func(self, COMXX_PPARGS_1(args));
     }, 1);
 }
 
 Class &Class::init(Function::basefunc2_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(2);
-        return func(self, NLUA_PPARGS_2(args));
+        return func(self, COMXX_PPARGS_2(args));
     }, 2);
 }
 
 Class &Class::init(Function::basefunc3_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(3);
-        return func(self, NLUA_PPARGS_3(args));
+        return func(self, COMXX_PPARGS_3(args));
     }, 3);
 }
 
 Class &Class::init(Function::basefunc4_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(4);
-        return func(self, NLUA_PPARGS_4(args));
+        return func(self, COMXX_PPARGS_4(args));
     }, 4);
 }
 
 Class &Class::init(Function::basefunc5_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(5);
-        return func(self, NLUA_PPARGS_5(args));
+        return func(self, COMXX_PPARGS_5(args));
     }, 5);
 }
 
 Class &Class::init(Function::basefunc6_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(6);
-        return func(self, NLUA_PPARGS_6(args));
+        return func(self, COMXX_PPARGS_6(args));
     }, 6);
 }
 
 Class &Class::init(Function::basefunc7_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(7);
-        return func(self, NLUA_PPARGS_7(args));
+        return func(self, COMXX_PPARGS_7(args));
     }, 7);
 }
 
 Class &Class::init(Function::basefunc8_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(8);
-        return func(self, NLUA_PPARGS_8(args));
+        return func(self, COMXX_PPARGS_8(args));
     }, 8);
 }
 
 Class &Class::init(Function::basefunc9_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(9);
-        return func(self, NLUA_PPARGS_9(args));
+        return func(self, COMXX_PPARGS_9(args));
     }, 9);
 }
 
@@ -1152,63 +1152,63 @@ Class &Class::add(string const &fname, Function::classfunc0_type func) {
 Class &Class::add(string const &fname, Function::classfunc1_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(1);
-        return func(self, NLUA_PPARGS_1(args));
+        return func(self, COMXX_PPARGS_1(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc2_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(2);
-        return func(self, NLUA_PPARGS_2(args));
+        return func(self, COMXX_PPARGS_2(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc3_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(3);
-        return func(self, NLUA_PPARGS_3(args));
+        return func(self, COMXX_PPARGS_3(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc4_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(4);
-        return func(self, NLUA_PPARGS_4(args));
+        return func(self, COMXX_PPARGS_4(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc5_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(5);
-        return func(self, NLUA_PPARGS_5(args));
+        return func(self, COMXX_PPARGS_5(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc6_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(6);
-        return func(self, NLUA_PPARGS_6(args));
+        return func(self, COMXX_PPARGS_6(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc7_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(7);
-        return func(self, NLUA_PPARGS_7(args));
+        return func(self, COMXX_PPARGS_7(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc8_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(8);
-        return func(self, NLUA_PPARGS_8(args));
+        return func(self, COMXX_PPARGS_8(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc9_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(9);
-        return func(self, NLUA_PPARGS_9(args));
+        return func(self, COMXX_PPARGS_9(args));
     });
 }
 
@@ -1229,63 +1229,63 @@ Class &Class::add_static(string const &fname, Function::func0_type func) {
 Class &Class::add_static(string const &fname, Function::func1_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(1);
-        return func(NLUA_PPARGS_1(args));
+        return func(COMXX_PPARGS_1(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func2_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(2);
-        return func(NLUA_PPARGS_2(args));
+        return func(COMXX_PPARGS_2(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func3_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(3);
-        return func(NLUA_PPARGS_3(args));
+        return func(COMXX_PPARGS_3(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func4_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(4);
-        return func(NLUA_PPARGS_4(args));
+        return func(COMXX_PPARGS_4(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func5_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(5);
-        return func(NLUA_PPARGS_5(args));
+        return func(COMXX_PPARGS_5(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func6_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(6);
-        return func(NLUA_PPARGS_6(args));
+        return func(COMXX_PPARGS_6(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func7_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(7);
-        return func(NLUA_PPARGS_7(args));
+        return func(COMXX_PPARGS_7(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func8_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(8);
-        return func(NLUA_PPARGS_8(args));
+        return func(COMXX_PPARGS_8(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func9_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(9);
-        return func(NLUA_PPARGS_9(args));
+        return func(COMXX_PPARGS_9(args));
     });
 }
 
@@ -1397,13 +1397,13 @@ public:
 };
 
 Module::Module() {
-    NLUA_CLASS_CONSTRUCT();
+    NNT_CLASS_CONSTRUCT();
     d_ptr->d_owner = this;
 }
 
 Module::~Module() {
     d_ptr->d_owner = nullptr;
-    NLUA_CLASS_DESTORY()
+    NNT_CLASS_DESTORY()
 }
 
 Module &Module::add(class_type &c) {
@@ -1440,11 +1440,11 @@ void Module::merge(Module const &r) {
 }
 
 Object::Object() {
-    NLUA_CLASS_CONSTRUCT()
+    NNT_CLASS_CONSTRUCT()
 }
 
 Object::~Object() {
-    NLUA_CLASS_DESTORY()
+    NNT_CLASS_DESTORY()
 }
 
 void *Object::payload() const {

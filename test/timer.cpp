@@ -15,12 +15,12 @@ public:
 
 TimeCounter::TimeCounter()
 {
-    NLUA_CLASS_CONSTRUCT();
+    NNT_CLASS_CONSTRUCT();
 }
 
 TimeCounter::~TimeCounter()
 {
-    NLUA_CLASS_DESTORY();
+    NNT_CLASS_DESTORY();
 }
 
 void TimeCounter::start()
@@ -80,7 +80,7 @@ public:
 
     static void _DoTick(CoTimersPrivate *self)
     {
-        NLUA_AUTOGUARD(self->mtx);
+        NNT_AUTOGUARD(self->mtx);
 
         bool needclean = false;
 
@@ -128,16 +128,16 @@ public:
 
 CoTimers::CoTimers(double interval)
 {
-    NLUA_CLASS_CONSTRUCT()
+    NNT_CLASS_CONSTRUCT()
     d_ptr->interval = interval;
 }
 
 CoTimers::~CoTimers() noexcept {
-    NLUA_CLASS_DESTORY()}
+    NNT_CLASS_DESTORY()}
 
 CoTimers::timer_t CoTimers::add(double interval, int repeat, tick_t cb)
 {
-    NLUA_AUTOGUARD(d_ptr->mtx);
+    NNT_AUTOGUARD(d_ptr->mtx);
 
     auto t = make_shared<CoTimerItem>();
     t->id = ++d_ptr->counter;
@@ -152,12 +152,12 @@ CoTimers::timer_t CoTimers::add(double interval, int repeat, tick_t cb)
 
 void CoTimers::cancel(timer_t id)
 {
-    NLUA_AUTOGUARD(d_ptr->mtx)
+    NNT_AUTOGUARD(d_ptr->mtx)
     d_ptr->timers.erase(id);
 }
 
 // 最小粒度定时器
-NLUA_SINGLETON_IMPL(CoTimers, 0.1);
+NNT_SINGLETON_IMPL(CoTimers, 0.1);
 
 Timer::timer_t Timer::SetTimeout(double time, tick_t cb)
 {
