@@ -36,10 +36,16 @@ public:
     operator bool() const;
     operator void*() const;
     operator string const& () const;
+    operator com::Variant const& () const;
 
 private:
     com::Variant const _var;
 };
+
+inline Variant::operator com::Variant const& () const
+{
+    return _var;
+}
 
 template <typename _CharT, typename _Traits>
 inline basic_ostream<_CharT, _Traits> &operator<<(basic_ostream<_CharT, _Traits> &stm, Variant const &v)
