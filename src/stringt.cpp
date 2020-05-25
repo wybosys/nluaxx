@@ -6,7 +6,7 @@ NLUA_BEGIN
 vector<std::string> explode(string const &str, string const &delimeter)
 {
     vector<std::string> ret;
-    int sid = 0, eid = 0;
+    size_t sid = 0, eid = 0;
     while ((eid = str.find(delimeter, sid)) < str.size())
     {
         string val = str.substr(sid, eid - sid);
