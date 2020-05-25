@@ -1064,108 +1064,63 @@ Class &Class::init(Function::basefunc0_type func) {
 Class &Class::init(Function::basefunc1_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(1);
-        auto const &v0 = args.begin() + 0;
-        return func(self, v0);
+        return func(self, NLUA_PPARGS_1(args));
     }, 1);
 }
 
 Class &Class::init(Function::basefunc2_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(2);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        return func(self, v0, v1);
+        return func(self, NLUA_PPARGS_2(args));
     }, 2);
 }
 
 Class &Class::init(Function::basefunc3_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(3);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        return func(self, v0, v1, v2);
+        return func(self, NLUA_PPARGS_3(args));
     }, 3);
 }
 
 Class &Class::init(Function::basefunc4_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(4);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        return func(self, v0, v1, v2, v3);
+        return func(self, NLUA_PPARGS_4(args));
     }, 4);
 }
 
 Class &Class::init(Function::basefunc5_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(5);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        return func(self, v0, v1, v2, v3, v4);
+        return func(self, NLUA_PPARGS_5(args));
     }, 5);
 }
 
 Class &Class::init(Function::basefunc6_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(6);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        auto const &v5 = args.begin() + 5;
-        return func(self, v0, v1, v2, v3, v4, v5);
+        return func(self, NLUA_PPARGS_6(args));
     }, 6);
 }
 
 Class &Class::init(Function::basefunc7_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(7);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        auto const &v5 = args.begin() + 5;
-        auto const &v6 = args.begin() + 6;
-        return func(self, v0, v1, v2, v3, v4, v5, v6);
+        return func(self, NLUA_PPARGS_7(args));
     }, 7);
 }
 
 Class &Class::init(Function::basefunc8_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(8);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        auto const &v5 = args.begin() + 5;
-        auto const &v6 = args.begin() + 6;
-        auto const &v7 = args.begin() + 7;
-        return func(self, v0, v1, v2, v3, v4, v5, v6, v7);
+        return func(self, NLUA_PPARGS_8(args));
     }, 8);
 }
 
 Class &Class::init(Function::basefunc9_type func) {
     return init([=](self_type &self, args_type const &args) {
         IMPFUNC_CHECK_ARGS(9);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        auto const &v5 = args.begin() + 5;
-        auto const &v6 = args.begin() + 6;
-        auto const &v7 = args.begin() + 7;
-        auto const &v8 = args.begin() + 8;
-        return func(self, v0, v1, v2, v3, v4, v5, v6, v7, v8);
+        return func(self, NLUA_PPARGS_9(args));
     }, 9);
 }
 
@@ -1197,108 +1152,63 @@ Class &Class::add(string const &fname, Function::classfunc0_type func) {
 Class &Class::add(string const &fname, Function::classfunc1_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(1);
-        auto const &v0 = args.begin() + 0;
-        return func(self, v0);
+        return func(self, NLUA_PPARGS_1(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc2_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(2);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        return func(self, v0, v1);
+        return func(self, NLUA_PPARGS_2(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc3_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(3);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        return func(self, v0, v1, v2);
+        return func(self, NLUA_PPARGS_3(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc4_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(4);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        return func(self, v0, v1, v2, v3);
+        return func(self, NLUA_PPARGS_4(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc5_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(5);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        return func(self, v0, v1, v2, v3, v4);
+        return func(self, NLUA_PPARGS_5(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc6_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(6);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        auto const &v5 = args.begin() + 5;
-        return func(self, v0, v1, v2, v3, v4, v5);
+        return func(self, NLUA_PPARGS_6(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc7_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(7);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        auto const &v5 = args.begin() + 5;
-        auto const &v6 = args.begin() + 6;
-        return func(self, v0, v1, v2, v3, v4, v5, v6);
+        return func(self, NLUA_PPARGS_7(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc8_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(8);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        auto const &v5 = args.begin() + 5;
-        auto const &v6 = args.begin() + 6;
-        auto const &v7 = args.begin() + 7;
-        return func(self, v0, v1, v2, v3, v4, v5, v6, v7);
+        return func(self, NLUA_PPARGS_8(args));
     });
 }
 
 Class &Class::add(string const &fname, Function::classfunc9_type func) {
     return add(fname, [=](self_type &self, args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(9);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        auto const &v5 = args.begin() + 5;
-        auto const &v6 = args.begin() + 6;
-        auto const &v7 = args.begin() + 7;
-        auto const &v8 = args.begin() + 8;
-        return func(self, v0, v1, v2, v3, v4, v5, v6, v7, v8);
+        return func(self, NLUA_PPARGS_9(args));
     });
 }
 
@@ -1319,108 +1229,63 @@ Class &Class::add_static(string const &fname, Function::func0_type func) {
 Class &Class::add_static(string const &fname, Function::func1_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(1);
-        auto const &v0 = args.begin() + 0;
-        return func(v0);
+        return func(NLUA_PPARGS_1(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func2_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(2);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        return func(v0, v1);
+        return func(NLUA_PPARGS_2(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func3_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(3);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        return func(v0, v1, v2);
+        return func(NLUA_PPARGS_3(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func4_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(4);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        return func(v0, v1, v2, v3);
+        return func(NLUA_PPARGS_4(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func5_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(5);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        return func(v0, v1, v2, v3, v4);
+        return func(NLUA_PPARGS_5(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func6_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(6);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        auto const &v5 = args.begin() + 5;
-        return func(v0, v1, v2, v3, v4, v5);
+        return func(NLUA_PPARGS_6(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func7_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(7);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        auto const &v5 = args.begin() + 5;
-        auto const &v6 = args.begin() + 6;
-        return func(v0, v1, v2, v3, v4, v5, v6);
+        return func(NLUA_PPARGS_7(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func8_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(8);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        auto const &v5 = args.begin() + 5;
-        auto const &v6 = args.begin() + 6;
-        auto const &v7 = args.begin() + 7;
-        return func(v0, v1, v2, v3, v4, v5, v6, v7);
+        return func(NLUA_PPARGS_8(args));
     });
 }
 
 Class &Class::add_static(string const &fname, Function::func9_type func) {
     return add_static(fname, [=](args_type const &args) -> return_type {
         IMPFUNC_CHECK_ARGS(9);
-        auto const &v0 = args.begin() + 0;
-        auto const &v1 = args.begin() + 1;
-        auto const &v2 = args.begin() + 2;
-        auto const &v3 = args.begin() + 3;
-        auto const &v4 = args.begin() + 4;
-        auto const &v5 = args.begin() + 5;
-        auto const &v6 = args.begin() + 6;
-        auto const &v7 = args.begin() + 7;
-        auto const &v8 = args.begin() + 8;
-        return func(v0, v1, v2, v3, v4, v5, v6, v7, v8);
+        return func(NLUA_PPARGS_9(args));
     });
 }
 

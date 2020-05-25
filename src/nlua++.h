@@ -4,8 +4,8 @@
 #include "core.h"
 #include "variant.h"
 #include "fs.h"
-#include <initializer_list>
 #include <map>
+#include <initializer_list>
 
 NLUA_BEGIN
 

@@ -95,6 +95,18 @@ public:                          \
 
 #define NLUA_AUTOGUARD(obj, ...) ::std::lock_guard<::std::mutex> _NLUA_COMBINE(__auto_guard_, __LINE__)(obj);
 
+#define NLUA_PPARGS_0(args)
+#define NLUA_PPARGS_1(args) *args.begin()
+#define NLUA_PPARGS_2(args) NLUA_PPARGS_1(args), *(args.begin() + 1)
+#define NLUA_PPARGS_3(args) NLUA_PPARGS_2(args), *(args.begin() + 2)
+#define NLUA_PPARGS_4(args) NLUA_PPARGS_3(args), *(args.begin() + 3)
+#define NLUA_PPARGS_5(args) NLUA_PPARGS_4(args), *(args.begin() + 4)
+#define NLUA_PPARGS_6(args) NLUA_PPARGS_5(args), *(args.begin() + 5)
+#define NLUA_PPARGS_7(args) NLUA_PPARGS_6(args), *(args.begin() + 6)
+#define NLUA_PPARGS_8(args) NLUA_PPARGS_7(args), *(args.begin() + 7)
+#define NLUA_PPARGS_9(args) NLUA_PPARGS_8(args), *(args.begin() + 8)
+#define NLUA_PPARGS_10(args) NLUA_PPARGS_9(args), *(args.begin() + 9)
+
 class error : public exception
 {
 public:
