@@ -1,150 +1,147 @@
 ﻿#include "core.h"
 #include "variant.h"
-#include <sstream>
+#include <math.h>
 
 NLUA_BEGIN
 
-Variant::~Variant()
+Variant::VT FromCom(com::Variant::VT vt)
 {
-    _clear();
+    switch (vt) {
+    case com::Variant::VT::INT:
+    case com::Variant::VT::UINT:
+    case com::Variant::VT::LONG:
+    case com::Variant::VT::ULONG:
+    case com::Variant::VT::SHORT:
+    case com::Variant::VT::USHORT:
+    case com::Variant::VT::LONGLONG:
+    case com::Variant::VT::ULONGLONG:
+    case com::Variant::VT::CHAR:
+    case com::Variant::VT::UCHAR:
+        return Variant::VT::INTEGER;
+    case com::Variant::VT::FLOAT:
+    case com::Variant::VT::DOUBLE:
+        return Variant::VT::NUMBER;
+    case com::Variant::VT::OBJECT:
+    case com::Variant::VT::POINTER:
+        return Variant::VT::POINTER;
+    case com::Variant::VT::BOOLEAN:
+        return Variant::VT::BOOLEAN;
+    case com::Variant::VT::STRING:
+        return Variant::VT::STRING;
+    }
+    return Variant::VT::NIL;
 }
 
-void Variant::_clear()
+Variant::Variant()
+    :vt(VT::NIL)
 {
-    _type = VariantType::UNKNOWN;
-#ifdef WIN32
-    memset(&_pod, 0, sizeof(_pod));
-#else
-    bzero(&_pod, sizeof(_pod));
-#endif
-    _arr = nullptr;
-    _str.clear();
 }
 
-string Variant::toString() const
+Variant::Variant(integer v)
+    : vt(VT::INTEGER), _var(v)
 {
-    switch (_type)
-    {
-    case VariantType::STRING:
-        return _str;
-    case VariantType::INTEGER:
-    {
-        stringstream ss;
-        ss << _pod.i;
-        return ss.str();
-    }
-    case VariantType::DECIMAL:
-    {
-        stringstream ss;
-        ss << _pod.n;
-        return ss.str();
-    }
-    case VariantType::POINTER:
-    {
-        stringstream ss;
-        ss << (pointer)_pod.ptr;
-        return ss.str();
-    }
-    case VariantType::BOOLEAN:
-    {
-        return _pod.b ? "true" : "false";
-    }
-    default:
-        break;
-    }
-
-    return _str;
 }
 
-number Variant::toNumber() const
+Variant::Variant(number v)
+    : vt(VT::NUMBER), _var(v)
 {
-    switch (_type)
-    {
-    case VariantType::STRING:
-    {
-        stringstream ss;
-        ss << _str;
-        number n;
-        ss >> n;
-        return n;
-    }
-    case VariantType::INTEGER:
-        return (number)_pod.i;
-    case VariantType::DECIMAL:
-        return _pod.n;
-    case VariantType::POINTER:
-        return (number)(pointer)_pod.ptr;
-    case VariantType::BOOLEAN:
-        return _pod.b ? 1 : 0;
-    default:
-        break;
-    }
-
-    return _pod.n;
 }
 
-integer Variant::toInteger() const
+Variant::Variant(bool v)
+    : vt(VT::BOOLEAN), _var(v)
 {
-    switch (_type)
-    {
-    case VariantType::STRING:
-    {
-        stringstream ss;
-        ss << _str;
-        integer n;
-        ss >> n;
-        return n;
-    }
-    case VariantType::INTEGER:
-        return _pod.i;
-    case VariantType::DECIMAL:
-        return (integer)_pod.n;
-    case VariantType::POINTER:
-        return (pointer)_pod.ptr;
-    case VariantType::BOOLEAN:
-        return _pod.b ? 1 : 0;
-    default:
-        break;
-    }
-
-    return _pod.i;
 }
 
-Variant::array_type Variant::toArray() const
+Variant::Variant(string const& v)
+    : vt(VT::STRING), _var(v)
 {
-    return _arr;
 }
 
-bool Variant::toBoolean() const
+Variant::Variant(char const* v)
+    : vt(VT::STRING), _var(v)
 {
-    switch (_type)
-    {
-    case VariantType::STRING:
-        return _str != "false";
-    case VariantType::INTEGER:
-        return _pod.i != 0;
-    case VariantType::DECIMAL:
-        return _pod.n != 0;
-    case VariantType::POINTER:
-        return _pod.ptr != nullptr;
-    default:
-        break;
-    }
-
-    return _pod.b;
 }
 
-void *Variant::toPointer() const
+Variant::Variant(void* v)
+    : vt(VT::POINTER), _var(v)
 {
-    switch (_type)
-    {
-    case VariantType::STRING:
-        return (void *)_str.c_str();
-    default:
-        break;
-    }
+}
 
-    return _pod.ptr;
+Variant::Variant(nullptr_t)
+    : vt(VT::POINTER), _var(nullptr)
+{
+}
+
+Variant::Variant(com::Variant const& v)
+    : vt(FromCom(v.vt)), _var(v)
+{
+}
+
+Variant::operator integer() const
+{
+    switch (_var.vt) {
+    case com::Variant::VT::INT:
+        return (int)_var;
+    case com::Variant::VT::UINT:
+        return (unsigned int)_var;
+    case com::Variant::VT::LONG:
+        return (long)_var;
+    case com::Variant::VT::ULONG:
+        return (unsigned long)_var;
+    case com::Variant::VT::SHORT:
+        return (short)_var;
+    case com::Variant::VT::USHORT:
+        return (unsigned short)_var;
+    case com::Variant::VT::LONGLONG:
+        return (integer)(long long)_var;
+    case com::Variant::VT::ULONGLONG:
+        return (integer)(unsigned long long)_var;
+    case com::Variant::VT::CHAR:
+        return (char)_var;
+    case com::Variant::VT::UCHAR:
+        return (unsigned char)_var;
+    case com::Variant::VT::BOOLEAN:
+        return (bool)_var;
+    case com::Variant::VT::FLOAT:
+        return (integer)round((float)_var);
+    case com::Variant::VT::DOUBLE:
+        return (integer)round((double)_var);
+    }
+    return 0;
+}
+
+Variant::operator number() const
+{
+    switch (_var.vt) {
+    case com::Variant::VT::FLOAT:
+        return (float)_var;
+    case com::Variant::VT::DOUBLE:
+        return (double)_var;
+    }
+    return (integer)(*this);
+}
+
+Variant::operator bool() const 
+{
+    if (_var.vt == com::Variant::VT::BOOLEAN)
+        return (bool)_var;
+    return (number)(*this) != 0;
+}
+
+Variant::operator string const& () const
+{
+    return (string const&)_var;
+}
+
+Variant::operator void*() const
+{
+    switch (_var.vt) {
+    case com::Variant::VT::OBJECT:
+        return (com::IObject*)_var;
+    case com::Variant::VT::POINTER:
+        return (void*)_var;
+    }
+    return NULL;
 }
 
 NLUA_END

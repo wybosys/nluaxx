@@ -32,12 +32,6 @@ using namespace ::std;
 // 执行main循环
 extern int Exec();
 
-typedef long long longlong;
-typedef unsigned long long ulonglong;
-typedef longlong integer;
-typedef ulonglong uinteger, pointer;
-typedef double number;
-
 class error : public exception
 {
 public:

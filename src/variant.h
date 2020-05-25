@@ -1,207 +1,65 @@
 ﻿#ifndef __NLUA_VARIANT_H_INCLUDED
 #define __NLUA_VARIANT_H_INCLUDED
 
-#include <vector>
-
 NLUA_BEGIN
 
-enum struct VariantType
-{
-    UNKNOWN = 0,
-    NIL = 0x10,
-    NUMBER_MASK = 0x20,
-    INTEGER = 0x21,
-    DECIMAL = 0x22,
-    POINTER = 0x23,
-    STRING = 0x30,
-    BOOLEAN = 0x40,
-    ARRAY = 0x50,
-};
+typedef ptrdiff_t integer;
+typedef double number;
 
 class Variant
 {
 public:
-    Variant() = default;
 
-    Variant(nullptr_t)
-    {
-        _type = VariantType::POINTER;
-        _pod.ptr = nullptr;
-    }
+    enum struct VT {
+        NIL,
+        INTEGER,
+        NUMBER,
+        BOOLEAN,
+        POINTER,
+        STRING
+    };
 
-    Variant(void *ptr)
-    {
-        _type = VariantType::POINTER;
-        _pod.ptr = ptr;
-    }
+    Variant();
+    Variant(integer);
+    Variant(number);
+    Variant(bool);
+    Variant(string const&);
+    Variant(void*);
+    Variant(char const*);
+    Variant(nullptr_t);
+    Variant(com::Variant const&);
 
-    Variant(integer i)
-    {
-        _type = VariantType::INTEGER;
-        _pod.i = i;
-    }
+    VT const vt;
 
-    Variant(int i)
-    {
-        _type = VariantType::INTEGER;
-        _pod.i = i;
-    }
-
-    Variant(number n)
-    {
-        _type = VariantType::DECIMAL;
-        _pod.n = n;
-    }
-
-    Variant(bool b)
-    {
-        _type = VariantType::BOOLEAN;
-        _pod.b = b;
-    }
-
-    Variant(string const &str)
-    {
-        _type = VariantType::STRING;
-        _str = str;
-    }
-
-    Variant(char const *str)
-    {
-        _type = VariantType::STRING;
-        _str = str;
-    }
-
-    Variant(Variant const &r)
-    {
-        _type = r._type;
-        _str = r._str;
-        _pod = r._pod;
-        _arr = r._arr;
-    }
-
-    Variant(Variant const *r)
-    {
-        _type = r->_type;
-        _str = r->_str;
-        _pod = r->_pod;
-        _arr = r->_arr;
-    }
-
-    ~Variant();
-
-    inline void reset(void *ptr)
-    {
-        _clear();
-
-        _type = VariantType::POINTER;
-        _pod.ptr = ptr;
-    }
-
-    inline void reset(integer i)
-    {
-        _clear();
-
-        _type = VariantType::INTEGER;
-        _pod.i = i;
-    }
-
-    inline void reset(number n)
-    {
-        _clear();
-
-        _type = VariantType::DECIMAL;
-        _pod.n = n;
-    }
-
-    inline void reset(bool b)
-    {
-        _clear();
-
-        _type = VariantType::BOOLEAN;
-        _pod.b = b;
-    }
-
-    inline void reset(string const &str)
-    {
-        _clear();
-
-        _type = VariantType::STRING;
-        _str = str;
-    }
-
-    inline VariantType type() const
-    {
-        return _type;
-    }
-
-    inline operator string() const
-    {
-        return toString();
-    }
-
-    inline operator number() const
-    {
-        return toNumber();
-    }
-
-    inline operator integer() const
-    {
-        return toInteger();
-    }
-
-    string toString() const;
-
-    number toNumber() const;
-
-    integer toInteger() const;
-
-    bool toBoolean() const;
-
-    void *toPointer() const;
-
-    typedef shared_ptr<vector<shared_ptr<Variant>>>
-        array_type;
-
-    array_type toArray() const;
-
-protected:
-    void _clear();
+    operator integer() const;
+    operator number() const;
+    operator bool() const;
+    operator void*() const;
+    operator string const& () const;
 
 private:
-    VariantType _type = VariantType::UNKNOWN;
-
-    union {
-        void *ptr;
-        integer i;
-        number n;
-        bool b;
-    } _pod;
-
-    string _str;
-    array_type _arr;
+    com::Variant const _var;
 };
 
 template <typename _CharT, typename _Traits>
 inline basic_ostream<_CharT, _Traits> &operator<<(basic_ostream<_CharT, _Traits> &stm, Variant const &v)
 {
-    switch (v.type())
+    switch (v.vt)
     {
-    case VariantType::STRING:
-        stm << v.toString();
+    case Variant::VT::STRING:
+        stm << (string)v;
         break;
-    case VariantType::INTEGER:
-        stm << v.toInteger();
+    case Variant::VT::INTEGER:
+        stm << (integer)v;
         break;
-    case VariantType::DECIMAL:
-        stm << v.toNumber();
+    case Variant::VT::NUMBER:
+        stm << (number)v;
         break;
-    case VariantType::POINTER:
-        stm << v.toPointer();
+    case Variant::VT::POINTER:
+        stm << (void*)v;
         break;
-    case VariantType::BOOLEAN:
-        stm << v.toBoolean();
-        break;
-    default:
+    case Variant::VT::BOOLEAN:
+        stm << (bool)v;
         break;
     }
     return stm;

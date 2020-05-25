@@ -15,28 +15,28 @@ extern void push(Variant const *v, lua_State *L)
 
 void push(Variant const &v, lua_State *L)
 {
-    switch (v.type())
+    switch (v.vt)
     {
-    default:
+    case Variant::VT::NIL:
         lua_pushnil(L);
         break;
-    case VariantType::POINTER:
-        lua_pushlightuserdata(L, v.toPointer());
+    case Variant::VT::POINTER:
+        lua_pushlightuserdata(L, (void*)v);
         break;
-    case VariantType::DECIMAL:
-        lua_pushnumber(L, v.toNumber());
+    case Variant::VT::NUMBER:
+        lua_pushnumber(L, (number)v);
         break;
-    case VariantType::INTEGER:
-        lua_pushinteger(L, (lua_Integer)v.toInteger());
+    case Variant::VT::INTEGER:
+        lua_pushinteger(L, (integer)v);
         break;
-    case VariantType::STRING:
+    case Variant::VT::STRING:
     {
-        auto s = v.toString();
+        string s = v;
         lua_pushlstring(L, s.c_str(), s.length());
     }
     break;
-    case VariantType::BOOLEAN:
-        lua_pushboolean(L, v.toBoolean());
+    case Variant::VT::BOOLEAN:
+        lua_pushboolean(L, (bool)v);
         break;
     }
 }

@@ -1,6 +1,8 @@
 ﻿#ifndef __COMXX_H_INCLUDED
 #define __COMXX_H_INCLUDED
 
+// github.com/wybosys/nnt.comxx
+
 #define COMXX_NS com
 #define COMXX_BEGIN    \
     namespace COMXX_NS \
@@ -47,7 +49,7 @@ public:
 
     enum struct VT
     {
-        POINTER = 0,
+        NIL = 0,
         INT = 1,
         UINT = 2,
         LONG = 3,
@@ -64,10 +66,14 @@ public:
         STRING = 14,
         FUNCTION = 15,
         OBJECT = 16,
+        BOOLEAN = 17,
+        POINTER = 18,
     };
 
+    Variant();
     Variant(class IObject *);
     Variant(void*);
+    Variant(nullptr_t);
     Variant(int);
     Variant(unsigned int);
     Variant(long);
@@ -80,8 +86,10 @@ public:
     Variant(double);
     Variant(char);
     Variant(unsigned char);
+    Variant(bool);
     Variant(bytes_t const &);
     Variant(string const &);
+    Variant(char const*);
     Variant(func_t const &);
     ~Variant();
 
@@ -101,6 +109,7 @@ public:
     operator double() const;
     operator char() const;
     operator unsigned char() const;
+    operator bool() const;
     operator bytes_t const &() const;
     operator string const &() const;
     operator func_t const &() const;
@@ -121,6 +130,7 @@ private:
         double d;
         char c;
         unsigned char uc;
+        bool b;
     } _pod = {0};
     shared_ptr<bytes_t> _bytes;
     shared_ptr<string> _str;
@@ -255,7 +265,9 @@ inline Variant::Variant(IObject *v) : vt(VT::OBJECT)
     }
 }
 
+inline Variant::Variant() :vt(VT::NIL) {}
 inline Variant::Variant(void* v) :vt(VT::POINTER) { _pod.p = v; }
+inline Variant::Variant(nullptr_t) : vt(VT::POINTER) { _pod.p = nullptr; }
 inline Variant::Variant(int v) : vt(VT::INT) { _pod.i = v; }
 inline Variant::Variant(unsigned int v) : vt(VT::UINT) { _pod.ui = v; }
 inline Variant::Variant(long v) : vt(VT::LONG) { _pod.l = v; }
@@ -268,8 +280,10 @@ inline Variant::Variant(float v) : vt(VT::FLOAT) { _pod.f = v; }
 inline Variant::Variant(double v) : vt(VT::DOUBLE) { _pod.d = v; }
 inline Variant::Variant(char v) : vt(VT::CHAR) { _pod.c = v; }
 inline Variant::Variant(unsigned char v) : vt(VT::UCHAR) { _pod.uc = v; }
+inline Variant::Variant(bool v) : vt(VT::BOOLEAN) { _pod.b = v; }
 inline Variant::Variant(bytes_t const &v) : vt(VT::BYTES) { _bytes = make_shared<bytes_t>(v); }
 inline Variant::Variant(string const &v) : vt(VT::STRING) { _str = make_shared<string>(v); }
+inline Variant::Variant(char const* v) : vt(VT::STRING) { _str = make_shared<string>(v); }
 inline Variant::Variant(func_t const &v) : vt(VT::FUNCTION) { _func = make_shared<func_t>(v); }
 
 inline Variant::~Variant()
@@ -295,6 +309,7 @@ inline Variant::operator float() const { return _pod.f; }
 inline Variant::operator double() const { return _pod.d; }
 inline Variant::operator char() const { return _pod.c; }
 inline Variant::operator unsigned char() const { return _pod.uc; }
+inline Variant::operator bool() const { return _pod.b; }
 inline Variant::operator bytes_t const &() const { return *_bytes; }
 inline Variant::operator string const &() const { return *_str; }
 inline Variant::operator func_t const &() const { return *_func; }

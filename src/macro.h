@@ -1,6 +1,8 @@
 #ifndef __NNT_MACROXX_H_INCLUDED
 #define __NNT_MACROXX_H_INCLUDED
 
+// github.com/wybosys/nnt.macro
+
 #define NNT_FRIEND(cls) friend class cls;
 #define NNT_NOCOPY(cls) \
 private:                 \

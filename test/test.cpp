@@ -81,9 +81,9 @@ TEST (test1) {
         });
 
         clz->add("done", [=](self_type &self) -> return_type {
-                    CHECK_EQUAL(self->get("a")->toInteger(), 123);
-                    CHECK_EQUAL(self->invoke("b")->toInteger(), 123);
-                    CHECK_EQUAL(self->invoke("proc", 123)->toInteger(), 123);
+                    CHECK_EQUAL((int)*self->get("a"), 123);
+                    CHECK_EQUAL((int)*self->invoke("b"), 123);
+                    CHECK_EQUAL((int)*self->invoke("proc", 123), 123);
                     CHECK_EQUAL(self->has("xxxxxxxx"), false);
             return nullptr;
         });
@@ -107,13 +107,13 @@ TEST (test2) {
     ctx.invoke("test2");
 
     auto gs_test = ctx.global("gs_test");
-            CHECK_EQUAL(gs_test->invoke("proc")->toString(), "nlua++");
+            CHECK_EQUAL((string)*gs_test->invoke("proc"), "nlua++");
     gs_test->set("msg", 123);
-            CHECK_EQUAL(gs_test->get("msg")->toInteger(), 123);
-            CHECK_EQUAL(gs_test->invoke("proc")->toInteger(), 123);
+            CHECK_EQUAL((int)*gs_test->get("msg"), 123);
+            CHECK_EQUAL((int)*gs_test->invoke("proc"), 123);
 
     auto Test = ctx.global("Test");
-            CHECK_EQUAL(Test->invoke("sproc")->toString(), "lua");
+            CHECK_EQUAL((string)*Test->invoke("sproc"), "lua");
 }
 
 TEST (test3) {
@@ -249,8 +249,8 @@ TEST (test7) {
     clz->name = "Test";
 
     clz->init([=](self_type &self, Variant const &v0, Variant const &v1) {
-                CHECK_EQUAL(v0.toInteger(), 1);
-                CHECK_EQUAL(v1.toInteger(), 2);
+                CHECK_EQUAL((int)v0, 1);
+                CHECK_EQUAL((int)v1, 2);
         self->bind<Test7Object>().txt = "test7";
     });
     clz->fini([=](self_type &self) {
