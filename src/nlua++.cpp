@@ -991,7 +991,7 @@ public:
         return 1;
     }
 
-    Singleton singleton;
+    shared_ptr<Singleton> singleton;
     Class::fields_type fields;
     Class::functions_type functions;
     Class::supers_type supers;
@@ -1016,9 +1016,11 @@ Class::functions_type const &Class::functions() const {
 }
 
 Class &Class::singleton(string const &_name, Singleton::func_type _init, Singleton::func_type _fini) {
-    d_ptr->singleton.name = _name;
-    d_ptr->singleton.init = ::std::move(_init);
-    d_ptr->singleton.fini = ::std::move(_fini);
+    auto t = make_shared<Singleton>();
+    t->name = _name;
+    t->init = move(_init);
+    t->fini = move(_fini);
+    d_ptr->singleton = t;
     return *this;
 }
 
@@ -1318,12 +1320,12 @@ void Class::declare_in(Context &ctx) const {
     lua_newtable(L);
     int clzid = lua_gettop(L);
 
-    if (d_ptr->singleton.empty()) {
+    if (d_ptr->singleton) {
+        d_ptr->singleton->declare_in(ctx);
+    } else {
         lua_pushstring(L, "new");
         lua_pushcfunction(L, ClassPrivate::ImpNew);
         lua_rawset(L, clzid);
-    } else {
-        d_ptr->singleton.declare_in(ctx);
     }
 
     // 定义析构函数
@@ -1349,12 +1351,12 @@ void Class::declare_in(Context &ctx, Module const &mod) const {
     lua_newtable(L);
     int clzid = lua_gettop(L);
 
-    if (d_ptr->singleton.empty()) {
+    if (d_ptr->singleton) {
+        d_ptr->singleton->declare_in(ctx);
+    } else {
         lua_pushstring(L, "new");
         lua_pushcfunction(L, ClassPrivate::ImpNew);
         lua_rawset(L, clzid);
-    } else {
-        d_ptr->singleton.declare_in(ctx);
     }
 
     // 定义析构函数

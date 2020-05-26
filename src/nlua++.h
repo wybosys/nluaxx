@@ -202,10 +202,6 @@ public:
     string name;
     func_type init, fini;
 
-    inline bool empty() const {
-        return name.empty();
-    }
-
     void declare_in(Context &) const;
 };
 
