@@ -201,10 +201,16 @@ public:
 
         cpackage_paths.clear();
         for (auto cur : *curs) {
-#ifndef WIN32
+#ifdef WIN32
             if (endwith(cur, "?.dll")) {
                 cur = cur.substr(0, cur.length() - 5);
             }
+#else
+            if (endwith(cur, "?.so"))
+            {
+                cur = cur.substr(0, cur.length() - 5);
+            }
+#endif
             string c = absolute(cur);
             if (isdirectory(c)) {
                 if (find(cpackage_paths.begin(), cpackage_paths.end(), c) == cpackage_paths.end()) {
@@ -212,21 +218,6 @@ public:
                     // cout << "cpackage path: " << c << endl;
                 }
             }
-#else
-            if (endwith(cur, "?.so"))
-            {
-                cur = cur.substr(0, cur.length() - 5);
-            }
-            string c = absolute(cur);
-            if (isdirectory(c))
-            {
-                if (find(cpackage_paths.begin(), cpackage_paths.end(), c) == cpackage_paths.end())
-                {
-                    cpackage_paths.emplace_back(c);
-                    // cout << "cpackage path: " << c << endl;
-                }
-            }
-#endif
         }
     }
 
