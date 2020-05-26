@@ -3,12 +3,6 @@
 #include <UnitTest++/TestReporterStdout.h>
 #include "timer.h"
 
-#define CHECK_EQUAL_SAFE(type, l, r) \
-{ auto t = l; \
-if (t == nullptr) { CHECK_EQUAL(true, false); } \
-else { CHECK_EQUAL((type)*t, r); } \
-}
-
 USE_NLUA
 
 TEST (main) {
@@ -87,10 +81,10 @@ TEST (test1) {
         });
 
         clz->add("done", [=](self_type &self) -> return_type {
-            CHECK_EQUAL_SAFE(int, self->get("a"), 123);
-            CHECK_EQUAL_SAFE(int, self->invoke("b"), 123);
-            CHECK_EQUAL_SAFE(int, self->invoke("proc", 123), 123);
-            CHECK_EQUAL(self->has("xxxxxxxx"), false);
+                    CHECK_EQUAL(self->get("a")->toInteger(), 123);
+                    CHECK_EQUAL(self->invoke("b")->toInteger(), 123);
+                    CHECK_EQUAL(self->invoke("proc", 123L)->toInteger(), 123);
+                    CHECK_EQUAL(self->has("xxxxxxxx"), false);
             return nullptr;
         });
 
@@ -113,13 +107,13 @@ TEST (test2) {
     ctx.invoke("test2");
 
     auto gs_test = ctx.global("gs_test");
-            CHECK_EQUAL((string)*gs_test->invoke("proc"), "nlua++");
-    gs_test->set("msg", 123);
-            CHECK_EQUAL((int)*gs_test->get("msg"), 123);
-            CHECK_EQUAL((int)*gs_test->invoke("proc"), 123);
+            CHECK_EQUAL(gs_test->invoke("proc")->toString(), "nlua++");
+    gs_test->set("msg", 123L);
+            CHECK_EQUAL(gs_test->get("msg")->toInteger(), 123);
+            CHECK_EQUAL(gs_test->invoke("proc")->toInteger(), 123);
 
     auto Test = ctx.global("Test");
-            CHECK_EQUAL((string)*Test->invoke("sproc"), "lua");
+            CHECK_EQUAL(Test->invoke("sproc")->toString(), "lua");
 }
 
 TEST (test3) {
@@ -164,7 +158,7 @@ TEST (test4) {
     TimeCounter tc;
     tc.start();
 
-    int cnt = 100000;
+    integer cnt = 100000;
 
     cout << "开始测试lua函数执行 " << cnt << " 次" << endl;
     ctx.invoke("test4_a", cnt);
@@ -255,8 +249,8 @@ TEST (test7) {
     clz->name = "Test";
 
     clz->init([=](self_type &self, Variant const &v0, Variant const &v1) {
-                CHECK_EQUAL((int)v0, 1);
-                CHECK_EQUAL((int)v1, 2);
+                CHECK_EQUAL(v0.toInteger(), 1);
+                CHECK_EQUAL(v1.toInteger(), 2);
         self->bind<Test7Object>().txt = "test7";
     });
     clz->fini([=](self_type &self) {
