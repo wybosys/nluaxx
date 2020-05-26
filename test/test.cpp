@@ -7,7 +7,7 @@ USE_NLUA
 
 TEST (main) {
     // 测试原始lua
-    auto &ctx = Context::shared;
+    auto &ctx = Context::shared();
 
     ctx.load("main.lua");
     ctx.invoke("main");
@@ -15,7 +15,7 @@ TEST (main) {
 
 TEST (test0) {
     // 测试c++定义lua类，以及从lua调用c++
-    auto &ctx = Context::shared;
+    auto &ctx = Context::shared();
 
     auto module = make_shared<Module>();
     module->name = "test";
@@ -57,7 +57,7 @@ TEST (test0) {
 
 TEST (test1) {
     // 测试 c++ 变量
-    auto &ctx = Context::shared;
+    auto &ctx = Context::shared();
 
     {
         auto module = make_shared<Module>();
@@ -101,7 +101,7 @@ TEST (test1) {
 
 TEST (test2) {
     // 测试c++调lua函数
-    auto &ctx = Context::shared;
+    auto &ctx = Context::shared();
 
     ctx.load("test2.lua");
     ctx.invoke("test2");
@@ -118,7 +118,7 @@ TEST (test2) {
 
 TEST (test3) {
     // 定义 lua 的单件
-    auto &ctx = Context::shared;
+    auto &ctx = Context::shared();
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
@@ -141,7 +141,7 @@ int test4_a() {
 }
 
 TEST (test4) {
-    auto &ctx = Context::shared;
+    auto &ctx = Context::shared();
 
     ctx.load("test4.lua");
 
@@ -185,14 +185,14 @@ TEST (test4) {
 
 TEST (test5) {
     // 测试 ss
-    auto &ctx = Context::shared;
+    auto &ctx = Context::shared();
 
     ctx.load("test5.lua");
     ctx.invoke("test5");
 }
 
 TEST (test6) {
-    auto &ctx = Context::shared;
+    auto &ctx = Context::shared();
 
     auto m = make_shared<Module>();
     m->name = "test";
@@ -243,7 +243,7 @@ public:
 
 TEST (test7) {
     // 测试c++生命期绑定至lua对象
-    auto &ctx = Context::shared;
+    auto &ctx = Context::shared();
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
@@ -274,14 +274,15 @@ TEST (test7) {
 TEST (test999) {
     return; // 协程测试会阻塞单元测试流程
     // 测试协程
-    auto &ctx = Context::shared;
+    auto &ctx = Context::shared();
 
     ctx.load("test999.lua");
     ctx.invoke("test999");
 }
 
 int main() {
-    Context::shared.add_package_path("../test");
+    Context::shared().create();
+    Context::shared().add_package_path("../test");
 
     ::UnitTest::TestReporterStdout rpt;
     ::UnitTest::TestRunner runner(rpt);

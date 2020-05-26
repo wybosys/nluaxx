@@ -40,19 +40,19 @@ class Context {
 NNT_CLASS_DECL(Context);
 
 public:
-    // 初始化一个全局的 *为了业务
-    static Context shared;
 
-    // 初始化
+NNT_SINGLETON_DECL(Context);
+
+    // 创建一个空上下文
     Context();
 
-    // 连接一个已经存在的
-    explicit Context(void *);
-
-    // 以null初始化后可以连接一个已经存在的
-    void attach(void *);
-
     ~Context();
+
+    // 绑定已经存在的lua_State上下文
+    Context &attach(void *);
+
+    // 创建新的lua_State上下文
+    Context &create();
 
     // 加载文件
     bool load(path const &);

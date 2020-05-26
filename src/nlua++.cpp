@@ -15,8 +15,6 @@ NLUA_BEGIN
             throw error(-1, "缺少参数"); \
     } while (0);
 
-Context Context::shared(nullptr);
-
 typedef atomic<lua_Integer> lua_refid_type;
 typedef function<return_type(lua_State *L, self_type &self, args_type const &)> luaref_classfunc_type;
 typedef function<return_type(lua_State *L, args_type const &)> luaref_func_type;
@@ -26,19 +24,40 @@ typedef map<lua_Integer, luaref_func_type> luaref_funcs_type;
 class ContextPrivate {
 public:
 
-    explicit ContextPrivate(lua_State *_l)
-    : refId(1)
-    {
-        if (_l) {
-            L = _l;
-            _freel = false;
-        } else {
-            L = luaL_newstate();
-            luaL_openlibs(L);
-            _freel = true;
+    ContextPrivate()
+            : refId(1) {
+    }
+
+    ~ContextPrivate() {
+        clear();
+    }
+
+    void clear() {
+        if (_freel) {
+            lua_close(L);
+        }
+        L = nullptr;
+        _freel = false;
+
+        classes.clear();
+        modules.clear();
+
+        refId.store(1);
+        refClassFuncs.clear();
+        refFuncs.clear();
+    }
+
+    void create() {
+        if (L && _freel) {
+            lua_close(L);
+        }
+
+        L = luaL_newstate();
+        luaL_openlibs(L);
+        _freel = true;
 
 #ifdef WIN32
-            // windows中需要额外设置lua的package.path保证可以拿到全局安装的库
+        // windows中需要额外设置lua的package.path保证可以拿到全局安装的库
             char *val;
             size_t len;
             errno_t err = _dupenv_s(&val, &len, "LUA_DEV");
@@ -87,29 +106,12 @@ public:
                 free(val);
             }
 #endif
-        }
-    }
-
-    ~ContextPrivate() {
-        clear();
-    }
-
-    void clear() {
-        if (_freel) {
-            lua_close(L);
-        }
-        L = nullptr;
-        _freel = false;
-
-        classes.clear();
-        modules.clear();
-
-        refId.store(1);
-        refClassFuncs.clear();
-        refFuncs.clear();
     }
 
     void attach(lua_State *_l) {
+        if (_l == L)
+            return;
+        
         if (L && _freel) {
             lua_close(L);
         }
@@ -251,20 +253,24 @@ static lua_State *GetContextL(Context &ctx) {
     return nnt::DPtr<Context, ContextPrivate>(&ctx)->L;
 }
 
-Context::Context() {
-    NNT_CLASS_CONSTRUCT(nullptr)
-}
+NNT_SINGLETON_IMPL(Context);
 
-Context::Context(void *l) {
-    NNT_CLASS_CONSTRUCT((lua_State *) l)
+Context::Context() {
+    NNT_CLASS_CONSTRUCT()
 }
 
 Context::~Context() {
     NNT_CLASS_DESTORY()
 }
 
-void Context::attach(void *_l) {
+Context &Context::attach(void *_l) {
     d_ptr->attach((lua_State *) _l);
+    return *this;
+}
+
+Context &Context::create() {
+    d_ptr->create();
+    return *this;
 }
 
 bool Context::load(const path &file) {
@@ -488,7 +494,7 @@ class FunctionPrivate {
 public:
 
     static int ImpClassFunction(lua_State *L) {
-        auto pctx = (ContextPrivate*)lua_topointer(L, lua_upvalueindex(1));
+        auto pctx = (ContextPrivate *) lua_topointer(L, lua_upvalueindex(1));
         auto id = lua_tointeger(L, lua_upvalueindex(2));
 
         auto fnd = pctx->refClassFuncs.find(id);
@@ -602,7 +608,7 @@ public:
     }
 
     static int ImpStaticFunction(lua_State *L) {
-        auto pctx = (ContextPrivate*)lua_topointer(L, lua_upvalueindex(1));
+        auto pctx = (ContextPrivate *) lua_topointer(L, lua_upvalueindex(1));
         auto id = lua_tointeger(L, lua_upvalueindex(2));
 
         auto fnd = pctx->refFuncs.find(id);
@@ -789,9 +795,8 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
 
 class ClassPrivate {
 public:
-    
-    ClassPrivate()
-    {
+
+    ClassPrivate() {
         // pass
     }
 
@@ -1683,7 +1688,7 @@ return_type Object::invoke(string const &name, args_type const &args) {
         // 获得全局变量
         lua_getglobal(L, d_ptr->name.c_str());
         if (lua_isnil(L, -1)) {
-            cerr << "没有找到变量" << name << endl;
+            cerr << "没有找到变量" << d_ptr->name << endl;
             return nullptr;
         }
         int selfid = lua_gettop(L);
