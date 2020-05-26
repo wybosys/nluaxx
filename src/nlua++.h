@@ -55,7 +55,7 @@ NNT_SINGLETON_DECL(Context);
     Context &create();
 
     // 加载文件
-    bool load(path const &);
+    bool load(string const &);
 
     // 执行函数
     return_type invoke(string const &fname, args_type const &args = {});
@@ -81,9 +81,9 @@ NNT_SINGLETON_DECL(Context);
     return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
 
     // 添加查找包的目录
-    void add_package_path(path const &);
+    void add_package_path(string const &);
 
-    void add_cpackage_path(path const &);
+    void add_cpackage_path(string const &);
 
     // 获得全局对象
     self_type global(string const &);

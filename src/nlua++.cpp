@@ -2,7 +2,7 @@
 #include "nlua++.h"
 #include "liblua.h"
 #include "value.h"
-#include "stringt.h"
+#include "str.h"
 #include <atomic>
 #include <sstream>
 
@@ -111,7 +111,7 @@ public:
     void attach(lua_State *_l) {
         if (_l == L)
             return;
-        
+
         if (L && _freel) {
             lua_close(L);
         }
@@ -127,8 +127,8 @@ public:
         return 0;
     }
 
-    path find_file(path const &file) {
-        if (path::isfile(file))
+    string find_file(string const &file) {
+        if (isfile(file))
             return file;
 
         if (package_paths.empty()) {
@@ -136,15 +136,11 @@ public:
         }
 
         for (auto e : package_paths) {
-#ifdef WIN32
-            e = e + "\\" + file;
-#else
-            e = e + "/" + file;
-#endif
-            if (path::isfile(e))
+            e = e + PATH_DELIMITER + file;
+            if (isfile(e))
                 return e;
         }
-        return path();
+        return "";
     }
 
     void update_package_paths(vector<string> const *curs) {
@@ -179,8 +175,8 @@ public:
                 cur = cur.substr(0, cur.length() - 11);
             }
 #endif
-            path c = path::absolute(cur);
-            if (path::isdirectory(c)) {
+            string c = absolute(cur);
+            if (isdirectory(c)) {
                 if (find(package_paths.begin(), package_paths.end(), c) == package_paths.end()) {
                     package_paths.emplace_back(c);
                     // cout << "package path: " << c << endl;
@@ -209,8 +205,8 @@ public:
             if (endwith(cur, "?.dll")) {
                 cur = cur.substr(0, cur.length() - 5);
             }
-            path c = path::absolute(cur);
-            if (path::isdirectory(c)) {
+            string c = absolute(cur);
+            if (isdirectory(c)) {
                 if (find(cpackage_paths.begin(), cpackage_paths.end(), c) == cpackage_paths.end()) {
                     cpackage_paths.emplace_back(c);
                     // cout << "cpackage path: " << c << endl;
@@ -237,7 +233,7 @@ public:
     lua_State *L = nullptr;
     bool _freel = false;
 
-    vector<path> package_paths, cpackage_paths;
+    vector<string> package_paths, cpackage_paths;
 
     // 当前声明中的类和模块
     Context::classes_type classes;
@@ -273,7 +269,7 @@ Context &Context::create() {
     return *this;
 }
 
-bool Context::load(const path &file) {
+bool Context::load(string const &file) {
     auto L = d_ptr->L;
     NLUA_AUTOSTACK(L);
 
@@ -293,8 +289,8 @@ bool Context::load(const path &file) {
     return true;
 }
 
-void Context::add_package_path(path const &dir) {
-    auto fdir = path::absolute(dir);
+void Context::add_package_path(string const &dir) {
+    auto fdir = absolute(dir);
     if (fdir.empty())
         return;
 
@@ -328,7 +324,7 @@ void Context::add_package_path(path const &dir) {
     }
 }
 
-void Context::add_cpackage_path(path const &dir) {
+void Context::add_cpackage_path(string const &dir) {
     auto L = d_ptr->L;
     NLUA_AUTOSTACK(L);
 
@@ -339,9 +335,9 @@ void Context::add_cpackage_path(path const &dir) {
     string cur = lua_tostring(L, -1);
 
 #ifdef WIN32
-    string d = path::absolute(dir) + "\\?.dll";
+    string d = absolute(dir) + "\\?.dll";
 #else
-    string d = path::absolute(dir) + "/?.so";
+    string d = absolute(dir) + "/?.so";
 #endif
 
     auto curs = explode(cur, ";");

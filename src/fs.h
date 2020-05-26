@@ -1,118 +1,35 @@
-﻿#ifndef __NLUA_FS_H_INCLUDED
+#ifndef __NLUA_FS_H_INCLUDED
 #define __NLUA_FS_H_INCLUDED
+
+// github.com/wybosys/nnt.cross
 
 NLUA_BEGIN
 
-class path;
+extern const string PATH_DELIMITER;
 
-class path_iterator
-{
-public:
-    class iterator
-    {
-    public:
-        ~iterator();
+extern string replace(string const &, string const &match, string const &tgt);
 
-        inline bool operator!=(iterator const &r) const
-        {
-            return entry != r.entry;
-        }
+extern string normalize(string const &);
 
-        inline bool operator==(iterator const &r) const
-        {
-            return entry == r.entry;
-        }
+extern bool mkdir(string const &);
 
-        iterator &operator++();
+extern bool mkdirs(string const &);
 
-        inline path const &operator*() const
-        {
-            return *_path;
-        }
+extern bool exists(string const &);
 
-        void *entry = nullptr;
-        void *dir = nullptr;
+extern bool isfile(string const &);
 
-    protected:
-        void _update();
+extern bool isdirectory(string const &);
 
-        path *_path = nullptr;
+extern vector <string> listdir(string const &);
 
-        friend class path_iterator;
-    };
+extern bool rmfile(string const &);
 
-    iterator begin();
+extern bool rmtree(string const &);
 
-    iterator end();
+extern bool rmdir(string const &);
 
-    explicit path_iterator(string const &);
-
-    ~path_iterator();
-
-    void *dir = nullptr;
-};
-
-class path
-{
-public:
-    path() = default;
-
-    path(string const &s) : _s(s) {}
-
-    path(char const *s) : _s(s) {}
-
-#if NLUA_SHELL
-    // 获得当前目录
-    static path getcwd();
-#endif
-
-    // 是否存在
-    static bool exists(path const &);
-
-    // 转换成绝对目录
-    static path absolute(path const &);
-
-    // 是否是文件
-    static bool isfile(path const &);
-
-    // 是否是目录
-    static bool isdirectory(path const &);
-
-    // 遍历目录
-    static path_iterator walk(path const &);
-
-    inline char const *c_str() const
-    {
-        return _s.c_str();
-    }
-
-    inline operator string const &() const
-    {
-        return _s;
-    }
-
-    inline operator char const *() const
-    {
-        return _s.c_str();
-    }
-
-    inline bool empty() const
-    {
-        return _s.empty();
-    }
-
-    path operator+(string const &) const;
-
-    path &operator+=(string const &);
-
-    inline bool operator==(path const &r) const
-    {
-        return _s == r._s;
-    }
-
-private:
-    string _s;
-};
+extern string absolute(string const &);
 
 NLUA_END
 

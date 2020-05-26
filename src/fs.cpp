@@ -1,177 +1,191 @@
 ﻿#include "core.h"
 #include "fs.h"
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <iterator>
+#include "str.h"
+#include <regex>
 
-#ifdef WIN32
-#include <fileapi.h>
-#include <processenv.h>
-#include <handleapi.h>
-#define S_ISREG(model) ((model)&_S_IFREG)
-#define S_ISDIR(model) ((model)&_S_IFDIR)
-#else
+#ifdef NNT_UNIXLIKE
+
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 #include <dirent.h>
+
 #endif
 
 NLUA_BEGIN
 
-#if NLUA_SHELL
-path path::getcwd()
-{
-#ifdef WIN32
-    char buf[FILENAME_MAX];
-    GetCurrentDirectoryA(FILENAME_MAX, buf);
-    return path(buf);
-#else
-    return path(get_current_dir_name());
-#endif
+#ifdef NNT_WINDOWS
+
+const string PATH_DELIMITER = "\\";
+
+string normalize(string const &str) {
+    return replace(str, "/", PATH_DELIMITER);
 }
+
+bool mkdir(string const &str)
+{
+    return CreateDirectoryA(str.c_str(), NULL);
+}
+
+bool exists(string const &str)
+{
+    return GetFileAttributesA(str.c_str()) != INVALID_FILE_ATTRIBUTES;
+}
+
+bool isfile(string const &str)
+{
+    auto f = GetFileAttributesA(str.c_str());
+    return INVALID_FILE_ATTRIBUTES != f && 0 == (f & FILE_ATTRIBUTE_DIRECTORY);
+}
+
+bool isdirectory(string const &str)
+{
+    auto f = GetFileAttributesA(str.c_str());
+    return INVALID_FILE_ATTRIBUTES != f && 0 != (f & FILE_ATTRIBUTE_DIRECTORY);
+}
+
+vector<string> listdir(string const &str)
+{
+    vector<string> r;
+    if (!isdirectory(str))
+        return r;
+    auto tgt = normalize(str) + PATH_DELIMITER + "*.*";
+    WIN32_FIND_DATAA data;
+    auto h = FindFirstFileA(tgt.c_str(), &data);
+    if (h == INVALID_HANDLE_VALUE)
+        return r;
+    do
+    {
+        string cur = data.cFileName;
+        if (cur == "." || cur == "..")
+            continue;
+        r.push_back(data.cFileName);
+    } while (FindNextFileA(h, &data));
+    FindClose(h);
+    return r;
+}
+
+bool rmfile(string const &str)
+{
+    return DeleteFileA(str.c_str());
+}
+
+bool rmdir(string const &str)
+{
+    return RemoveDirectoryA(str.c_str());
+}
+
+string absolute(string const &str)
+{
+    char buf[BUFSIZ];
+    if (S_OK == GetFullPathNameA(str.c_str(), BUFSIZ, buf, NULL))
+        return buf;
+    return str;
+}
+
 #endif
 
-bool path::exists(path const &p)
-{
+#ifdef NNT_UNIXLIKE
+
+const string PATH_DELIMITER = "/";
+
+string normalize(string const &str) {
+    return replace(str, "\\\\", PATH_DELIMITER);
+}
+
+bool mkdir(string const &str) {
+    return ::mkdir(str.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0;
+}
+
+bool exists(string const &str) {
     struct stat st = {0};
-    return stat(p.c_str(), &st) == 0;
+    return stat(str.c_str(), &st) == 0;
 }
 
-path path::absolute(path const &p)
-{
-    char buf[FILENAME_MAX];
-#ifdef WIN32
-    char const *r = _fullpath(buf, p.c_str(), FILENAME_MAX);
-#else
-    char const *r = realpath(p.c_str(), buf);
-#endif
-    return r == nullptr ? path() : path(r);
-}
-
-bool path::isfile(path const &p)
-{
+bool isfile(string const &str) {
     struct stat st = {0};
-    if (stat(p.c_str(), &st))
+    if (stat(str.c_str(), &st))
         return false;
     return S_ISREG(st.st_mode);
 }
 
-bool path::isdirectory(path const &p)
-{
+bool isdirectory(string const &str) {
     struct stat st = {0};
-    if (stat(p.c_str(), &st))
+    if (stat(str.c_str(), &st))
         return false;
     return S_ISDIR(st.st_mode);
 }
 
-path path::operator+(string const &r) const
-{
-    return _s + r;
-}
-
-path &path::operator+=(string const &r)
-{
-    _s += r;
-    return *this;
-}
-
-path_iterator path::walk(path const &p)
-{
-    return path_iterator(p);
-}
-
-#ifdef WIN32
-struct DIR
-{
-    WIN32_FIND_DATAA fdata;
-    HANDLE hfind;
-};
-#define pdir ((DIR *)dir)
-#endif
-
-path_iterator::path_iterator(string const &p)
-{
-#ifdef WIN32
-    dir = malloc(sizeof(DIR));
-    pdir->hfind = FindFirstFileA(p.c_str(), &pdir->fdata);
-    if (pdir->hfind == INVALID_HANDLE_VALUE)
-    {
-        free(dir);
-        dir = nullptr;
+vector<string> listdir(string const &str) {
+    vector<string> r;
+    if (!isdirectory(str))
+        return r;
+    auto tgt = normalize(str) + PATH_DELIMITER;
+    auto h = opendir(tgt.c_str());
+    auto d = readdir(h);
+    while (d) {
+        string cur = d->d_name;
+        if (cur != "." && cur != "..") {
+            r.emplace_back(cur);
+        }
+        d = readdir(h);
     }
-#else
-    dir = opendir(p.c_str());
-#endif
-}
-
-path_iterator::~path_iterator()
-{
-#ifdef WIN32
-    free(dir);
-#else
-    closedir((DIR *)dir);
-#endif
-    dir = nullptr;
-}
-
-path_iterator::iterator path_iterator::begin()
-{
-    iterator r;
-
-#ifdef WIN32
-#else
-    // 跳掉 . 和 ..
-    r.entry = readdir((DIR *)dir);
-    r.entry = readdir((DIR *)dir);
-    r.entry = readdir((DIR *)dir);
-#endif
-
-    r.dir = dir;
-    r._update();
+    closedir(h);
     return r;
 }
 
-path_iterator::iterator path_iterator::end()
-{
-    return iterator();
+bool rmfile(string const &str) {
+    return ::unlink(str.c_str()) == 0;
 }
 
-path_iterator::iterator::~iterator()
-{
-    if (_path)
-    {
-        delete _path;
-        _path = nullptr;
-    }
+bool rmdir(string const &str) {
+    return ::rmdir(str.c_str()) == 0;
 }
 
-path_iterator::iterator &path_iterator::iterator::operator++()
-{
-#ifdef WIN32
-#else
-    entry = readdir((DIR *)dir);
+string absolute(string const &str) {
+    char buf[PATH_MAX];
+    if (::realpath(str.c_str(), buf))
+        return buf;
+    return str;
+}
+
 #endif
 
-    _update();
-    return *this;
+string replace(string const &str, string const &match, string const &tgt) {
+    return regex_replace(str, regex(match), tgt);
 }
 
-void path_iterator::iterator::_update()
-{
-    if (entry)
-    {
-        auto ent = (struct dirent *)entry;
-        if (!_path)
-            _path = new path();
-#ifdef WIN32
-#else
-        *_path = path(ent->d_name);
-#endif
+bool mkdirs(string const &str) {
+    auto strs = explode(normalize(str), PATH_DELIMITER, true);
+    if (strs.empty())
+        return false;
+    auto cur = strs[0];
+    if (!exists(cur) && !mkdir(cur))
+        return false;
+    for (size_t idx = 1; idx < strs.size(); ++idx) {
+        cur += PATH_DELIMITER + strs[idx];
+        if (!exists(cur) && !mkdir(cur))
+            return false;
     }
-    else if (_path)
-    {
-        delete _path;
-        _path = nullptr;
+    return true;
+}
+
+bool rmtree(string const &str) {
+    if (!isdirectory(str))
+        return false;
+    for (auto &e : listdir(str)) {
+        auto cur = str + PATH_DELIMITER + e;
+        if (isfile(cur)) {
+            if (!rmfile(cur)) {
+                cerr << ("删除 " + cur + " 失败") << endl;
+                return false;
+            }
+        } else if (!rmtree(cur)) {
+            cerr << ("删除 " + cur + " 失败") << endl;
+            return false;
+        }
     }
+    return rmdir(str);
 }
 
 NLUA_END

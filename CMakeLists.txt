@@ -6,10 +6,10 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(src)
 set(NLUA_SRCS
         src/core.cpp
-        src/stringt.cpp
-        src/fs.cpp
         src/variant.cpp
         src/value.cpp
+        src/str.cpp
+        src/fs.cpp
         src/nlua++.cpp
         )
 
