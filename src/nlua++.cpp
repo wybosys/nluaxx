@@ -217,8 +217,8 @@ public:
             {
                 cur = cur.substr(0, cur.length() - 5);
             }
-            path c = path::absolute(cur);
-            if (path::isdirectory(c))
+            string c = absolute(cur);
+            if (isdirectory(c))
             {
                 if (find(cpackage_paths.begin(), cpackage_paths.end(), c) == cpackage_paths.end())
                 {

@@ -159,7 +159,7 @@
     <ClInclude Include="..\..\src\liblua.h" />
     <ClInclude Include="..\..\src\macro.h" />
     <ClInclude Include="..\..\src\nlua++.h" />
-    <ClInclude Include="..\..\src\stringt.h" />
+    <ClInclude Include="..\..\src\str.h" />
     <ClInclude Include="..\..\src\value.h" />
     <ClInclude Include="..\..\src\variant.h" />
     <ClInclude Include="stdafx.h" />
@@ -168,7 +168,7 @@
     <ClCompile Include="..\..\src\core.cpp" />
     <ClCompile Include="..\..\src\fs.cpp" />
     <ClCompile Include="..\..\src\nlua++.cpp" />
-    <ClCompile Include="..\..\src\stringt.cpp" />
+    <ClCompile Include="..\..\src\str.cpp" />
     <ClCompile Include="..\..\src\value.cpp" />
     <ClCompile Include="..\..\src\variant.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -27,9 +27,6 @@
     <ClInclude Include="..\..\src\nlua++.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\stringt.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\value.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -45,6 +42,9 @@
     <ClInclude Include="..\..\src\macro.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\str.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\core.cpp">
@@ -56,9 +56,6 @@
     <ClCompile Include="..\..\src\nlua++.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\stringt.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\value.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -66,6 +63,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\variant.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\str.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
