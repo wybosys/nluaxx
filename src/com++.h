@@ -510,18 +510,26 @@ struct function_traits<T &&> : public function_traits<T> {
 
 template<typename F, size_t N = function_traits<F>::count>
 struct function_call {
-    template<typename C>
-    inline typename function_traits<F>::return_type operator()(F const &fn, C *self, args_t const &args) {
+    template<typename C, typename Args>
+    inline typename function_traits<F>::return_type operator()(F const &fn, C *self, Args const &args) {
         return (self->*fn)();
+    }
+    template<typename Args>
+    inline typename function_traits<F>::return_type operator()(F const &fn, Args const &args) {
+        return fn();
     }
 };
 
 #define COMXX_FUNCTION_CALL(N, __args__) \
 template <typename F> \
 struct function_call<F, N> { \
-    template <typename C> \
-    inline typename function_traits<F>::return_type operator()(F const& fn, C* self, args_t const& args) { \
+    template <typename C, typename Args> \
+    inline typename function_traits<F>::return_type operator()(F const& fn, C* self, Args const& args) { \
         return (self->*fn)(__args__); \
+    } \
+    template <typename Args> \
+    inline typename function_traits<F>::return_type operator()(F const& fn, Args const& args) { \
+        return fn(__args__); \
     } \
 };
 
