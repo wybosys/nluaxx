@@ -73,6 +73,9 @@ public:                         \
     }                                               \
     bool cls::is_shared() { return nullptr != _##cls##_shared; }
 
+#define NNT_DOT .
+#define NNT_COMMA ,
+
 #define __NNT_RAW(L) L
 #define __NNT_COMBINE(L, R) L##R
 #define _NNT_COMBINE(L, R) __NNT_COMBINE(L, R)
@@ -80,6 +83,11 @@ public:                         \
 #define NNT_AUTOGUARD(obj, ...) ::std::lock_guard<::std::mutex> _NNT_COMBINE(__auto_guard_, __LINE__)(obj);
 
 #define NNT_PASS
+#define NNT_PASS_EXPRESS(...) \
+    {                         \
+        __VA_ARGS__           \
+    }                         \
+    while (0)
 
 #ifdef NNT_STATIC
 #define NNT_LIBRARY 1
@@ -95,6 +103,7 @@ public:                         \
 
 #if defined(WIN32) || defined(_WIN32)
 #include <SDKDDKVer.h>
+#pragma warning(disable : 4251)
 #define WIN32_LEAN_AND_MEAN
 #define NNT_WINDOWS
 #ifdef NNT_LIBRARY
@@ -118,6 +127,20 @@ public:                         \
 
 #if defined(NNT_WINDOWS) && defined(_UNICODE)
 #include <xstring>
+#endif
+
+#if defined(DEBUG) || defined(_DEBUG)
+#define NNT_DEBUG
+#define NNT_DEBUG_SYMBOL(exp) exp
+#define NNT_RELEASE_SYMBOL(exp)
+#define NNT_DEBUG_EXPRESS(exp) NNT_PASS_EXPRESS(exp)
+#define NNT_RELEASE_EXPRESS(exp) NNT_PASS_EXPRESS()
+#else
+#define NNT_RELEASE
+#define NNT_DEBUG_SYMBOL(exp)
+#define NNT_RELEASE_SYMBOL(exp) exp
+#define NNT_DEBUG_EXPRESS(exp) NNT_PASS_EXPRESS()
+#define NNT_RELEASE_EXPRESS(exp) NNT_PASS_EXPRESS(exp)
 #endif
 
 NNT_BEGIN
