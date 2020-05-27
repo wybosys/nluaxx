@@ -75,7 +75,9 @@ public:                          \
 #endif
 
 #if defined(WIN32) || defined(_WIN32)
+#include <SDKDDKVer.h>
 #include <Windows.h>
+#define WIN32_LEAN_AND_MEAN
 #define NNT_WINDOWS
 #ifdef NNT_LIBRARY
 #ifdef NNT_SHARED
