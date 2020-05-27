@@ -147,19 +147,6 @@ public:
 
     func_t const &toFunction() const;
 
-    // 仅针对有限的几个类型做unsafe的类型自动转换
-    operator string const &() const;
-
-    operator int () const;
-
-    operator long long () const;
-
-    operator bool () const;
-
-    operator double () const;
-
-    operator float () const;
-
 private:
     union {
         class IObject *o;
@@ -381,18 +368,6 @@ inline Variant::bytes_t const &Variant::toBytes() const { return *_bytes; }
 inline string const &Variant::toString() const { return *_str; }
 
 inline Variant::func_t const &Variant::toFunction() const { return *_func; }
-
-inline Variant::operator string const &() const { return toString(); }
-
-inline Variant::operator int () const { return toInt(); }
-
-inline Variant::operator long long () const { return toLonglong(); }
-
-inline Variant::operator bool () const { return toBool(); }
-
-inline Variant::operator double () const { return toDouble(); }
-
-inline Variant::operator float() const { return toFloat(); }
 
 inline void IObject::grab() const { 
     _referencedCount += 1; 

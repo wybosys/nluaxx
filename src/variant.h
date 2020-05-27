@@ -48,11 +48,41 @@ public:
 
     string const &toString() const;
 
+    operator integer() const;
+
+    operator number() const;
+
+    operator bool() const;
+
+    operator void *() const;
+
+    operator string const& () const;
+
     operator com::Variant const &() const;
 
 private:
     com::Variant const _var;
 };
+
+inline Variant::operator integer() const {
+    return toInteger();
+}
+
+inline Variant::operator number() const {
+    return toNumber();
+}
+
+inline Variant::operator bool() const {
+    return toBool();
+}
+
+inline Variant::operator void *() const {
+    return toPointer();
+}
+
+inline Variant::operator string const& () const {
+    return toString();
+}
 
 inline Variant::operator com::Variant const &() const {
     return _var;
