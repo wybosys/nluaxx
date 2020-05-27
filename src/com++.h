@@ -107,6 +107,8 @@ public:
 
     Variant(func_t const &);
 
+    Variant(Variant const&);
+
     ~Variant();
 
     const VT vt;
@@ -146,6 +148,8 @@ public:
     string const &toString() const;
 
     func_t const &toFunction() const;
+
+    Variant& operator = (Variant const&);
 
 private:
     union {
@@ -326,6 +330,16 @@ inline Variant::Variant(char const *v) : vt(VT::STRING) { _str = make_shared<str
 
 inline Variant::Variant(func_t const &v) : vt(VT::FUNCTION) { _func = make_shared<func_t>(v); }
 
+inline Variant::Variant(Variant const& r) : vt(r.vt) {
+    _pod = r._pod;
+    _bytes = r._bytes;
+    _str = r._str;
+    _func = r._func;
+    if (r.vt == VT::OBJECT && _pod.o) {
+        _pod.o->grab();
+    }
+}
+
 inline Variant::~Variant() {
     if (vt == VT::OBJECT && _pod.o) {
         _pod.o->drop();
@@ -368,6 +382,28 @@ inline Variant::bytes_t const &Variant::toBytes() const { return *_bytes; }
 inline string const &Variant::toString() const { return *_str; }
 
 inline Variant::func_t const &Variant::toFunction() const { return *_func; }
+
+inline Variant& Variant::operator=(Variant const& r) {
+    if (this != &r) {
+        _bytes = r._bytes;
+        _str = r._str;
+        _func = r._func;
+
+        IObject* old = nullptr;
+        if (vt == VT::OBJECT && _pod.o) {
+            old = _pod.o;
+        }
+        const_cast<VT&>(vt) = r.vt;
+        _pod = r._pod;
+        if (vt == VT::OBJECT && _pod.o) {
+            _pod.o->grab();
+        }
+        if (old) {
+            old->drop();
+        }
+    }
+    return *this;
+}
 
 inline void IObject::grab() const { 
     _referencedCount += 1; 
