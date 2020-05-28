@@ -30,15 +30,15 @@ public:
 
     ~ContextPrivate() {
         clear();
-    }
 
-    void clear() {
         if (_freel) {
             lua_close(L);
         }
         L = nullptr;
         _freel = false;
+    }
 
+    void clear() {
         classes.clear();
         modules.clear();
 
