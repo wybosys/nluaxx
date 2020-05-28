@@ -482,9 +482,9 @@ public:
 
     static int ImpClassFunction(lua_State *L) {
         auto pctx = (ContextPrivate *) lua_topointer(L, lua_upvalueindex(1));
-        auto id = lua_tointeger(L, lua_upvalueindex(2));
+        auto fnid = lua_tointeger(L, lua_upvalueindex(2));
 
-        auto fnd = pctx->refClassFuncs.find(id);
+        auto fnd = pctx->refClassFuncs.find(fnid);
         if (fnd == pctx->refClassFuncs.end()) {
             cerr << "没有找到对应的回调函数" << endl;
             return 0;
@@ -596,9 +596,9 @@ public:
 
     static int ImpStaticFunction(lua_State *L) {
         auto pctx = (ContextPrivate *) lua_topointer(L, lua_upvalueindex(1));
-        auto id = lua_tointeger(L, lua_upvalueindex(2));
+        auto fnid = lua_tointeger(L, lua_upvalueindex(2));
 
-        auto fnd = pctx->refFuncs.find(id);
+        auto fnd = pctx->refFuncs.find(fnid);
         if (fnd == pctx->refFuncs.end()) {
             cerr << "没有找到对应的回调函数" << endl;
             return 0;
