@@ -28,16 +28,15 @@ public:
     }
 
     void recover() {
-        if (!_recovered) {
-            _recovered = true;
+        if (L) {
             lua_settop(L, _old);
+            L = nullptr;
         }
     }
 
 private:
     lua_State *L;
     int _old;
-    bool _recovered = false;
 };
 
 #define NLUA_AUTOSTACK(L, ...) AutoStackRecover _NNT_COMBINE(__nlua_autostack_, __LINE__)(L);
