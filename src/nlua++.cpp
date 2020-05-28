@@ -721,12 +721,13 @@ void Function::declare_in(Context &ctx) const {
     auto id = pctx->refId++;
 
     // 注册到全局对照表中，用于激活函数时查找真正的执行函数
-    pctx->refFuncs[id] = [=](lua_State *L, args_type const &args) -> return_type {
+    pctx->refFuncs[id] = [&](lua_State *L, args_type const &args) -> return_type {
         try {
             return this->func(args);
         }
-        catch (exception &e) {
-            luaL_error(L, e.what());
+        catch (...) {
+            string err = "lua调用C++: " + name + " 遇到未处理异常";
+            luaL_error(L, err.c_str());
         }
         return nullptr;
     };
@@ -753,24 +754,26 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
 
     if (classfunc) {
         // 注册到全局对照表中，用于激活函数时查找真正的执行函数
-        pctx->refClassFuncs[id] = [=](lua_State *L, self_type &self, args_type const &args) -> return_type {
+        pctx->refClassFuncs[id] = [&](lua_State *L, self_type &self, args_type const &args) -> return_type {
             try {
                 return this->classfunc(self, args);
             }
-            catch (exception &e) {
-                luaL_error(L, e.what());
+            catch (...) {
+                string err = "lua调用C++: " + name + "@" + clz.name + " 遇到未处理异常";
+                luaL_error(L, err.c_str());
             }
             return nullptr;
         };
         lua_pushcclosure(L, private_class_type::ImpClassFunction, 2);
     } else {
         // 注册静态函数
-        pctx->refFuncs[id] = [=](lua_State *L, args_type const &args) -> return_type {
+        pctx->refFuncs[id] = [&](lua_State *L, args_type const &args) -> return_type {
             try {
                 return this->func(args);
             }
-            catch (exception &e) {
-                luaL_error(L, e.what());
+            catch (...) {
+                string err = "lua调用C++: " + name + "@" + clz.name + " 遇到未处理异常";
+                luaL_error(L, err.c_str());
             }
             return nullptr;
         };
