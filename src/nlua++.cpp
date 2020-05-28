@@ -123,7 +123,8 @@ public:
     static int Traceback(lua_State *L) {
         if (!lua_isstring(L, 1))
             return 1;
-        cerr << "捕获错误 " << luaL_checkstring(L, 1) << endl;
+        string msg = lua_tostring(L, 1);
+        cerr << "捕获错误 " + msg << endl;
         return 0;
     }
 
