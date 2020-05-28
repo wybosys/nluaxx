@@ -898,22 +898,6 @@ public:
         return 1;
     }
 
-    // 调用原始的new函数实例化
-    static void CallSingletonNew(lua_State *L) {
-        // 1 clzid
-        lua_pushcfunction(L, ContextPrivate::Traceback);
-
-        // 2 tbid
-        lua_pushstring(L, "__singleton_new__");
-        lua_rawget(L, 1);
-        lua_pushvalue(L, 1);
-
-        int s = lua_pcall(L, 1, 1, 2);
-        if (s != LUA_OK) {
-            lua_pushnil(L);
-        }
-    }
-
     // 析构函数实现
     static int ImpDestroy(lua_State *L) {
         // self 1
@@ -954,8 +938,21 @@ public:
             // 恢复堆栈
             lua_pop(L, 1);
 
-            // 调用new函数
-            CallSingletonNew(L);
+            // 调用原始的new函数实例化
+            {
+                // 1 clzid
+                lua_pushcfunction(L, ContextPrivate::Traceback);
+
+                // 2 tbid
+                lua_pushstring(L, "__singleton_new__");
+                lua_rawget(L, 1);
+                lua_pushvalue(L, 1);
+
+                int s = lua_pcall(L, 1, 1, 2);
+                if (s != LUA_OK) {
+                    lua_pushnil(L);
+                }
+            }
 
             int objid = lua_gettop(L);
 
