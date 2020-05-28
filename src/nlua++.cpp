@@ -718,7 +718,7 @@ void Function::declare_in(Context &ctx) const {
     NLUA_AUTOSTACK(L);
 
     auto pctx = nnt::DPtr<Context, ContextPrivate>(&ctx);
-    auto id = pctx->refId.fetch_add(1);
+    auto id = pctx->refId++;
 
     // 注册到全局对照表中，用于激活函数时查找真正的执行函数
     pctx->refFuncs[id] = [=](lua_State *L, args_type const &args) -> return_type {
@@ -743,7 +743,7 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
     NLUA_AUTOSTACK(L);
 
     auto pctx = nnt::DPtr<Context, ContextPrivate>(&ctx);
-    auto id = pctx->refId.fetch_add(1);
+    auto id = pctx->refId++;
 
     // 绑定到类
     int clzid = lua_gettop(L);
@@ -1593,7 +1593,7 @@ void Object::grab() {
     if (d_ptr->id) {
         // 设置生命期到全局，避免被局部释放
         ostringstream oss;
-        oss << "__nluaxx_global_objects_" << ObjectPrivate::RefId.fetch_add(1);
+        oss << "__nluaxx_global_objects_" << ObjectPrivate::RefId++;
         d_ptr->name = oss.str();
 
         lua_pushvalue(L, d_ptr->id);

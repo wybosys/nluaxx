@@ -80,8 +80,6 @@ public:
 
     static void _DoTick(CoTimersPrivate *self)
     {
-        NNT_AUTOGUARD(self->mtx);
-
         bool needclean = false;
 
         for (auto &e : self->timers)
@@ -104,6 +102,8 @@ public:
         // 移除失效的
         if (needclean)
         {
+            NNT_AUTOGUARD(self->mtx);
+
             for (auto i = self->timers.begin(); i != self->timers.end();)
             {
                 if (i->second->repeat <= 0)

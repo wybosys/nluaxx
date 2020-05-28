@@ -210,6 +210,11 @@ TEST (test6) {
             self->invoke("ondone");
             self->invoke("onend");
 
+            Timer::SetTimeout(1, [=]() {
+                self->invoke("ondone");
+                self->invoke("onend");
+                });
+
             self->drop();
         });
 

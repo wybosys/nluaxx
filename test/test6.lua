@@ -7,6 +7,7 @@ end
 function test6_a()
     local t = test.Test:new()
     t.onend = function(self)
+        print("onend")
         if self.ondone then
            print("unimplement ondone")
         end
