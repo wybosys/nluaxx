@@ -298,6 +298,11 @@ public:
     // 添加成员变量
     Class &add(field_type const &);
 
+    template <typename T>
+    inline Class &add_field(string const& name, T const& v) {
+        return add(make_shared<Field>(name, v));
+    }
+
     fields_type const &fields() const;
 
     functions_type const &functions() const;
