@@ -1591,6 +1591,11 @@ void Object::grab() {
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
+        if (!lua_istable(L, d_ptr->id)) {
+            cerr << "变量不是table类型，不支持grab" << endl;
+            return;
+        }
+
         // 设置生命期到全局，避免被局部释放
         ostringstream oss;
         oss << "__nluaxx_global_objects_" << ObjectPrivate::RefId++;
@@ -1604,9 +1609,10 @@ void Object::grab() {
     // 已经是全局变量
     lua_getglobal(L, d_ptr->name.c_str());
     if (!lua_istable(L, -1)) {
-        cerr << "当前变量不是对象" << d_ptr->name << endl;
+        cerr << "全局变量不是table类型 " + d_ptr->name + " 不支持grab" << endl;
         return;
     }
+
     int selfid = lua_gettop(L);
     lua_getfield(L, selfid, "__refs");
     if (lua_isnumber(L, -1)) {
@@ -1627,10 +1633,11 @@ bool Object::drop() {
     }
 
     lua_getglobal(L, d_ptr->name.c_str());
-    if (lua_isnil(L, -1)) {
-        cerr << "没有找到变量" << d_ptr->name << endl;
+    if (!lua_istable(L, -1)) {
+        // cerr << "没有找到变量" + d_ptr->name << endl;
         return false;
     }
+
     int selfid = lua_gettop(L);
     lua_getfield(L, selfid, "__refs");
     if (!lua_isnumber(L, -1)) {
@@ -1661,13 +1668,13 @@ return_type Object::invoke(string const &name, args_type const &args) {
 
     if (d_ptr->id) {
         // 是局部变量
-        lua_getfield(L, d_ptr->id, name.c_str());
-        if (lua_isnil(L, -1)) {
-            cerr << "没有找到函数" << name << endl;
+        if (!lua_istable(L, d_ptr->id)) {
+            //cerr << "不能调用非table对象身上的 " + name + " 函数" << endl;
             return nullptr;
         }
+        lua_getfield(L, d_ptr->id, name.c_str());
         if (!lua_isfunction(L, -1)) {
-            // cerr << name << "当前不是函数" << endl;
+            //cerr << "没有找到函数 " + name << endl;
             return nullptr;
         }
 
@@ -1676,20 +1683,16 @@ return_type Object::invoke(string const &name, args_type const &args) {
     } else {
         // 获得全局变量
         lua_getglobal(L, d_ptr->name.c_str());
-        if (lua_isnil(L, -1)) {
-            cerr << "没有找到变量" << d_ptr->name << endl;
+        if (!lua_istable(L, -1)) {
+            //cerr << "没有找到全局变量 " + d_ptr->name << endl;
             return nullptr;
         }
         int selfid = lua_gettop(L);
 
         // 获得的函数
         lua_getfield(L, -1, name.c_str());
-        if (lua_isnil(L, -1)) {
-            cerr << "没有找到函数" << name << endl;
-            return nullptr;
-        }
         if (!lua_isfunction(L, -1)) {
-            // cerr << name << "当前不是函数" << endl;
+            //cerr << "没有找到成员函数 " + name + "@" + d_ptr->name << endl;
             return nullptr;
         }
 

@@ -213,6 +213,8 @@ TEST (test6) {
             Timer::SetTimeout(1, [=]() {
                 self->invoke("ondone");
                 self->invoke("onend");
+
+                self->drop();
                 });
 
             self->drop();
