@@ -24,12 +24,20 @@ public:
 
     ~AutoStackRecover()
     {
-        lua_settop(L, _old);
+        recover();
+    }
+
+    void recover() {
+        if (!_recovered) {
+            _recovered = true;
+            lua_settop(L, _old);
+        }
     }
 
 private:
     lua_State *L;
     int _old;
+    bool _recovered = false;
 };
 
 #define NLUA_AUTOSTACK(L, ...) AutoStackRecover _NNT_COMBINE(__nlua_autostack_, __LINE__)(L);
