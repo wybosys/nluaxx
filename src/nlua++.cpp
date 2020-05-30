@@ -1,8 +1,8 @@
-﻿#include "core.h"
-#include "nlua++.h"
-#include "liblua.h"
-#include "value.h"
-#include "str.h"
+﻿#include "core.hpp"
+#include "nlua++.hpp"
+#include "liblua.hpp"
+#include "value.hpp"
+#include "str.hpp"
 #include <atomic>
 #include <sstream>
 

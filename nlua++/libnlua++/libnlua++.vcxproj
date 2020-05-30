@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions);NLUA_51</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>core.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>core.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -124,7 +124,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions);NLUA_51</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>core.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>core.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -153,15 +153,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\com++.h" />
-    <ClInclude Include="..\..\src\core.h" />
-    <ClInclude Include="..\..\src\fs.h" />
-    <ClInclude Include="..\..\src\liblua.h" />
-    <ClInclude Include="..\..\src\macro.h" />
-    <ClInclude Include="..\..\src\nlua++.h" />
-    <ClInclude Include="..\..\src\str.h" />
-    <ClInclude Include="..\..\src\value.h" />
-    <ClInclude Include="..\..\src\variant.h" />
+    <ClInclude Include="..\..\src\com++.hpp" />
+    <ClInclude Include="..\..\src\core.hpp" />
+    <ClInclude Include="..\..\src\fs.hpp" />
+    <ClInclude Include="..\..\src\liblua.hpp" />
+    <ClInclude Include="..\..\src\macro.hpp" />
+    <ClInclude Include="..\..\src\nlua++.hpp" />
+    <ClInclude Include="..\..\src\str.hpp" />
+    <ClInclude Include="..\..\src\value.hpp" />
+    <ClInclude Include="..\..\src\variant.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\core.cpp" />

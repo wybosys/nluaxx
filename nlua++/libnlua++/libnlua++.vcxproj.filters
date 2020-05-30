@@ -15,31 +15,31 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\core.h">
+    <ClInclude Include="..\..\src\com++.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\fs.h">
+    <ClInclude Include="..\..\src\core.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\liblua.h">
+    <ClInclude Include="..\..\src\fs.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\nlua++.h">
+    <ClInclude Include="..\..\src\liblua.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\value.h">
+    <ClInclude Include="..\..\src\macro.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\variant.h">
+    <ClInclude Include="..\..\src\nlua++.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\com++.h">
+    <ClInclude Include="..\..\src\str.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\macro.h">
+    <ClInclude Include="..\..\src\value.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\str.h">
+    <ClInclude Include="..\..\src\variant.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,9 +1,9 @@
 ﻿#ifndef __NLUA_VALUE_H_INCLUDE
 #define __NLUA_VALUE_H_INCLUDE
 
-#include "variant.h"
-#include "nlua++.h"
-#include "liblua.h"
+#include "variant.hpp"
+#include "nlua++.hpp"
+#include "liblua.hpp"
 
 NLUA_BEGIN
 

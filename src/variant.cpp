@@ -1,5 +1,5 @@
-﻿#include "core.h"
-#include "variant.h"
+﻿#include "core.hpp"
+#include "variant.hpp"
 #include <math.h>
 
 NLUA_BEGIN

@@ -1,7 +1,7 @@
-﻿#include "nlua++.h"
+﻿#include "nlua++.hpp"
 #include <UnitTest++/UnitTest++.h>
 #include <UnitTest++/TestReporterStdout.h>
-#include "timer.h"
+#include "timer.hpp"
 
 USE_NLUA
 

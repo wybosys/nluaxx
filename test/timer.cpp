@@ -1,5 +1,5 @@
-﻿#include "nlua++.h"
-#include "timer.h"
+﻿#include "nlua++.hpp"
+#include "timer.hpp"
 #include <chrono>
 #include <thread>
 #include <map>

@@ -1,9 +1,9 @@
 ﻿#ifndef __NLUA_XX_H_INCLUDED
 #define __NLUA_XX_H_INCLUDED
 
-#include "core.h"
-#include "variant.h"
-#include "fs.h"
+#include "core.hpp"
+#include "variant.hpp"
+#include "fs.hpp"
 #include <map>
 #include <initializer_list>
 

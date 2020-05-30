@@ -18,8 +18,8 @@
 #include <algorithm>
 #include <functional>
 
-#include "com++.h"
-#include "macro.h"
+#include "com++.hpp"
+#include "macro.hpp"
 
 #define NLUA_STATIC_INVOKE(func) \
 [&](args_type const& args)->return_type { \
