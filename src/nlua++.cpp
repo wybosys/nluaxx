@@ -1473,7 +1473,7 @@ void Object::payload(void *data) {
     ud->data = data;
 }
 
-return_type Object::get(string const &name) {
+return_type Object::get(string const &name) const {
     auto L = d_ptr->L;
     NLUA_AUTOSTACK(L);
 
@@ -1486,6 +1486,12 @@ return_type Object::get(string const &name) {
     lua_pushstring(L, name.c_str());
     lua_rawget(L, -2);
 
+    return at(L, -1);
+}
+
+return_type Object::global(string const& name) const {
+    auto L = d_ptr->L;
+    lua_getglobal(L, name.c_str());
     return at(L, -1);
 }
 

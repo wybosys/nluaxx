@@ -402,7 +402,10 @@ public:
     }
 
     // 获得数据
-    return_type get(string const &name);
+    return_type get(string const &name) const;
+
+    // 获得全局数据
+    return_type global(string const& name) const;
 
     // 设置数据
     void set(string const &, value_type const &);
