@@ -1793,4 +1793,13 @@ return_type Object::invoke(string const &name, Variant const &v0, Variant const 
     return invoke(name, {v0, v1, v2, v3, v4, v5, v6, v7, v8, v9});
 }
 
+shared_ptr<Variant> Object::toVariant() const
+{
+    if (!d_ptr->id)
+        return nullptr;
+    auto r = make_shared<Variant>(d_ptr->id);
+    const_cast<Variant::VT&>(r->vt) = Variant::VT::OBJECT;
+    return r;
+}
+
 NLUA_END

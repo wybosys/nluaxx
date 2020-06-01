@@ -3,6 +3,8 @@
 
 NLUA_BEGIN
 
+class Object;
+
 typedef ptrdiff_t integer;
 typedef double number;
 
@@ -15,7 +17,8 @@ public:
         NUMBER,
         BOOLEAN,
         POINTER,
-        STRING
+        STRING,
+        OBJECT
     };
 
     Variant();
@@ -35,6 +38,8 @@ public:
     Variant(nullptr_t);
 
     Variant(com::Variant const &);
+
+    Variant(shared_ptr<Object> const&);
 
     VT const vt;
 
@@ -61,7 +66,9 @@ public:
     operator com::Variant const &() const;
 
 private:
+
     com::Variant const _var;
+    
 };
 
 inline Variant::operator integer() const {

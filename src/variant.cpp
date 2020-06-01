@@ -1,6 +1,7 @@
 ﻿#include "core.hpp"
 #include "variant.hpp"
 #include <math.h>
+#include "nlua++.hpp"
 
 NLUA_BEGIN
 
@@ -66,6 +67,10 @@ Variant::Variant(nullptr_t)
 Variant::Variant(com::Variant const &v)
         : vt(FromCom(v.vt)), _var(v) {
 }
+
+Variant::Variant(shared_ptr<Object> const& r)
+    : vt(VT::OBJECT), _var(*r->toVariant())
+{}
 
 integer Variant::toInteger() const {
     switch (_var.vt) {

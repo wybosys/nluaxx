@@ -33,6 +33,9 @@ void push(Variant const &v, lua_State *L) {
         case Variant::VT::BOOLEAN:
             lua_pushboolean(L, v.toBool());
             break;
+        case Variant::VT::OBJECT:
+            lua_pushvalue(L, v.toInteger());
+            break;
     }
 }
 

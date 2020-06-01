@@ -430,6 +430,9 @@ public:
     // 实例化lua对象
     self_type instance() const;
 
+    // 转换成variant
+    shared_ptr<Variant> toVariant() const;
+
     // 执行函数
     return_type invoke(string const &name, args_type const &);
 

@@ -5,6 +5,7 @@ function Abc:proc()
 end
 
 function test8()
-    test.Test:proc()
+    local r = test.Test:proc()
+    print(r:proc())
     collectgarbage("collect")
 end

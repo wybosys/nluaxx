@@ -292,7 +292,7 @@ TEST(test8)
         auto abc = ctx.global("Abc");
         auto r = abc->instance();
         CHECK_EQUAL(r->invoke("proc")->toString(), "abc");
-        return nullptr;
+        return r->toVariant();
         });
 
     auto m = make_shared<Module>();
