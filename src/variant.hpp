@@ -117,6 +117,11 @@ inline basic_ostream <_CharT, _Traits> &operator<<(basic_ostream <_CharT, _Trait
     return stm << *v;
 }
 
+template <typename V>
+inline shared_ptr<Variant> _V(V const& v) {
+    return make_shared<Variant>(v);
+}
+
 NLUA_END
 
 #endif
