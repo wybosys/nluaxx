@@ -238,7 +238,7 @@ public:
 };
 
 static lua_State *GetContextL(Context &ctx) {
-    return nnt::DPtr<Context, ContextPrivate>(&ctx)->L;
+    return ctx.d().L;
 }
 
 NNT_SINGLETON_IMPL(Context);
@@ -718,7 +718,7 @@ void Function::declare_in(Context &ctx) const {
     auto L = GetContextL(ctx);
     NLUA_AUTOSTACK(L);
 
-    auto pctx = nnt::DPtr<Context, ContextPrivate>(&ctx);
+    auto pctx = &ctx.d();
     auto id = pctx->refId++;
 
     // 注册到全局对照表中，用于激活函数时查找真正的执行函数
@@ -744,7 +744,7 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
     auto L = GetContextL(ctx);
     NLUA_AUTOSTACK(L);
 
-    auto pctx = nnt::DPtr<Context, ContextPrivate>(&ctx);
+    auto pctx = &ctx.d();
     auto id = pctx->refId++;
 
     // 绑定到类
