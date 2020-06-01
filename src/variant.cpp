@@ -69,8 +69,10 @@ Variant::Variant(com::Variant const &v)
 }
 
 Variant::Variant(shared_ptr<Object> const& r)
-    : vt(VT::OBJECT), _var(*r->toVariant())
-{}
+    : vt(VT::OBJECT) {
+    // 兼容android
+    const_cast<com::Variant&>(_var) = *r->toVariant();
+}
 
 integer Variant::toInteger() const {
     switch (_var.vt) {
