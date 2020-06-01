@@ -427,6 +427,9 @@ public:
     // 释放
     bool drop();
 
+    // 实例化lua对象
+    self_type instance() const;
+
     // 执行函数
     return_type invoke(string const &name, args_type const &);
 

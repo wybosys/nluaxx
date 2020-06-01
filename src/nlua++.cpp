@@ -1587,6 +1587,44 @@ bool Object::isnull() const {
     return !d_ptr->L || !d_ptr->id || d_ptr->name.empty();
 }
 
+self_type Object::instance() const {
+    if (d_ptr->name.empty()) {
+        cerr << "没有传入类名" << endl;
+        return nullptr;
+    }
+
+    auto L = d_ptr->L;
+    // NLUA_AUTOSTACK(L); 因需要返回局部变量所以不能恢复
+
+    lua_getglobal(L, d_ptr->name.c_str());
+    if (!lua_istable(L, -1)) {
+        cerr << "传入的不是存在的类名" << endl;
+        return nullptr;
+    }
+
+    auto clsid = lua_gettop(L);
+
+    // meta
+    lua_newtable(L);
+    int metaid = lua_gettop(L);
+
+    lua_pushstring(L, "__index");
+    lua_pushvalue(L, clsid);
+    lua_rawset(L, metaid);
+
+    // new
+    lua_newtable(L);
+    int objid = lua_gettop(L);
+
+    lua_pushvalue(L, metaid);
+    lua_setmetatable(L, -2);
+
+    auto r = make_shared<Object>();
+    r->d_ptr->L = L;
+    r->d_ptr->id = objid;
+    return r;
+}
+
 void Object::grab() {
     auto L = d_ptr->L;
     NLUA_AUTOSTACK(L);

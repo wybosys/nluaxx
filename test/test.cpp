@@ -280,6 +280,32 @@ TEST (test7) {
     ctx.invoke("test7");
 }
 
+TEST(test8)
+{
+    //c++ 实例化lua对象，并讲c++生命期绑定到lua对象上
+    auto &ctx = Context::shared();
+
+    auto clz = make_shared<Class>();
+    clz->name = "Test";
+
+    clz->add_static("proc", [&]()->return_type {
+        auto abc = ctx.global("Abc");
+        auto r = abc->instance();
+        CHECK_EQUAL(r->invoke("proc")->toString(), "abc");
+        return nullptr;
+        });
+
+    auto m = make_shared<Module>();
+    m->name = "test";
+    m->add(clz);
+
+    m->declare_in(ctx);
+    ctx.add(m);
+
+    ctx.load("test8.lua");
+    ctx.invoke("test8");
+}
+
 TEST (test999) {
     return; // 协程测试会阻塞单元测试流程
     // 测试协程

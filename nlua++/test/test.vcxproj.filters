@@ -65,6 +65,9 @@
     <None Include="..\..\test\test7.lua">
       <Filter>lua</Filter>
     </None>
+    <None Include="..\..\test\test8.lua">
+      <Filter>lua</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

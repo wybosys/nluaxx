@@ -183,6 +183,7 @@
     <None Include="..\..\test\test5.lua" />
     <None Include="..\..\test\test6.lua" />
     <None Include="..\..\test\test7.lua" />
+    <None Include="..\..\test\test8.lua" />
     <None Include="..\..\test\test999.lua" />
   </ItemGroup>
   <ItemGroup>
