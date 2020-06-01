@@ -1489,10 +1489,15 @@ return_type Object::get(string const &name) const {
     return at(L, -1);
 }
 
-return_type Object::global(string const& name) const {
+self_type Object::global(string const& name) const {
     auto L = d_ptr->L;
     lua_getglobal(L, name.c_str());
-    return at(L, -1);
+    if (lua_isnil(L, -1))
+        return nullptr;
+    self_type r = make_shared<Object>();
+    r->d_ptr->name = name;
+    r->d_ptr->L = L;
+    return r;
 }
 
 void Object::set(string const &name, value_type const &val) {
