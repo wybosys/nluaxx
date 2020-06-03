@@ -207,8 +207,7 @@ public:
                 cur = cur.substr(0, cur.length() - 5);
             }
 #else
-            if (endwith(cur, "?.so"))
-            {
+            if (endwith(cur, "?.so")) {
                 cur = cur.substr(0, cur.length() - 5);
             }
 #endif
@@ -1489,7 +1488,7 @@ return_type Object::get(string const &name) const {
     return at(L, -1);
 }
 
-self_type Object::global(string const& name) const {
+self_type Object::global(string const &name) const {
     auto L = d_ptr->L;
     lua_getglobal(L, name.c_str());
     if (lua_isnil(L, -1))
@@ -1804,12 +1803,11 @@ return_type Object::invoke(string const &name, Variant const &v0, Variant const 
     return invoke(name, {v0, v1, v2, v3, v4, v5, v6, v7, v8, v9});
 }
 
-shared_ptr<Variant> Object::toVariant() const
-{
+shared_ptr<Variant> Object::toVariant() const {
     if (!d_ptr->id)
         return nullptr;
-    auto r = make_shared<Variant>(d_ptr->id);
-    const_cast<Variant::VT&>(r->vt) = Variant::VT::OBJECT;
+    auto r = make_shared<Variant>((integer) d_ptr->id);
+    const_cast<Variant::VT &>(r->vt) = Variant::VT::OBJECT;
     return r;
 }
 

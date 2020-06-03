@@ -37,9 +37,9 @@ public:
 
     Variant(nullptr_t);
 
-    Variant(com::Variant const &);
+    Variant(com::Variant<> const &);
 
-    Variant(shared_ptr<Object> const&);
+    Variant(shared_ptr <Object> const &);
 
     VT const vt;
 
@@ -61,14 +61,14 @@ public:
 
     operator void *() const;
 
-    operator string const& () const;
+    operator string const &() const;
 
-    operator com::Variant const &() const;
+    operator com::Variant<> const &() const;
 
 private:
 
-    com::Variant const _var;
-    
+    com::Variant<> const _var;
+
 };
 
 inline Variant::operator integer() const {
@@ -87,11 +87,11 @@ inline Variant::operator void *() const {
     return toPointer();
 }
 
-inline Variant::operator string const& () const {
+inline Variant::operator string const &() const {
     return toString();
 }
 
-inline Variant::operator com::Variant const &() const {
+inline Variant::operator ::com::Variant<> const &() const {
     return _var;
 }
 
@@ -124,8 +124,8 @@ inline basic_ostream <_CharT, _Traits> &operator<<(basic_ostream <_CharT, _Trait
     return stm << *v;
 }
 
-template <typename V>
-inline shared_ptr<Variant> _V(V const& v) {
+template<typename V>
+inline shared_ptr <Variant> _V(V const &v) {
     return make_shared<Variant>(v);
 }
 
