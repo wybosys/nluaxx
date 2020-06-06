@@ -1515,6 +1515,7 @@ void Module::merge(Module const &r) {
         }
         else {
             d_ptr->modules[e.first] = e.second;
+            e.second->parent = this;
         }
     }
 }
