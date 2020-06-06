@@ -363,7 +363,7 @@ public:
     typedef ::std::vector<parent_type> parents_type;
 
     // 父模块
-    parent_type parent;
+    parent_type parent = nullptr;
 
     // 获得模块的正向所有父模块
     parents_type parents() const;
