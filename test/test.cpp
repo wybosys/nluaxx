@@ -38,6 +38,19 @@ TEST (test0) {
 
     module->add(clz);
     module->add(clz2);
+
+    // 第二层module
+    auto m2 = make_shared<Module>();
+    m2->name = "test.abc";
+
+    auto clz22 = make_shared<Class>();
+    clz22->name = "Abc";
+    clz22->add("proc", [=](self_type&, Variant const& v)->return_type {
+        return _V("abc");
+        });
+    m2->add(clz22);
+    m2->declare_in(ctx);
+
     module->declare_in(ctx);
     // 重复declare, 应该被跳过
     module->declare_in(ctx);

@@ -167,8 +167,10 @@ public:
     // 实现的静态函数
     func_type func;
 
+    // 声明为全局函数
     void declare_in(Context &) const;
 
+    // 声明为类的成员函数
     void declare_in(Context &, Class const &) const;
 };
 
@@ -190,8 +192,10 @@ public:
     // 默认数据
     value_type val;
 
+    // 声明为全局变量
     void declare_in(Context &) const;
 
+    // 声明为类的成员变量
     void declare_in(Context &, Class const &) const;
 };
 
@@ -202,7 +206,12 @@ public:
     string name;
     func_type init, fini;
 
+protected:
+
+    // 只用来将已经定义的类转成单件
     void declare_in(Context &) const;
+
+    friend class Class;
 };
 
 NNT_CLASS_PREPARE(Class)
@@ -318,10 +327,10 @@ public:
     // 多继承
     Class &inherit(::std::initializer_list<Any> const &pars);
 
-    // 直接声明
+    // 直接为全局类
     void declare_in(Context &) const;
 
-    // 声明到模块中
+    // 声明为模块的子类
     void declare_in(Context &, Module const &) const;
 };
 
@@ -335,17 +344,18 @@ public:
 
     ~Module();
 
+    // 模块名
     string name;
 
     typedef shared_ptr<Class> class_type;
     typedef map<string, class_type> classes_type;
 
     // 将类添加到模块中
-    Module &add(class_type &);
+    bool add(class_type &);
 
     classes_type const &classes() const;
 
-    // 声明模块
+    // 声明为全局模块
     void declare_in(Context &) const;
 
     // 合并其他模块

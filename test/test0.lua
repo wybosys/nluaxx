@@ -19,6 +19,9 @@ function test0()
         return "cde"
     end
 
+    local t2 = test.abc.Abc:new()
+    assert(t2:proc() == "abc", "sub module test failed")
+
     return 0
 end
 

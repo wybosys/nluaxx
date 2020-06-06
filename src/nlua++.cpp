@@ -1382,6 +1382,7 @@ void Class::declare_in(Context &ctx, Module const &mod) const {
 class ModulePrivate {
 public:
     Module *d_owner;
+
     Module::classes_type classes;
 
     void body_declare_in(Context &ctx) {
@@ -1401,9 +1402,14 @@ Module::~Module() {
     NNT_CLASS_DESTORY()
 }
 
-Module &Module::add(class_type &c) {
+bool Module::add(class_type &c) {
+    auto fnd = d_ptr->classes.find(c->name);
+    if (fnd != d_ptr->classes.end()) {
+        cerr << "模块中已经存在类 " + c->name << endl;
+        return false;
+    }
     d_ptr->classes[c->name] = c;
-    return *this;
+    return true;
 }
 
 void Module::declare_in(Context &ctx) const {
