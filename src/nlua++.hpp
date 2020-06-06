@@ -353,6 +353,19 @@ public:
     // 将类添加到模块中
     bool add(class_type &);
 
+    typedef shared_ptr<Module> module_type;
+    typedef map<string, module_type> modules_type;
+
+    // 添加子模块
+    bool add(module_type &);
+
+    // 父模块
+    Module *parent = nullptr;
+
+    // 获得模块的正向所有父模块
+    typedef ::std::vector<Module const*> parents_type;
+    parents_type parents() const;
+
     classes_type const &classes() const;
 
     // 声明为全局模块

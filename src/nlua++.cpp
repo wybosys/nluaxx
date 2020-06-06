@@ -725,6 +725,10 @@ void Function::declare_in(Context &ctx) const {
         try {
             return this->func(args);
         }
+        catch (error &e) {
+            string err = "lua调用C++: " + name + " 遇到异常: " + e.what();
+            luaL_error(L, err.c_str());
+        }
         catch (...) {
             string err = "lua调用C++: " + name + " 遇到未处理异常";
             luaL_error(L, err.c_str());
@@ -758,6 +762,10 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
             try {
                 return this->classfunc(self, args);
             }
+            catch (error &e) {
+                string err = "lua调用C++: " + name + " 遇到异常: " + e.what();
+                luaL_error(L, err.c_str());
+            }
             catch (...) {
                 string err = "lua调用C++: " + name + "@" + clz.name + " 遇到未处理异常";
                 luaL_error(L, err.c_str());
@@ -770,6 +778,10 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
         pctx->refFuncs[id] = [&](lua_State *L, args_type const &args) -> return_type {
             try {
                 return this->func(args);
+            }
+            catch (error &e) {
+                string err = "lua调用C++: " + name + " 遇到异常: " + e.what();
+                luaL_error(L, err.c_str());
             }
             catch (...) {
                 string err = "lua调用C++: " + name + "@" + clz.name + " 遇到未处理异常";
@@ -1344,6 +1356,9 @@ void Class::declare_in(Context &ctx) const {
     lua_setglobal(L, name.c_str());
 };
 
+// 获得module的定义栈id
+extern int DeclareModule(Module const&, Context &);
+
 void Class::declare_in(Context &ctx, Module const &mod) const {
     auto L = GetContextL(ctx);
     NLUA_AUTOSTACK(L);
@@ -1371,8 +1386,7 @@ void Class::declare_in(Context &ctx, Module const &mod) const {
     d_ptr->body_declare_in(ctx, *this);
 
     // 定义到module中
-    lua_getglobal(L, mod.name.c_str());
-    int modid = lua_gettop(L);
+    int modid = DeclareModule(mod, ctx);
     lua_pushstring(L, name.c_str());
     lua_pushvalue(L, clzid);
     lua_rawset(L, modid);
@@ -1383,13 +1397,67 @@ public:
     Module *d_owner;
 
     Module::classes_type classes;
+    Module::modules_type modules;    
+
+    int declare_module(Context &ctx) const {
+        auto L = GetContextL(ctx);
+        auto pars = d_owner->parents();
+        pars.emplace_back(d_owner);
+        int modid = 0;
+
+        auto first = pars[0];
+        lua_getglobal(L, first->name.c_str());
+        if (!lua_isnil(L, -1)) {
+            modid = lua_gettop(L);
+        }
+        else {
+            lua_newtable(L);
+            modid = lua_gettop(L);
+            lua_pushstring(L, "__index");
+            lua_pushvalue(L, modid);
+            lua_rawset(L, modid);
+            lua_setglobal(L, first->name.c_str());
+        }
+
+        for (size_t i = 1; i < pars.size(); ++i) {
+            auto m = pars[i];
+            lua_pushstring(L, m->name.c_str());
+            lua_rawget(L, modid);
+            if (!lua_isnil(L, -1)) {
+                modid = lua_gettop(L);
+            }
+            else {
+                lua_newtable(L);
+                int submodid = lua_gettop(L);
+                lua_pushstring(L, "__index");
+                lua_pushvalue(L, submodid);
+                lua_rawset(L, submodid);
+
+                lua_pushstring(L, m->name.c_str());
+                lua_pushvalue(L, submodid);
+                lua_rawset(L, modid);
+
+                modid = submodid;
+            }
+        }
+
+        return modid;
+    }
 
     void body_declare_in(Context &ctx) {
         for (auto &e : classes) {
             e.second->declare_in(ctx, *d_owner);
         }
+
+        for (auto &e : modules) {
+            e.second->declare_in(ctx);
+        }
     }
 };
+
+int DeclareModule(Module const& m, Context& ctx) {
+    return m.d().declare_module(ctx);
+}
 
 Module::Module() {
     NNT_CLASS_CONSTRUCT();
@@ -1411,25 +1479,27 @@ bool Module::add(class_type &c) {
     return true;
 }
 
+bool Module::add(module_type &m) {
+    if (m->parent) {
+        cerr << name + " 已经是 " + m->parent->name + " 的子模块" << endl;
+        return false;
+    }
+    auto fnd = d_ptr->modules.find(m->name);
+    if (fnd != d_ptr->modules.end()) {
+        fnd->second->merge(*m);
+    }
+    else {
+        d_ptr->modules[m->name] = m;
+    }
+    m->parent = this;
+    return true;
+}
+
 void Module::declare_in(Context &ctx) const {
     auto L = GetContextL(ctx);
     NLUA_AUTOSTACK(L);
 
-    // 判断是否已经被定义, module不允许覆盖
-    lua_getglobal(L, name.c_str());
-    if (!lua_isnil(L, -1)) {
-        d_ptr->body_declare_in(ctx);
-        return;
-    }
-
-    lua_newtable(L);
-    int modid = lua_gettop(L);
-
-    lua_pushstring(L, "__index");
-    lua_pushvalue(L, modid);
-    lua_rawset(L, modid);
-    lua_setglobal(L, name.c_str());
-
+    d_ptr->declare_module(ctx);
     d_ptr->body_declare_in(ctx);
 }
 
@@ -1437,6 +1507,26 @@ void Module::merge(Module const &r) {
     for (auto &e : r.d_ptr->classes) {
         d_ptr->classes[e.first] = e.second;
     }
+
+    for (auto &e : r.d_ptr->modules) {
+        auto fnd = d_ptr->modules.find(e.first);
+        if (fnd != d_ptr->modules.end()) {
+            fnd->second->merge(*e.second);
+        }
+        else {
+            d_ptr->modules[e.first] = e.second;
+        }
+    }
+}
+
+Module::parents_type Module::parents() const {
+    parents_type r;
+    auto p = parent;
+    while (p) {
+        r.emplace_back(p);
+        p = p->parent;
+    }
+    return parents_type(r.rbegin(), r.rend());
 }
 
 Object::Object() {
