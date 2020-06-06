@@ -359,11 +359,13 @@ public:
     // 添加子模块
     bool add(module_type &);
 
+    typedef Module const* parent_type;
+    typedef ::std::vector<parent_type> parents_type;
+
     // 父模块
-    Module *parent = nullptr;
+    parent_type parent;
 
     // 获得模块的正向所有父模块
-    typedef ::std::vector<Module const*> parents_type;
     parents_type parents() const;
 
     classes_type const &classes() const;
