@@ -861,21 +861,28 @@ public:
         lua_pushvalue(L, clzid);
         lua_rawset(L, metaid);
 
-        // instance
+        // 实例化的对象id
+        lua_newtable(L);
+        int const objid = lua_gettop(L);
+
+        // 绑定原型到对象
+        lua_pushvalue(L, metaid);
+        lua_setmetatable(L, objid);
+
+        // 标准c对象是直接返回lua_newuserdata的结果，但是userdata将无法设置kv，所以采用将userdata作为临时变量绑定到普通table中实现
         if (has_fini) {
+            // 如果存在析构函数，则认为业务层实现了C++类型自定义，需要呼起释放流程
             // 申请一小段的内存
             lua_newuserdata(L, sizeof(ObjectPrivate::UserData));
             auto ud = (ObjectPrivate::UserData *) lua_touserdata(L, -1);
             ud->data = nullptr;
             ud->freed = false;
-        } else {
-            lua_newtable(L);
-        }
-        int objid = lua_gettop(L);
 
-        // 绑定原型到对象
-        lua_pushvalue(L, metaid);
-        lua_setmetatable(L, objid);
+            // 将c类型保存
+            lua_pushstring(L, "__cdata__"); // -1
+            lua_pushvalue(L, -2); // ud
+            lua_rawset(L, objid);
+        }
 
         // 根据传入的参数个数，调用构造函数
         ostringstream oss;
@@ -916,10 +923,22 @@ public:
     // 析构函数实现
     static int ImpDestroy(lua_State *L) {
         // self 1
+
         // 如果已经释放，则不调用
+        lua_pushstring(L, "__cdata__");
+        lua_rawget(L, 1);
+        if (!lua_isuserdata(L, -1)) {
+            cerr << "ImpDestroy被非C++对象调用" << endl;
+            return 0; // 不存在c数据
+        }
+
         auto ud = (ObjectPrivate::UserData *) lua_touserdata(L, -1);
-        if (ud->freed)
-            return 0;
+        if (ud->freed) {
+            cerr << "ImpDestroy重复释放" << endl;
+            return 0; // 已经释放
+        }
+        // 弹出ud
+        lua_pop(L, 1);
 
         lua_pushcfunction(L, ContextPrivate::Traceback);
         // tbid 2
@@ -1547,9 +1566,15 @@ void *Object::payload() const {
     } else {
         lua_getglobal(L, d_ptr->name.c_str());
     }
+    
+    int objid = lua_gettop(L);
+    lua_pushstring(L, "__cdata__");
+    lua_rawget(L, objid);
 
-    if (!lua_isuserdata(L, -1))
+    if (!lua_isuserdata(L, -1)) {
+        cerr << "不是C++自定义对象" << endl;
         return nullptr;
+    }
 
     auto ud = (ObjectPrivate::UserData *) lua_touserdata(L, -1);
     return ud->data;
@@ -1563,6 +1588,15 @@ void Object::payload(void *data) {
         lua_pushvalue(L, d_ptr->id);
     } else {
         lua_getglobal(L, d_ptr->name.c_str());
+    }
+
+    int objid = lua_gettop(L);
+    lua_pushstring(L, "__cdata__");
+    lua_rawget(L, objid);
+
+    if (!lua_isuserdata(L, -1)) {
+        cerr << "不是C++自定义对象" << endl;
+        return;
     }
 
     auto ud = (ObjectPrivate::UserData *) lua_touserdata(L, -1);

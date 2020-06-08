@@ -283,6 +283,9 @@ TEST (test7) {
     clz->add("proc", [=](self_type &self) -> return_type {
         return make_shared<Variant>(self->payload<Test7Object>().txt);
     });
+    clz->add("proc2", [=](self_type &self)->return_type {
+        return self->get("abc");
+        });
 
     auto m = make_shared<Module>();
     m->name = "test";
