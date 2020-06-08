@@ -408,40 +408,13 @@ public:
     // 设置隐含的指针地址
     void payload(void *);
 
-    // 设置shared_ptr的工具函数
-    template <class T>
-    void shared_payload(shared_ptr<T> const& pl) {
-        auto p = new shared_ptr<T>(pl);
-        payload(p);
-    }
-
-    template <class T>
-    shared_ptr<T> shared_payload() const {
-        auto p = (shared_ptr<T>*)payload();
-        shared_ptr<T> r;
-        if (p)
-            r = *p;
-        return r;
-    }
-
-    // 实例化连接对象
+    // 实例化连接对象, 如果传null则自动new一个出来
     template<class T>
-    inline T &bind() {
-        unbind<T>();
-        auto pl = new T();
-        payload(pl);
-        return *pl;
-    }
+    T &bind(T* = nullptr);
 
     // 释放连接对象
     template<class T>
-    inline void unbind() {
-        auto pl = (T *) payload();
-        if (pl) {
-            delete pl;
-            payload(nullptr);
-        }
-    }
+    void unbind();
 
     // 获得数据
     return_type get(string const &name) const;
@@ -503,6 +476,23 @@ public:
 
     return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
 };
+
+template<class T>
+inline T &Object::bind(T *ptr) {
+    unbind<T>();
+    auto pl = ptr ? ptr : new T();
+    payload(pl);
+    return *pl;
+}
+
+template<class T>
+inline void Object::unbind() {
+    auto pl = (T *)payload();
+    if (pl) {
+        delete pl;
+        payload(nullptr);
+    }
+}
 
 NLUA_END
 
