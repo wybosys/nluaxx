@@ -408,6 +408,22 @@ public:
     // 设置隐含的指针地址
     void payload(void *);
 
+    // 设置shared_ptr的工具函数
+    template <class T>
+    void shared_payload(shared_ptr<T> const& pl) {
+        auto p = new shared_ptr<T>(pl);
+        payload(p);
+    }
+
+    template <class T>
+    shared_ptr<T> shared_payload() const {
+        auto p = (shared_ptr<T>*)payload();
+        shared_ptr<T> r;
+        if (p)
+            r = *p;
+        return r;
+    }
+
     // 实例化连接对象
     template<class T>
     inline T &bind() {
