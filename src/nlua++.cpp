@@ -1619,17 +1619,6 @@ return_type Object::get(string const &name) const {
     return at(L, -1);
 }
 
-self_type Object::global(string const &name) const {
-    auto L = d_ptr->L;
-    lua_getglobal(L, name.c_str());
-    if (lua_isnil(L, -1))
-        return nullptr;
-    self_type r = make_shared<Object>();
-    r->d_ptr->name = name;
-    r->d_ptr->L = L;
-    return r;
-}
-
 void Object::set(string const &name, value_type const &val) {
     auto L = d_ptr->L;
     NLUA_AUTOSTACK(L);
@@ -1650,12 +1639,33 @@ void Object::set(string const &name, value_type const &val) {
 
 self_type Context::global(string const &name) {
     auto L = d_ptr->L;
-    NLUA_AUTOSTACK(L);
 
+    if (name.find('.') != string::npos) {
+        // 多级模块
+        auto ss = explode(name, ".");
+        lua_getglobal(L, ss[0].c_str());
+        if (!lua_istable(L, -1))
+            return nullptr;
+        int cid = lua_gettop(L);
+        for (auto iter = ss.begin() + 1; iter != ss.end(); ++iter) {
+            lua_pushstring(L, iter->c_str());
+            lua_rawget(L, cid);
+            if (!lua_istable(L, -1))
+                return nullptr;
+            cid = lua_gettop(L);
+        }
+
+        self_type r = make_shared<Object>();
+        r->d_ptr->L = L;
+        r->d_ptr->id = cid;
+        return r;
+    }
+
+    // 根全局对象
+    NLUA_AUTOSTACK(L);
     lua_getglobal(L, name.c_str());
     if (lua_isnil(L, -1))
         return nullptr;
-
     self_type r = make_shared<Object>();
     r->d_ptr->name = name;
     r->d_ptr->L = L;
@@ -1729,21 +1739,30 @@ bool Object::isnull() const {
 }
 
 self_type Object::instance() const {
-    if (d_ptr->name.empty()) {
-        cerr << "没有传入类名" << endl;
-        return nullptr;
-    }
-
     auto L = d_ptr->L;
     // NLUA_AUTOSTACK(L); 因需要返回局部变量所以不能恢复
 
-    lua_getglobal(L, d_ptr->name.c_str());
-    if (!lua_istable(L, -1)) {
-        cerr << "传入的不是存在的类名" << endl;
+    int clsid;
+
+    if (!d_ptr->name.empty()) {
+        lua_getglobal(L, d_ptr->name.c_str());
+        if (!lua_istable(L, -1)) {
+            cerr << "传入的不是存在的类名" << endl;
+            return nullptr;
+        }
+        clsid = lua_gettop(L);
+    }
+    else if (d_ptr->id) {
+        if (!lua_istable(L, d_ptr->id)) {
+            cerr << "传入的不是类对象" << endl;
+            return nullptr;
+        }
+        clsid = d_ptr->id;
+    }
+    else {
+        cerr << "传入的是空对象" << endl;
         return nullptr;
     }
-
-    auto clsid = lua_gettop(L);
 
     // meta
     lua_newtable(L);

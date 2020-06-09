@@ -307,7 +307,7 @@ TEST(test8)
     clz->name = "Test";
 
     clz->add_static("proc", [&]()->return_type {
-        auto abc = ctx.global("Abc");
+        auto abc = ctx.global("abc.Abc");
         auto r = abc->instance();
         CHECK_EQUAL(r->invoke("proc")->toString(), "abc");
         return r->toVariant();

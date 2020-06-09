@@ -1,6 +1,7 @@
-Abc = {}
+abc = {}
+abc.Abc = {}
 
-function Abc:proc()
+function abc.Abc:proc()
     return "abc"
 end
 
