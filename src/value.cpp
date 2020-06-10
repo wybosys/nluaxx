@@ -45,7 +45,7 @@ return_type at(lua_State *L, int n) {
     switch (typ)
     {
     case LUA_TSTRING:
-        return make_shared<Variant>((string)lua_tostring(L, n));
+        return make_shared<Variant>(string(lua_tostring(L, n), lua_strlen(L, n)));
     case LUA_TBOOLEAN:
         return make_shared<Variant>(!!lua_toboolean(L, n));
     case LUA_TNUMBER:
