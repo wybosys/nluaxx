@@ -43,12 +43,12 @@ return_type at(lua_State *L, int n) {
     int t = lua_gettop(L);
     if (lua_isnil(L, n))
         return nullptr;
+    if (lua_isstring(L, n))
+        return make_shared<Variant>((string)luaL_checkstring(L, n));
+    if (lua_isboolean(L, n))
+        return make_shared<Variant>((bool)luaL_checkint(L, n));
     if (lua_isnumber(L, n))
         return make_shared<Variant>(luaL_checknumber(L, n));
-    if (lua_isboolean(L, n))
-        return make_shared<Variant>((bool) luaL_checkint(L, n));
-    if (lua_isstring(L, n))
-        return make_shared<Variant>((string) luaL_checkstring(L, n));
     return make_shared<Variant>();
 }
 
