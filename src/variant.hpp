@@ -21,6 +21,8 @@ public:
         OBJECT
     };
 
+    typedef ::COMXX_NS::Variant<> com_variant_type;
+
     Variant();
 
     Variant(integer);
@@ -37,9 +39,9 @@ public:
 
     Variant(nullptr_t);
 
-    Variant(com::Variant<> const &);
+    Variant(com_variant_type const &);
 
-    Variant(shared_ptr <Object> const &);
+    Variant(shared_ptr<Object> const &);
 
     VT const vt;
 
@@ -53,6 +55,8 @@ public:
 
     string toString() const;
 
+    shared_ptr<Object> const& toObject() const;
+
     operator integer() const;
 
     operator number() const;
@@ -63,11 +67,12 @@ public:
 
     operator string () const;
 
-    operator com::Variant<> const &() const;
+    operator com_variant_type const &() const;
 
 private:
 
-    com::Variant<> const _var;
+    com_variant_type const _var;
+    shared_ptr<Object> const _obj;
 
 };
 
@@ -91,8 +96,12 @@ inline Variant::operator string () const {
     return toString();
 }
 
-inline Variant::operator ::com::Variant<> const &() const {
+inline Variant::operator com_variant_type const &() const {
     return _var;
+}
+
+inline shared_ptr<Object> const& Variant::toObject() const {
+    return _obj;
 }
 
 template<typename _CharT, typename _Traits>

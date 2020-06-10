@@ -1794,11 +1794,6 @@ void Object::grab() {
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
-        if (!lua_istable(L, d_ptr->id)) {
-            cerr << "变量不是table类型，不支持grab" << endl;
-            return;
-        }
-
         // 设置生命期到全局，避免被局部释放
         ostringstream oss;
         oss << "__nluaxx_global_objects_" << ObjectPrivate::RefId++;
@@ -1812,7 +1807,7 @@ void Object::grab() {
     // 已经是全局变量
     lua_getglobal(L, d_ptr->name.c_str());
     if (!lua_istable(L, -1)) {
-        cerr << "全局变量不是table类型 " + d_ptr->name + " 不支持grab" << endl;
+        // 非table的对象，不维持计数模式
         return;
     }
 
@@ -1837,8 +1832,11 @@ bool Object::drop() {
 
     lua_getglobal(L, d_ptr->name.c_str());
     if (!lua_istable(L, -1)) {
-        // cerr << "没有找到变量" + d_ptr->name << endl;
-        return false;
+        // 非table的对象，不维持计数模式
+        // 需要释放
+        lua_pushnil(L);
+        lua_setglobal(L, d_ptr->name.c_str());
+        return true;
     }
 
     int selfid = lua_gettop(L);
@@ -1957,11 +1955,105 @@ return_type Object::invoke(string const &name, Variant const &v0, Variant const 
     return invoke(name, {v0, v1, v2, v3, v4, v5, v6, v7, v8, v9});
 }
 
-shared_ptr<Variant> Object::toVariant() const {
-    if (!d_ptr->id)
+return_type Object::call(args_type const& args) {
+    auto L = d_ptr->L;
+    NLUA_AUTOSTACK(L);
+
+    lua_pushcfunction(L, ContextPrivate::Traceback);
+    int tbid = lua_gettop(L);
+
+    if (d_ptr->id) {
+        // 是局部函数
+        if (!lua_isfunction(L, d_ptr->id)) {
+            //cerr << "没有找到函数 " + name << endl;
+            return nullptr;
+        }
+
+        lua_pushvalue(L, d_ptr->id);
+    }
+    else {
+        // 获得全局函数
+        lua_getglobal(L, d_ptr->name.c_str());
+        if (!lua_isfunction(L, -1)) {
+            //cerr << "没有找到全局函数 " + name + "@" + d_ptr->name << endl;
+            return nullptr;
+        }
+    }
+
+    for (auto& e : args) {
+        push(e, L);
+    }
+
+    int s = lua_pcall(L, args.size(), 1, tbid);
+    if (LUA_OK != s)
         return nullptr;
-    auto r = make_shared<Variant>((integer) d_ptr->id);
-    const_cast<Variant::VT &>(r->vt) = Variant::VT::OBJECT;
+    return at(L, -1);
+}
+
+return_type Object::call() {
+    return call({});
+}
+
+return_type Object::call(Variant const& v0) {
+    return call({ v0 });
+}
+
+return_type Object::call(Variant const& v0, Variant const& v1) {
+    return call({ v0, v1 });
+}
+
+return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2) {
+    return call({ v0, v1, v2 });
+}
+
+return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3) {
+    return call({ v0, v1, v2, v3 });
+}
+
+return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3, Variant const& v4) {
+    return call({ v0, v1, v2, v3, v4 });
+}
+
+return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3, Variant const& v4, Variant const& v5) {
+    return call({ v0, v1, v2, v3, v4, v5 });
+}
+
+return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3, Variant const& v4, Variant const& v5, Variant const& v6) {
+    return call({ v0, v1, v2, v3, v4, v5, v6 });
+}
+
+return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3, Variant const& v4, Variant const& v5, Variant const& v6, Variant const& v7) {
+    return call({ v0, v1, v2, v3, v4, v5, v6, v7 });
+}
+
+return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3, Variant const& v4, Variant const& v5, Variant const& v6, Variant const& v7, Variant const& v8) {
+    return call({ v0, v1, v2, v3, v4, v5, v6, v7, v8 });
+}
+
+return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3, Variant const& v4, Variant const& v5, Variant const& v6, Variant const& v7, Variant const& v8, Variant const& v9) {
+    return call({ v0, v1, v2, v3, v4, v5, v6, v7, v8, v9 });
+}
+
+shared_ptr<Variant> Object::toVariant() const
+{
+    auto r = make_shared<Variant>((integer)d_ptr->id);
+    const_cast<Variant::VT&>(r->vt) = Variant::VT::OBJECT;
+    return r;
+}
+
+shared_ptr<Variant::com_variant_type> Object::toComVariant() const
+{
+    if (d_ptr->id)
+        return make_shared<Variant::com_variant_type>(d_ptr->id);
+    return make_shared<Variant::com_variant_type>(d_ptr->name);
+}
+
+self_type to_object(lua_State* L, int n)
+{
+    auto r = make_shared<Object>();    
+    auto& rd = r->d();
+    rd.L = L;
+    rd.id = n;
     return r;
 }
 

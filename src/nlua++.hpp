@@ -445,10 +445,11 @@ public:
     // 实例化lua对象
     self_type instance() const;
 
-    // 转换成variant
+    // 转换为通用数据
+    shared_ptr<Variant::com_variant_type> toComVariant() const;
     shared_ptr<Variant> toVariant() const;
 
-    // 执行函数
+    // 执行对象得成员函数
     return_type invoke(string const &name, args_type const &);
 
     return_type invoke(string const &name);
@@ -472,6 +473,33 @@ public:
     return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
 
     return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+
+
+    // 对象是函数对象
+    return_type call(args_type const&);
+
+    return_type call();
+
+    return_type call(Variant const&);
+
+    return_type call(Variant const&, Variant const&);
+
+    return_type call(Variant const&, Variant const&, Variant const&);
+
+    return_type call(Variant const&, Variant const&, Variant const&, Variant const&);
+
+    return_type call(Variant const&, Variant const&, Variant const&, Variant const&, Variant const&);
+
+    return_type call(Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&);
+
+    return_type call(Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&);
+
+    return_type call(Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&);
+
+    return_type call(Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&);
+
+    return_type call(Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&);
+
 };
 
 template<class T>

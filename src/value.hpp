@@ -13,6 +13,9 @@ extern void push(Variant const &, lua_State *);
 
 extern return_type at(lua_State *, int n);
 
+// 将N封装成Object
+extern self_type to_object(lua_State *, int n);
+
 class AutoStackRecover
 {
 public:

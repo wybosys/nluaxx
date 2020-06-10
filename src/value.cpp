@@ -52,6 +52,8 @@ return_type at(lua_State *L, int n) {
         return make_shared<Variant>(lua_tonumber(L, n));
     case LUA_TNIL:
         return nullptr;
+    case LUA_TFUNCTION:
+        return make_shared<Variant>(to_object(L, n));
     }
     return make_shared<Variant>();
 }
