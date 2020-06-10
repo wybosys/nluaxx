@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="cross">
+      <UniqueIdentifier>{72069c5f-820a-4c9f-9946-0d4d8701e393}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\com++.hpp">
@@ -33,14 +36,17 @@
     <ClInclude Include="..\..\src\nlua++.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\str.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\value.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\variant.hpp">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cross\cross.hpp">
+      <Filter>cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cross\str.hpp">
+      <Filter>cross</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -62,8 +68,8 @@
     <ClCompile Include="..\..\src\variant.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\str.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\src\cross\str.cpp">
+      <Filter>cross</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

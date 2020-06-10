@@ -2,11 +2,15 @@
 #include "nlua++.hpp"
 #include "liblua.hpp"
 #include "value.hpp"
-#include "str.hpp"
 #include <atomic>
 #include <sstream>
 
+#include <cross/cross.hpp>
+#include <cross/str.hpp>
+
 NLUA_BEGIN
+
+USE_CROSS
 
 #define IMPFUNC_CHECK_ARGS(count)        \
     do                                   \

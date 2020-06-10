@@ -1,7 +1,9 @@
 ﻿#include "core.hpp"
 #include "fs.hpp"
-#include "str.hpp"
 #include <regex>
+
+#include <cross/cross.hpp>
+#include <cross/str.hpp>
 
 #ifdef NNT_WINDOWS
 #include <Windows.h>
@@ -17,6 +19,8 @@
 #endif
 
 NLUA_BEGIN
+
+USE_CROSS
 
 #ifdef NNT_WINDOWS
 

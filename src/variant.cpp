@@ -1,9 +1,13 @@
 ﻿#include "core.hpp"
 #include "variant.hpp"
-#include <math.h>
 #include "nlua++.hpp"
+#include <cmath>
+#include <cross/cross.hpp>
+#include <cross/str.hpp>
 
 NLUA_BEGIN
+
+USE_CROSS
 
 Variant::VT FromCom(com::Variant<>::VT vt) {
     switch (vt) {
@@ -102,6 +106,8 @@ integer Variant::toInteger() const {
             return (integer) round(_var.toFloat());
         case com::Variant<>::VT::DOUBLE:
             return (integer) round(_var.toDouble());
+        case com::Variant<>::VT::STRING:
+            return toint(_var.toString());
     }
     return 0;
 }
@@ -112,6 +118,8 @@ number Variant::toNumber() const {
             return _var.toFloat();
         case com::Variant<>::VT::DOUBLE:
             return _var.toDouble();
+        case com::Variant<>::VT::STRING:
+            return todouble(_var.toString());
     }
     return toInteger();
 }
@@ -122,8 +130,17 @@ bool Variant::toBool() const {
     return toNumber() != 0;
 }
 
-string const &Variant::toString() const {
-    return _var.toString();
+string Variant::toString() const {
+    if (_var.vt == com::Variant<>::VT::STRING)
+        return _var.toString();
+
+    if (_var.vt == com::Variant<>::VT::FLOAT ||
+        _var.vt == com::Variant<>::VT::DOUBLE) 
+    {
+        return tostr(toNumber());
+    }
+
+    return tostr(toInteger());
 }
 
 void *Variant::toPointer() const {

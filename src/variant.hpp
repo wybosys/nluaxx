@@ -51,7 +51,7 @@ public:
 
     void *toPointer() const;
 
-    string const &toString() const;
+    string toString() const;
 
     operator integer() const;
 
@@ -61,7 +61,7 @@ public:
 
     operator void *() const;
 
-    operator string const &() const;
+    operator string () const;
 
     operator com::Variant<> const &() const;
 
@@ -87,7 +87,7 @@ inline Variant::operator void *() const {
     return toPointer();
 }
 
-inline Variant::operator string const &() const {
+inline Variant::operator string () const {
     return toString();
 }
 
