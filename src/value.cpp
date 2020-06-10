@@ -41,14 +41,18 @@ void push(Variant const &v, lua_State *L) {
 
 return_type at(lua_State *L, int n) {
     int t = lua_gettop(L);
-    if (lua_isnil(L, n))
+    auto const typ = lua_type(L, n);
+    switch (typ)
+    {
+    case LUA_TSTRING:
+        return make_shared<Variant>((string)lua_tostring(L, n));
+    case LUA_TBOOLEAN:
+        return make_shared<Variant>(!!lua_toboolean(L, n));
+    case LUA_TNUMBER:
+        return make_shared<Variant>(lua_tonumber(L, n));
+    case LUA_TNIL:
         return nullptr;
-    if (lua_isstring(L, n))
-        return make_shared<Variant>((string)luaL_checkstring(L, n));
-    if (lua_isboolean(L, n))
-        return make_shared<Variant>((bool)luaL_checkint(L, n));
-    if (lua_isnumber(L, n))
-        return make_shared<Variant>(luaL_checknumber(L, n));
+    }
     return make_shared<Variant>();
 }
 
