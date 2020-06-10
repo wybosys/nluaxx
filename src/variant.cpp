@@ -140,7 +140,7 @@ string Variant::toString() const {
         return tostr(toNumber());
     }
 
-    return tostr(toInteger());
+    return tostr((int)toInteger());
 }
 
 void *Variant::toPointer() const {
