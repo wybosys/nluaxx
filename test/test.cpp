@@ -92,6 +92,8 @@ TEST (test1) {
          */
 
         clz->add("proc", [=](self_type &self, Variant const &v) -> return_type {
+            if (v.isnil())
+                cout << "收到空参数" << endl;
             return make_shared<Variant>(v);
         });
 

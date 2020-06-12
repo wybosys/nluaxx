@@ -3,6 +3,7 @@ function test1()
     assert(test.Test.sa == "sa", "global sa")
     local t0 = test.Test:new()
     local t1 = test.Test:new()
+    t0:proc(null)
     assert(t0.a == "a", "obj0 a")
     assert(t0.sa == "sa", "obj0 sa")
     t0.a = 123

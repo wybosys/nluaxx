@@ -69,6 +69,10 @@ public:
 
     operator com_variant_type const &() const;
 
+    inline bool isnil() const {
+        return vt == VT::NIL;
+    }
+
 private:
 
     com_variant_type const _var;

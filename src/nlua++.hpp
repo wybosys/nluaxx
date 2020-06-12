@@ -22,7 +22,7 @@ class Module;
 typedef shared_ptr<Variant> return_type;
 typedef shared_ptr<Variant> value_type;
 typedef Variant arg_type;
-typedef initializer_list<arg_type> args_type;
+typedef initializer_list<arg_type const*> args_type;
 typedef shared_ptr<Object> self_type;
 
 class Any {
