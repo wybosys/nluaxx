@@ -1,9 +1,13 @@
 ﻿#include "nlua++.hpp"
 #include <UnitTest++/UnitTest++.h>
 #include <UnitTest++/TestReporterStdout.h>
-#include "timer.hpp"
 
-USE_NLUA
+#include <cross/cross.hpp>
+#include <cross/timer.hpp>
+#include <cross/threads.hpp>
+
+USE_NLUA;
+USE_CROSS;
 
 TEST (main) {
     // 测试原始lua
@@ -342,5 +346,7 @@ int main() {
     ::UnitTest::TestReporterStdout rpt;
     ::UnitTest::TestRunner runner(rpt);
     runner.RunTestsIf(::UnitTest::Test::GetTestList(), nullptr, ::UnitTest::True(), 0);
-    return Exec();
+
+    MainThread::shared().exec();
+    return 0;
 }

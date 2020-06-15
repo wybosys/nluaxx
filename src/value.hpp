@@ -1,5 +1,5 @@
-﻿#ifndef __NLUA_VALUE_H_INCLUDE
-#define __NLUA_VALUE_H_INCLUDE
+﻿#ifndef __NLUA_VALUE_H_INCLUDED
+#define __NLUA_VALUE_H_INCLUDED
 
 #include "variant.hpp"
 #include "liblua.hpp"

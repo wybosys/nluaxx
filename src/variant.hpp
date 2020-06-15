@@ -109,7 +109,7 @@ inline shared_ptr<Object> const& Variant::toObject() const {
 }
 
 template<typename _CharT, typename _Traits>
-inline basic_ostream <_CharT, _Traits> &operator<<(basic_ostream <_CharT, _Traits> &stm, Variant const &v) {
+inline ::std::basic_ostream <_CharT, _Traits> &operator<<(::std::basic_ostream <_CharT, _Traits> &stm, Variant const &v) {
     switch (v.vt) {
         case Variant::VT::STRING:
             stm << v.toString();
@@ -131,7 +131,7 @@ inline basic_ostream <_CharT, _Traits> &operator<<(basic_ostream <_CharT, _Trait
 }
 
 template<typename _CharT, typename _Traits>
-inline basic_ostream <_CharT, _Traits> &operator<<(basic_ostream <_CharT, _Traits> &stm, shared_ptr <Variant> const &v) {
+inline ::std::basic_ostream <_CharT, _Traits> &operator<<(::std::basic_ostream <_CharT, _Traits> &stm, shared_ptr <Variant> const &v) {
     if (!v)
         return stm;
     return stm << *v;

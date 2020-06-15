@@ -54,6 +54,12 @@
     <ClInclude Include="..\..\src\cross\fs.hpp">
       <Filter>cross</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ast.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\private.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\nlua++.cpp">
@@ -82,6 +88,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\cross\fs.cpp">
       <Filter>cross</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ast.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\private.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
