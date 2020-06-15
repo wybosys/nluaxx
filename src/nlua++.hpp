@@ -137,6 +137,10 @@ public:
     typedef shared_ptr<Class> class_type;
     typedef ::std::map<string, class_type> classes_type;
 
+    // 全局锁，用来避免多线程环境中调用lua出错
+    void lock();
+    void unlock();
+
     // 清空
     void clear();
 

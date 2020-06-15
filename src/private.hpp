@@ -3,6 +3,7 @@
 
 #include "liblua.hpp"
 #include <atomic>
+#include <mutex>
 
 NLUA_BEGIN
 
@@ -26,8 +27,10 @@ public:
     void update_package_paths(::std::vector<string> const *curs);
     void update_cpackage_paths(::std::vector<string> const *curs);
 
+    // 通用lua层错误处理函数
     static int Traceback(lua_State *L);
 
+    // lua原始句柄
     lua_State *L = nullptr;
     bool _freel = false;
 
@@ -41,6 +44,9 @@ public:
     lua_refid_type refId;
     luaref_funcs_type refFuncs;
     luaref_classfuncs_type refClassFuncs;
+
+    // 各种锁
+    ::std::mutex mtx_global;
 };
 
 NLUA_END

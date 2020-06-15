@@ -1633,7 +1633,19 @@ return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2
 
 shared_ptr<Variant> Object::toVariant() const
 {
-    auto r = make_shared<Variant>((integer)d_ptr->id);
+    integer oid = d_ptr->id;
+    if (!oid) {
+        if (d_ptr->name.empty()) {
+            cerr << "该变量既不是局部变量也不是全局变量不能转换成Variant" << endl;
+            return nullptr;
+        }
+
+        auto L = d_ptr->L;
+        lua_getglobal(L, d_ptr->name.c_str());
+        oid = lua_gettop(L);
+    }
+
+    auto r = make_shared<Variant>(oid);
     const_cast<Variant::VT&>(r->vt) = Variant::VT::OBJECT;
     return r;
 }

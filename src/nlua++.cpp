@@ -115,6 +115,16 @@ void Context::add_cpackage_path(string const &dir) {
 }
 
 void Context::clear() {
+    // 检查是否有死锁
+    if (d_ptr->mtx_global.try_lock()) {
+        d_ptr->mtx_global.unlock();
+    }
+    else {
+        cerr << "检测到NLUA层死锁" << endl;
+        return;
+    }
+
+    // 清空
     d_ptr->clear();
 }
 
@@ -203,6 +213,16 @@ return_type Context::invoke(string const &name, Variant const &v0, Variant const
 
 return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5, Variant const &v6, Variant const &v7, Variant const &v8, Variant const &v9) {
     return invoke(name, { &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9 });
+}
+
+void Context::lock()
+{
+    d_ptr->mtx_global.lock();
+}
+
+void Context::unlock()
+{
+    d_ptr->mtx_global.unlock();
 }
 
 NLUA_END
