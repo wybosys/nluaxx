@@ -1,7 +1,7 @@
-﻿#include "core.hpp"
+﻿#include "nlua++.hpp"
 #include "variant.hpp"
-#include "nlua++.hpp"
 #include <cmath>
+
 #include <cross/cross.hpp>
 #include <cross/str.hpp>
 

@@ -1,5 +1,4 @@
-﻿#include "core.hpp"
-#include "nlua++.hpp"
+﻿#include "nlua++.hpp"
 #include "liblua.hpp"
 #include "value.hpp"
 #include <atomic>
@@ -11,6 +10,7 @@
 NLUA_BEGIN
 
 USE_CROSS
+USE_STL
 
 #define IMPFUNC_CHECK_ARGS(count)        \
     do                                   \

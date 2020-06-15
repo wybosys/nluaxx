@@ -1,4 +1,4 @@
-﻿#include "core.hpp"
+﻿#include "nlua++.hpp"
 #include "value.hpp"
 
 NLUA_BEGIN

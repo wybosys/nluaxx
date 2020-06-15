@@ -1,13 +1,54 @@
 ﻿#ifndef __NLUA_XX_H_INCLUDED
 #define __NLUA_XX_H_INCLUDED
 
-#include "core.hpp"
+#include "com++.hpp"
+#include "macro.hpp"
 #include "variant.hpp"
-#include "fs.hpp"
 #include <map>
+#include <string>
+#include <memory>
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <functional>
 #include <initializer_list>
 
+#ifndef NLUA_NS
+#define NLUA_NS nlua
+#endif
+
+#define NLUA_BEGIN    \
+    namespace NLUA_NS \
+    {
+#define NLUA_END }
+#define USE_NLUA using namespace NLUA_NS;
+
+#define NLUA_STATIC_INVOKE(func) \
+[&](args_type const& args)->return_type { \
+return make_shared<Variant>(com::function_call<decltype(&func)>()(&func, args)); \
+}
+
 NLUA_BEGIN
+
+using ::std::string;
+using ::std::shared_ptr;
+using ::std::make_shared;
+using ::std::function;
+
+class error : public ::std::exception
+{
+public:
+    explicit error(int code, string const &msg = "") : _code(code), _msg(msg) {}
+
+    virtual const char *what() const throw()
+    {
+        return _msg.c_str();
+    }
+
+private:
+    int _code;
+    string _msg;
+};
 
 class Class;
 
@@ -22,7 +63,7 @@ class Module;
 typedef shared_ptr<Variant> return_type;
 typedef shared_ptr<Variant> value_type;
 typedef Variant arg_type;
-typedef initializer_list<arg_type const*> args_type;
+typedef ::std::initializer_list<arg_type const*> args_type;
 typedef shared_ptr<Object> self_type;
 
 class Any {
@@ -228,10 +269,10 @@ public:
     string name;
 
     typedef shared_ptr<Field> field_type;
-    typedef map<string, field_type> fields_type;
+    typedef ::std::map<string, field_type> fields_type;
     typedef shared_ptr<Function> function_type;
-    typedef map<string, function_type> functions_type;
-    typedef vector<function_type> initfunctions_type;
+    typedef ::std::map<string, function_type> functions_type;
+    typedef ::std::vector<function_type> initfunctions_type;
 
     // 定义构造函数
     Class &init(Function::basefunc_type, size_t args);
@@ -349,13 +390,13 @@ public:
     string name;
 
     typedef shared_ptr<Class> class_type;
-    typedef map<string, class_type> classes_type;
+    typedef ::std::map<string, class_type> classes_type;
 
     // 将类添加到模块中
     bool add(class_type &);
 
     typedef shared_ptr<Module> module_type;
-    typedef map<string, module_type> modules_type;
+    typedef ::std::map<string, module_type> modules_type;
 
     // 添加子模块
     bool add(module_type &);

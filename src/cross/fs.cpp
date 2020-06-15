@@ -1,12 +1,12 @@
-﻿#include "core.hpp"
+﻿#include "cross.hpp"
 #include "fs.hpp"
-#include <regex>
-
-#include <cross/cross.hpp>
-#include <cross/str.hpp>
+#include "str.hpp"
+#include <sstream>
 
 #ifdef NNT_WINDOWS
+
 #include <Windows.h>
+
 #endif
 
 #ifdef NNT_UNIXLIKE
@@ -15,12 +15,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <cstdlib>
 
 #endif
 
-NLUA_BEGIN
-
-USE_CROSS
+CROSS_BEGIN
 
 #ifdef NNT_WINDOWS
 
@@ -52,9 +51,9 @@ bool isdirectory(string const &str)
     return INVALID_FILE_ATTRIBUTES != f && 0 != (f & FILE_ATTRIBUTE_DIRECTORY);
 }
 
-vector<string> listdir(string const &str)
+::std::vector<string> listdir(string const& str)
 {
-    vector<string> r;
+    ::std::vector<string> r;
     if (!isdirectory(str))
         return r;
     auto tgt = normalize(str) + PATH_DELIMITER + "*.*";
@@ -85,10 +84,46 @@ bool rmdir(string const &str)
 
 string absolute(string const &str)
 {
+    auto nstr = normalize(str);
     char buf[BUFSIZ];
-    if (S_OK == GetFullPathNameA(str.c_str(), BUFSIZ, buf, NULL))
+    if (GetFullPathNameA(nstr.c_str(), BUFSIZ, buf, NULL))
         return buf;
-    return str;
+    return nstr;
+}
+
+bool isabsolute(string const& str)
+{
+    const size_t l = str.length();
+    if (l == 0)
+        return false;
+    char idr = str[0];
+    if (idr == '/' || idr == '\\')
+        return true;
+    idr = str[1];
+    return idr == ':';
+}
+
+string pwd()
+{
+    char buf[MAX_PATH] = { 0 };
+    GetCurrentDirectoryA(MAX_PATH, buf);
+    return buf;
+}
+
+bool cd(string const& str)
+{
+    return SetCurrentDirectoryA(str.c_str()) == S_OK;
+}
+
+shared_ptr<Stat> stat(string const &target) {
+    struct stat st = { 0 };
+    if (::stat(target.c_str(), &st) != 0)
+        return nullptr;
+    auto r = make_shared<Stat>();
+    r->size = st.st_size;
+    r->tm_created = st.st_ctime;
+    r->tm_modified = st.st_mtime;
+    return r;
 }
 
 #endif
@@ -107,25 +142,25 @@ bool mkdir(string const &str) {
 
 bool exists(string const &str) {
     struct stat st = {0};
-    return stat(str.c_str(), &st) == 0;
+    return ::stat(str.c_str(), &st) == 0;
 }
 
 bool isfile(string const &str) {
     struct stat st = {0};
-    if (stat(str.c_str(), &st))
+    if (::stat(str.c_str(), &st))
         return false;
     return S_ISREG(st.st_mode);
 }
 
 bool isdirectory(string const &str) {
     struct stat st = {0};
-    if (stat(str.c_str(), &st))
+    if (::stat(str.c_str(), &st))
         return false;
     return S_ISDIR(st.st_mode);
 }
 
-vector<string> listdir(string const &str) {
-    vector<string> r;
+strings listdir(string const &str) {
+    strings r;
     if (!isdirectory(str))
         return r;
     auto tgt = normalize(str) + PATH_DELIMITER;
@@ -157,10 +192,46 @@ string absolute(string const &str) {
     return str;
 }
 
+bool isabsolute(string const &str) {
+    const size_t l = str.length();
+    if (l == 0)
+        return false;
+    char idr = str[0];
+    if (idr == '/' || idr == '\\' || idr == '~')
+        return true;
+    return false;
+}
+
+string pwd() {
+    char buf[PATH_MAX] = {0};
+    getcwd(buf, PATH_MAX);
+    return buf;
+}
+
+bool cd(string const &str) {
+    return ::chdir(str.c_str()) == 0;
+}
+
+shared_ptr<Stat> stat(string const &target) {
+    struct stat st = {0};
+    if (::stat(target.c_str(), &st) != 0)
+        return nullptr;
+    auto r = make_shared<Stat>();
+    r->size = st.st_size;
+    r->tm_created = st.st_ctim.tv_sec;
+    r->tm_modified = st.st_mtim.tv_sec;
+    return r;
+}
+
 #endif
 
-string replace(string const &str, string const &match, string const &tgt) {
-    return regex_replace(str, regex(match), tgt);
+string dirname(string const &str) {
+    auto nstr = normalize(str);
+    auto ps = explode(nstr, PATH_DELIMITER, true);
+    if (ps.empty())
+        return nstr;
+    ps.pop_back();
+    return implode(ps, PATH_DELIMITER);
 }
 
 bool mkdirs(string const &str) {
@@ -196,4 +267,62 @@ bool rmtree(string const &str) {
     return rmdir(str);
 }
 
-NLUA_END
+string file_get_contents(string const &file) {
+    string t;
+    file_get_contents(file, t);
+    return t;
+}
+
+bool file_get_contents(string const &file, string &result) {
+#ifdef NNT_WINDOWS
+    FILE *fp = NULL;
+    fopen_s(&fp, file.c_str(), "rb");
+#else
+    FILE *fp = fopen(file.c_str(), "r");
+#endif
+
+    if (fp == nullptr)
+        return false;
+
+    ::std::ostringstream oss;
+    char buf[BUFSIZ];
+    while (1) {
+        size_t readed = fread(buf, 1, BUFSIZ, fp);
+        if (readed == 0) {
+            break;
+        }
+        oss.write(buf, readed);
+    }
+    fclose(fp);
+    result = oss.str();
+    return true;
+}
+
+bool file_put_contents(string const &file, string const &result) {
+#ifdef NNT_WINDOWS
+    FILE *fp = NULL;
+    fopen_s(&fp, file.c_str(), "wb");
+#else
+    FILE *fp = fopen(file.c_str(), "w");
+#endif
+
+    if (fp == nullptr)
+        return false;
+
+    char const *buf = result.c_str();
+    size_t full = result.length();
+
+    while (1) {
+        size_t writed = fwrite(buf, 1, full, fp);
+        if (writed == full) {
+            break;
+        }
+        buf += writed;
+        full -= writed;
+    }
+
+    fclose(fp);
+    return true;
+}
+
+CROSS_END

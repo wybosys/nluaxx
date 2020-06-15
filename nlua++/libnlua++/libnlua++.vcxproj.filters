@@ -21,12 +21,6 @@
     <ClInclude Include="..\..\src\com++.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\fs.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\liblua.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -48,14 +42,20 @@
     <ClInclude Include="..\..\src\cross\str.hpp">
       <Filter>cross</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\cross\datetime.hpp">
+      <Filter>cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cross\timer.hpp">
+      <Filter>cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cross\threads.hpp">
+      <Filter>cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cross\fs.hpp">
+      <Filter>cross</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\core.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\fs.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\nlua++.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -69,6 +69,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\cross\str.cpp">
+      <Filter>cross</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cross\datetime.cpp">
+      <Filter>cross</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cross\timer.cpp">
+      <Filter>cross</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cross\threads.cpp">
+      <Filter>cross</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cross\fs.cpp">
       <Filter>cross</Filter>
     </ClCompile>
   </ItemGroup>

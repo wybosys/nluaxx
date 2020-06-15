@@ -2,7 +2,6 @@
 #define __NLUA_VALUE_H_INCLUDE
 
 #include "variant.hpp"
-#include "nlua++.hpp"
 #include "liblua.hpp"
 
 NLUA_BEGIN
