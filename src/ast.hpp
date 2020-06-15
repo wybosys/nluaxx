@@ -280,9 +280,9 @@ public:
 NNT_CLASS_PREPARE(Object)
 
 class Object {
-    NNT_CLASS_DECL(Object)
+    NNT_CLASS_DECL(Object);
 
-        friend class Context;
+    friend class Context;
 
     friend class ClassPrivate;
 
