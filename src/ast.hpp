@@ -99,10 +99,11 @@ public:
 
 class Singleton {
 public:
-    typedef function<void()> func_type;
+
+    typedef function<void(self_type&)> ini_type;
 
     string name;
-    func_type init, fini;
+    ini_type init, fini;
 
 protected:
 
@@ -215,7 +216,7 @@ public:
     functions_type const &functions() const;
 
     // 设置为单件模式，名称为 name 和 free_name
-    Class &singleton(string const &_name, Singleton::func_type _init = nullptr, Singleton::func_type _fini = nullptr);
+    Class &singleton(string const &_name, Singleton::ini_type _init = nullptr, Singleton::ini_type _fini = nullptr);
 
     typedef ::std::vector<Any> supers_type;
 

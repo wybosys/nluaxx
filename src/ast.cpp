@@ -583,8 +583,12 @@ public:
 
             // 获得singleton对象，用于调用初始化函数
             auto sig = (Singleton *)lua_topointer(L, lua_upvalueindex(1));
-            if (sig->init)
-                sig->init();
+            if (sig->init) {
+                auto self = make_shared<Object>();
+                self->d_ptr->id = objid;
+                self->d_ptr->L = L;
+                sig->init(self);
+            }
         }
         return 1;
     }
@@ -593,14 +597,20 @@ public:
         lua_pushstring(L, "__shared");
         lua_rawget(L, 1);
         if (!lua_isnil(L, -1)) {
+            int objid = lua_gettop(L);
+
+            auto sig = (Singleton *)lua_topointer(L, lua_upvalueindex(1));
+            if (sig->fini) {
+                auto self = make_shared<Object>();
+                self->d_ptr->L = L;
+                self->d_ptr->id = objid;
+                sig->fini(self);
+            }
+
             // 释放
             lua_pushstring(L, "__shared");
             lua_pushnil(L);
             lua_rawset(L, 1);
-
-            auto sig = (Singleton *)lua_topointer(L, lua_upvalueindex(1));
-            if (sig->fini)
-                sig->fini();
         }
         return 1;
     }
@@ -629,7 +639,7 @@ Class::functions_type const &Class::functions() const {
     return d_ptr->functions;
 }
 
-Class &Class::singleton(string const &_name, Singleton::func_type _init, Singleton::func_type _fini) {
+Class &Class::singleton(string const &_name, Singleton::ini_type _init, Singleton::ini_type _fini) {
     auto t = make_shared<Singleton>();
     t->name = _name;
     t->init = move(_init);

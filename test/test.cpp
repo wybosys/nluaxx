@@ -143,10 +143,12 @@ TEST (test3) {
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
-    clz->singleton("shared", [=]() {
-        // cout << "初始化" << endl;
-    }, [=]() {
-        // cout << "析构" << endl;
+    clz->singleton("shared", [=](self_type& self) {
+        cout << "初始化" << endl;
+        self->set("abc", 123);
+    }, [=](self_type& self) {
+        CHECK_EQUAL(self->get("abc")->toInteger(), 123);
+        cout << "析构" << endl;
     });
     clz->add("proc", [=](self_type &self) -> return_type {
         return nullptr;
