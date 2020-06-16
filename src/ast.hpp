@@ -372,7 +372,6 @@ public:
 
     return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
 
-
     // 对象是函数对象
     return_type call(args_type const&);
 

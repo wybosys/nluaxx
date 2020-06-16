@@ -1243,7 +1243,7 @@ void Object::set(string const &name, value_type const &val) {
     lua_rawset(L, -3);
 }
 
-self_type Context::global(string const &name) {
+self_type Context::global(string const &name) const {
     auto L = d_ptr->L;
 
     if (name.find('.') != string::npos) {
@@ -1276,6 +1276,14 @@ self_type Context::global(string const &name) {
     r->d_ptr->name = name;
     r->d_ptr->L = L;
     return r;
+}
+
+self_type Context::singleton(string const& name) const {
+    auto obj = global(name);
+    if (!obj)
+        return nullptr;
+    // 获得obj身上的 __shared
+    return obj->get("__shared")->toObject();
 }
 
 void Object::setfor(Object &r) const {

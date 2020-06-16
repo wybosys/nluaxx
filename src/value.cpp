@@ -53,6 +53,7 @@ return_type at(lua_State *L, int n) {
     case LUA_TNIL:
         return make_shared<Variant>();
     case LUA_TFUNCTION:
+    case LUA_TTABLE:
         return make_shared<Variant>(to_object(L, n));
     }
     return make_shared<Variant>();

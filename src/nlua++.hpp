@@ -129,7 +129,10 @@ public:
     void add_cpackage_path(string const &);
 
     // 获得全局对象
-    self_type global(string const &);
+    self_type global(string const &) const;
+
+    // 获得全局单件对象
+    self_type singleton(string const&) const;
 
     typedef shared_ptr<Module> module_type;
     typedef ::std::map<string, module_type> modules_type;

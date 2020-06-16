@@ -150,7 +150,11 @@ TEST (test3) {
         CHECK_EQUAL(self->get("abc")->toInteger(), 123);
         cout << "析构" << endl;
     });
-    clz->add("proc", [=](self_type &self) -> return_type {
+    clz->add("proc", [=, &ctx](self_type &self) -> return_type {
+        self->set("abc", 456);
+        // 拿静态对象
+        auto obj = ctx.singleton("Test");
+        CHECK_EQUAL(obj->get("abc")->toInteger(), 456);
         return nullptr;
     });
     clz->declare_in(ctx);
