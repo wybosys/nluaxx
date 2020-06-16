@@ -329,7 +329,7 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
     NLUA_AUTOSTACK(L);
 
     auto pctx = &ctx.d();
-    auto id = pctx->refId++;
+    auto id = pctx->refId++; // 函数id，之后回调通过id找到具体的实现
 
     // 绑定到类
     int clzid = lua_gettop(L);
@@ -341,6 +341,12 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
         // 注册到全局对照表中，用于激活函数时查找真正的执行函数
         pctx->refClassFuncs[id] = [&](lua_State *L, self_type &self, args_type const &args) -> return_type {
             try {
+                // 如果是单件，则self换为使用全局名称获得
+                if (clz.singleton()) {
+                    self->d().id = 0;
+                    self->d().name = clz.singleton()->_globalvar;
+                }
+                
                 return this->classfunc(self, args);
             }
             catch (error &e) {
@@ -571,6 +577,7 @@ public:
                 }
             }
 
+            // 单件对象id
             int objid = lua_gettop(L);
 
             // 设置到__shared上
@@ -578,14 +585,24 @@ public:
             lua_pushvalue(L, objid);
             lua_rawset(L, 1);
 
-            // 返回
+            // 获得对应的C++定义
+            auto sig = (Singleton *)lua_topointer(L, lua_upvalueindex(1));
+            auto pctx = (ContextPrivate *)lua_topointer(L, lua_upvalueindex(2));
+
+            // 绑定到全局中
+            ostringstream oss;
+            oss << "__global_singleton_shared" << pctx->refSingletonId++;
+            sig->_globalvar = oss.str();
+            lua_pushvalue(L, objid);
+            lua_setglobal(L, sig->_globalvar.c_str());
+
+            // 返回对象
             lua_pushvalue(L, objid);
 
             // 获得singleton对象，用于调用初始化函数
-            auto sig = (Singleton *)lua_topointer(L, lua_upvalueindex(1));
             if (sig->init) {
                 auto self = make_shared<Object>();
-                self->d_ptr->id = objid;
+                self->d_ptr->name = sig->_globalvar;
                 self->d_ptr->L = L;
                 sig->init(self);
             }
@@ -600,6 +617,7 @@ public:
             int objid = lua_gettop(L);
 
             auto sig = (Singleton *)lua_topointer(L, lua_upvalueindex(1));
+
             if (sig->fini) {
                 auto self = make_shared<Object>();
                 self->d_ptr->L = L;
@@ -611,6 +629,10 @@ public:
             lua_pushstring(L, "__shared");
             lua_pushnil(L);
             lua_rawset(L, 1);
+
+            // 释放对应的全局变量
+            lua_pushnil(L);
+            lua_setglobal(L, sig->_globalvar.c_str());
         }
         return 1;
     }
@@ -646,6 +668,10 @@ Class &Class::singleton(string const &_name, Singleton::ini_type _init, Singleto
     t->fini = move(_fini);
     d_ptr->singleton = t;
     return *this;
+}
+
+Class::singleton_type Class::singleton() const {
+    return d_ptr->singleton;
 }
 
 Class &Class::inherit(Any const &par) {
@@ -920,19 +946,22 @@ Class &Class::add(field_type const &f) {
 }
 
 void Singleton::declare_in(Context &ctx) const {
-    auto L = ctx.d().L;
+    auto pctx = &ctx.d();
+    auto L = pctx->L;
     NLUA_AUTOSTACK(L);
 
     int clzid = lua_gettop(L);
 
     lua_pushstring(L, name.c_str());
     lua_pushlightuserdata(L, (void *)this);
-    lua_pushcclosure(L, ClassPrivate::ImpGetSingleton, 1);
+    lua_pushlightuserdata(L, (void *)pctx);
+    lua_pushcclosure(L, ClassPrivate::ImpGetSingleton, 2);
     lua_rawset(L, clzid);
 
     lua_pushstring(L, ("free_" + name).c_str());
     lua_pushlightuserdata(L, (void *)this);
-    lua_pushcclosure(L, ClassPrivate::ImpFreeSingleton, 1);
+    lua_pushlightuserdata(L, (void *)pctx);
+    lua_pushcclosure(L, ClassPrivate::ImpFreeSingleton, 2);
     lua_rawset(L, clzid);
 
     lua_pushstring(L, "__shared");

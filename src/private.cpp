@@ -29,9 +29,11 @@ void ContextPrivate::clear() {
     classes.clear();
     modules.clear();
     
-    refId.store(1);
+    refId = 1;
     refClassFuncs.clear();
     refFuncs.clear();
+
+    refSingletonId = 1;
 }
 
 void ContextPrivate::create() {

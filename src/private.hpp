@@ -45,6 +45,9 @@ public:
     luaref_funcs_type refFuncs;
     luaref_classfuncs_type refClassFuncs;
 
+    // 全局singleton计数器
+    lua_refid_type refSingletonId;
+
     // 各种锁
     ::std::mutex mtx_global;
 };

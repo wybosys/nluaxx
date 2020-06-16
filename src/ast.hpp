@@ -102,15 +102,23 @@ public:
 
     typedef function<void(self_type&)> ini_type;
 
+    // 用于获得单件的函数名，支持自定义
     string name;
+
+    // 构造函数和析构函数的实现
     ini_type init, fini;
 
 protected:
+
+    // 对应单件实例的全局对象名
+    string _globalvar;
 
     // 只用来将已经定义的类转成单件
     void declare_in(Context &) const;
 
     friend class Class;
+    friend class ClassPrivate;
+    friend class Function;
 };
 
 NNT_CLASS_PREPARE(Class)
@@ -128,6 +136,7 @@ public:
     typedef shared_ptr<Field> field_type;
     typedef ::std::map<string, field_type> fields_type;
     typedef shared_ptr<Function> function_type;
+    typedef shared_ptr<Singleton> singleton_type;
     typedef ::std::map<string, function_type> functions_type;
     typedef ::std::vector<function_type> initfunctions_type;
 
@@ -211,12 +220,17 @@ public:
         return add(make_shared<Field>(name, v));
     }
 
+    // 所有的变量
     fields_type const &fields() const;
 
+    // 所有的函数
     functions_type const &functions() const;
 
     // 设置为单件模式，名称为 name 和 free_name
     Class &singleton(string const &_name, Singleton::ini_type _init = nullptr, Singleton::ini_type _fini = nullptr);
+
+    // 返回单件的定义
+    singleton_type singleton() const;
 
     typedef ::std::vector<Any> supers_type;
 
