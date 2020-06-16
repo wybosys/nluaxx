@@ -250,13 +250,13 @@ public:
     typedef ::std::map<string, class_type> classes_type;
 
     // 将类添加到模块中
-    bool add(class_type &);
+    bool add(class_type const&);
 
     typedef shared_ptr<Module> module_type;
     typedef ::std::map<string, module_type> modules_type;
 
     // 添加子模块
-    bool add(module_type &);
+    bool add(module_type const&);
 
     typedef Module const* parent_type;
     typedef ::std::vector<parent_type> parents_type;

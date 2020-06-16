@@ -1090,7 +1090,7 @@ Module::~Module() {
     NNT_CLASS_DESTORY()
 }
 
-bool Module::add(class_type &c) {
+bool Module::add(class_type const& c) {
     auto fnd = d_ptr->classes.find(c->name);
     if (fnd != d_ptr->classes.end()) {
         cerr << "模块中已经存在类 " + c->name << endl;
@@ -1100,7 +1100,7 @@ bool Module::add(class_type &c) {
     return true;
 }
 
-bool Module::add(module_type &m) {
+bool Module::add(module_type const& m) {
     if (m->parent) {
         cerr << name + " 已经是 " + m->parent->name + " 的子模块" << endl;
         return false;
