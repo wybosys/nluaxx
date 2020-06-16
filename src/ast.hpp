@@ -331,7 +331,7 @@ public:
     bool has(string const &) const;
 
     // 是否为空
-    bool isnull() const;
+    bool isnil() const;
 
     // 提升生命期
     void grab();

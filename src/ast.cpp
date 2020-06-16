@@ -1333,7 +1333,7 @@ bool Object::has(string const &name) const {
     return true;
 }
 
-bool Object::isnull() const {
+bool Object::isnil() const {
     return !d_ptr->L || !d_ptr->id || d_ptr->name.empty();
 }
 
