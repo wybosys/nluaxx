@@ -38,7 +38,7 @@ return make_shared<Variant>(com::function_call<decltype(&func)>()(&func, args));
 #ifdef NNT_DEBUG
 #define NLUA_DEBUG(msg) NLUA_INFO(msg)
 #else
-#define NLUA_DEBUG(msg) ()
+#define NLUA_DEBUG(msg) while (0)
 #endif
 
 NLUA_BEGIN
