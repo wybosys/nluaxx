@@ -1720,25 +1720,26 @@ return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2
 
 shared_ptr<Variant> Object::toVariant() const
 {
-    integer oid = d_ptr->id;
-    if (!oid) {
+    auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
+    if (!d_ptr->id) {
         if (d_ptr->name.empty()) {
             NLUA_ERROR("该变量既不是局部变量也不是全局变量不能转换成Variant");
             return nullptr;
         }
 
-        auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
         lua_getglobal(L, d_ptr->name.c_str());
-        oid = lua_gettop(L);
-
-        // 如果位于GL上，需要放回L中
-        if (d_ptr->GL) {
-            lua_xmove(d_ptr->GL, d_ptr->L, 1);
-            oid = lua_gettop(d_ptr->L);
-        }
+        d_ptr->id = lua_gettop(L);
     }
 
-    auto r = make_shared<Variant>(oid);
+    // 如果位于GL上，需要放回L中
+    if (d_ptr->GL) {
+        lua_pushvalue(d_ptr->GL, d_ptr->id);
+        lua_xmove(d_ptr->GL, d_ptr->L, 1);
+        d_ptr->id = lua_gettop(d_ptr->L);
+        d_ptr->GL = nullptr;
+    }
+
+    auto r = make_shared<Variant>(d_ptr->id);
     const_cast<Variant::VT&>(r->vt) = Variant::VT::OBJECT;
     return r;
 }
