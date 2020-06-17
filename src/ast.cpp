@@ -47,8 +47,10 @@ public:
     // 当前栈
     lua_State *L = nullptr;
 
+#if NLUA_MT
     // grab后的栈
     lua_State *GL = nullptr;
+#endif
 
     // 当前栈上对象的id（local对象）
     int id = 0;
@@ -1206,7 +1208,11 @@ Object::~Object() {
 }
 
 void *Object::payload() const {
+#if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
+#else
+    auto L = d_ptr->L;
+#endif
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
@@ -1230,7 +1236,11 @@ void *Object::payload() const {
 }
 
 void Object::payload(void *data) {
+#if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
+#else
+    auto L = d_ptr->L;
+#endif
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
@@ -1254,7 +1264,11 @@ void Object::payload(void *data) {
 }
 
 return_type Object::get(string const &name) const {
+#if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
+#else
+    auto L = d_ptr->L;
+#endif
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
@@ -1271,7 +1285,11 @@ return_type Object::get(string const &name) const {
 }
 
 void Object::set(string const &name, value_type const &val) {
+#if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
+#else
+    auto L = d_ptr->L;
+#endif
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
@@ -1296,37 +1314,57 @@ void Object::set(string const &name, value_type const &val) {
 }
 
 self_type Context::global(string const &name) const {
+#if NLUA_MT
+    // 放到工作线程上
+    auto GL = d_ptr->pvd_worker->L;
+    auto XL = GL;
+#else
+    auto XL = d_ptr->L;
+#endif
+
     auto L = d_ptr->L;
 
     if (name.find('.') != string::npos) {
         // 多级模块
         auto ss = explode(name, ".");
-        lua_getglobal(L, ss[0].c_str());
-        if (!lua_istable(L, -1))
+        lua_getglobal(XL, ss[0].c_str());
+        if (!lua_istable(XL, -1))
             return nullptr;
-        int cid = lua_gettop(L);
+        int cid = lua_gettop(XL);
         for (auto iter = ss.begin() + 1; iter != ss.end(); ++iter) {
-            lua_pushstring(L, iter->c_str());
-            lua_rawget(L, cid);
-            if (!lua_istable(L, -1))
+            lua_pushstring(XL, iter->c_str());
+            lua_rawget(XL, cid);
+            if (!lua_istable(XL, -1))
                 return nullptr;
-            cid = lua_gettop(L);
+            cid = lua_gettop(XL);
         }
 
         self_type r = make_shared<Object>();
         r->d_ptr->L = L;
+
+#if NLUA_MT
+        r->d_ptr->GL = GL;
+#endif
+
         r->d_ptr->id = cid;
         return r;
     }
 
     // 根全局对象
-    NLUA_AUTOSTACK(L);
-    lua_getglobal(L, name.c_str());
-    if (lua_isnil(L, -1))
+    NLUA_AUTOSTACK(XL);
+    lua_getglobal(XL, name.c_str());
+    if (lua_isnil(XL, -1)) {
+        NLUA_ERROR("没有找到全局对象 " << name);
         return nullptr;
+    }
+
     self_type r = make_shared<Object>();
     r->d_ptr->name = name;
     r->d_ptr->L = L;
+
+#if NLUA_MT
+    r->d_ptr->GL = GL;
+#endif
     return r;
 }
 
@@ -1379,7 +1417,11 @@ void Object::setfor(Object &r) const {
 }
 
 bool Object::has(string const &name) const {
+#if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
+#else
+    auto L = d_ptr->L;
+#endif
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
@@ -1408,7 +1450,11 @@ bool Object::isnil() const {
 }
 
 self_type Object::instance() const {
+#if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
+#else
+    auto L = d_ptr->L;
+#endif
     // NLUA_AUTOSTACK(L); 因需要返回局部变量所以不能恢复
 
     int clsid;
@@ -1455,6 +1501,7 @@ self_type Object::instance() const {
 }
 
 void Object::grab() {
+#if NLUA_MT
     if (!d_ptr->GL) {
         // grab后的操作均位于独立L上进行，此时可以使用Resrouce的锁避免冲突
         d_ptr->GL = GL();
@@ -1466,9 +1513,13 @@ void Object::grab() {
             d_ptr->id = lua_gettop(d_ptr->GL);
         }
     }
+#endif
 
-    // auto L = d_ptr->L;
+#if NLUA_MT
     auto L = d_ptr->GL;
+#else
+    auto L = d_ptr->L;
+#endif
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
@@ -1506,7 +1557,11 @@ bool Object::drop() {
         return false;
     }
 
+#if NLUA_MT
     auto L = d_ptr->GL;
+#else
+    auto L = d_ptr->L;
+#endif
     NLUA_AUTOSTACK(L);
 
     lua_getglobal(L, d_ptr->name.c_str());
@@ -1540,7 +1595,11 @@ bool Object::drop() {
 }
 
 return_type Object::invoke(string const &name, args_type const &args) {
+#if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
+#else
+    auto L = d_ptr->L;
+#endif
     NLUA_AUTOSTACK(L);
 
     lua_pushcfunction(L, ContextPrivate::Traceback);
@@ -1638,7 +1697,11 @@ return_type Object::invoke(string const &name, Variant const &v0, Variant const 
 }
 
 return_type Object::call(args_type const& args) {
+#if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
+#else
+    auto L = d_ptr->L;
+#endif
     NLUA_AUTOSTACK(L);
 
     lua_pushcfunction(L, ContextPrivate::Traceback);
@@ -1720,7 +1783,11 @@ return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2
 
 shared_ptr<Variant> Object::toVariant() const
 {
+#if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
+#else
+    auto L = d_ptr->L;
+#endif
     if (!d_ptr->id) {
         if (d_ptr->name.empty()) {
             NLUA_ERROR("该变量既不是局部变量也不是全局变量不能转换成Variant");
@@ -1731,6 +1798,7 @@ shared_ptr<Variant> Object::toVariant() const
         d_ptr->id = lua_gettop(L);
     }
 
+#if NLUA_MT
     // 如果位于GL上，需要放回L中
     if (d_ptr->GL) {
         lua_pushvalue(d_ptr->GL, d_ptr->id);
@@ -1738,6 +1806,7 @@ shared_ptr<Variant> Object::toVariant() const
         d_ptr->id = lua_gettop(d_ptr->L);
         d_ptr->GL = nullptr;
     }
+#endif
 
     auto r = make_shared<Variant>((integer)d_ptr->id);
     const_cast<Variant::VT&>(r->vt) = Variant::VT::OBJECT;

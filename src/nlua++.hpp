@@ -41,6 +41,9 @@ return make_shared<Variant>(com::function_call<decltype(&func)>()(&func, args));
 #define NLUA_DEBUG(msg) while (0)
 #endif
 
+// nlua多线程支持
+#define NLUA_MT 0
+
 NLUA_BEGIN
 
 using ::std::string;

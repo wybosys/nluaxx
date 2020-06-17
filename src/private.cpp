@@ -213,7 +213,7 @@ int ContextPrivate::Traceback(lua_State *L)
     if (!lua_isstring(L, 1))
         return 1;
     string msg = lua_tostring(L, 1);
-    cerr << "捕获错误 " + msg << endl;
+    NLUA_ERROR("捕获错误 " + msg);
     return 0;
 }
 
