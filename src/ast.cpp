@@ -592,7 +592,7 @@ public:
 
             // 绑定到全局中
             ostringstream oss;
-            oss << "__global_singleton_shared" << pctx->refSingletonId++;
+            oss << "__global_singleton_" << pctx->refSingletonId++;
             sig->_globalvar = oss.str();
             lua_pushvalue(L, objid);
             lua_setglobal(L, sig->_globalvar.c_str());
@@ -1439,7 +1439,7 @@ void Object::grab() {
     if (d_ptr->id) {
         // 设置生命期到全局，避免被局部释放
         ostringstream oss;
-        oss << "__nluaxx_global_objects_" << ObjectPrivate::RefId++;
+        oss << "__global_object_" << ObjectPrivate::RefId++;
         d_ptr->name = oss.str();
 
         lua_pushvalue(L, d_ptr->id);
