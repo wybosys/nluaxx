@@ -21,7 +21,11 @@ ContextAutoGuard::ContextAutoGuard()
 
 ContextAutoGuard::~ContextAutoGuard()
 {
-    // pass
+    if (ismain) {
+        MainL = nullptr;
+        ismain = false;
+    }
+    L = nullptr;
 }
 
 lua_State *ContextAutoGuard::MainL = nullptr;
@@ -46,8 +50,12 @@ ContextPrivate::~ContextPrivate()
         lua_close(L);
     }
 
+    // 清空自身
     L = nullptr;
     _freel = false;
+
+    // 停止资源
+    pvd_worker.stop();
 }
 
 void ContextPrivate::clear() 
