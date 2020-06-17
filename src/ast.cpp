@@ -68,7 +68,7 @@ public:
 
         auto fnd = pctx->refClassFuncs.find(fnid);
         if (fnd == pctx->refClassFuncs.end()) {
-            cerr << "没有找到对应的回调函数" << endl;
+            NLUA_ERROR("没有找到对应的回调函数");
             return 0;
         }
 
@@ -182,7 +182,7 @@ public:
 
         auto fnd = pctx->refFuncs.find(fnid);
         if (fnd == pctx->refFuncs.end()) {
-            cerr << "没有找到对应的回调函数" << endl;
+            NLUA_ERROR("没有找到对应的回调函数");
             return 0;
         }
 
@@ -305,14 +305,17 @@ void Function::declare_in(Context &ctx) const {
     // 注册到全局对照表中，用于激活函数时查找真正的执行函数
     pctx->refFuncs[id] = [&](lua_State *L, args_type const &args) -> return_type {
         try {
+            NLUA_DEBUG("调用C++函数： " << name);
             return this->func(args);
         }
         catch (error &e) {
             string err = "lua调用C++: " + name + " 遇到异常: " + e.what();
+            NLUA_ERROR(err);
             luaL_error(L, err.c_str());
         }
         catch (...) {
             string err = "lua调用C++: " + name + " 遇到未处理异常";
+            NLUA_ERROR(err);
             luaL_error(L, err.c_str());
         }
         return nullptr;
@@ -342,6 +345,8 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
         // 注册到全局对照表中，用于激活函数时查找真正的执行函数
         pctx->refClassFuncs[id] = [&](lua_State *L, self_type &self, args_type const &args) -> return_type {
             try {
+                // NLUA_DEBUG("调用C++成员函数： " << name);
+
                 // 如果是单件，则self换为使用全局名称获得
                 if (clz.singleton()) {
                     self->d().id = 0;
@@ -352,10 +357,12 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
             }
             catch (error &e) {
                 string err = "lua调用C++: " + name + " 遇到异常: " + e.what();
+                NLUA_ERROR(err);
                 luaL_error(L, err.c_str());
             }
             catch (...) {
                 string err = "lua调用C++: " + name + "@" + clz.name + " 遇到未处理异常";
+                NLUA_ERROR(err);
                 luaL_error(L, err.c_str());
             }
             return nullptr;
@@ -366,14 +373,18 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
         // 注册静态函数
         pctx->refFuncs[id] = [&](lua_State *L, args_type const &args) -> return_type {
             try {
+                // NLUA_DEBUG("调用C++静态函数： " << name);
+
                 return this->func(args);
             }
             catch (error &e) {
                 string err = "lua调用C++: " + name + " 遇到异常: " + e.what();
+                NLUA_ERROR(err);
                 luaL_error(L, err.c_str());
             }
             catch (...) {
                 string err = "lua调用C++: " + name + "@" + clz.name + " 遇到未处理异常";
+                NLUA_ERROR(err);
                 luaL_error(L, err.c_str());
             }
             return nullptr;
@@ -499,6 +510,7 @@ public:
 
             int s = lua_pcall(L, args + 1, 0, tbid);
             if (LUA_OK != s) {
+                NLUA_DEBUG("调用构造函数失败");
                 // 初始化失败，传入空
                 lua_pushnil(L);
                 return 1;
@@ -518,13 +530,13 @@ public:
         lua_pushstring(L, "__cdata__");
         lua_rawget(L, 1);
         if (!lua_isuserdata(L, -1)) {
-            cerr << "ImpDestroy被非C++对象调用" << endl;
+            NLUA_ERROR("ImpDestroy被非C++对象调用");
             return 0; // 不存在c数据
         }
 
         auto ud = (ObjectPrivate::UserData *) lua_touserdata(L, -1);
         if (ud->freed) {
-            cerr << "ImpDestroy重复释放" << endl;
+            NLUA_ERROR("ImpDestroy重复释放");
             return 0; // 已经释放
         }
         // 弹出ud
@@ -574,6 +586,7 @@ public:
 
                 int s = lua_pcall(L, 1, 1, 2);
                 if (s != LUA_OK) {
+                    NLUA_DEBUG("调用单件的构造函数失败");
                     lua_pushnil(L);
                 }
             }
@@ -1123,7 +1136,7 @@ Module::~Module() {
 bool Module::add(class_type const& c) {
     auto fnd = d_ptr->classes.find(c->name);
     if (fnd != d_ptr->classes.end()) {
-        cerr << "模块中已经存在类 " + c->name << endl;
+        NLUA_ERROR("模块中已经存在类 " << c->name);
         return false;
     }
     d_ptr->classes[c->name] = c;
@@ -1132,7 +1145,7 @@ bool Module::add(class_type const& c) {
 
 bool Module::add(module_type const& m) {
     if (m->parent) {
-        cerr << name + " 已经是 " + m->parent->name + " 的子模块" << endl;
+        NLUA_ERROR(name << " 已经是 " << m->parent->name << " 的子模块");
         return false;
     }
     auto fnd = d_ptr->modules.find(m->name);
@@ -1205,7 +1218,7 @@ void *Object::payload() const {
     lua_rawget(L, objid);
 
     if (!lua_isuserdata(L, -1)) {
-        cerr << "不是C++自定义对象" << endl;
+        NLUA_ERROR("不是C++自定义对象");
         return nullptr;
     }
 
@@ -1229,7 +1242,7 @@ void Object::payload(void *data) {
     lua_rawget(L, objid);
 
     if (!lua_isuserdata(L, -1)) {
-        cerr << "不是C++自定义对象" << endl;
+        NLUA_ERROR("不是C++自定义对象");
         return;
     }
 
@@ -1265,11 +1278,17 @@ void Object::set(string const &name, value_type const &val) {
     else {
         // 全局变量
         lua_getglobal(L, d_ptr->name.c_str());
+    } // -3
+
+    lua_pushstring(L, name.c_str()); // -2
+    push(val.get(), L); // -1
+
+    if (!lua_istable(L, -3)) {
+        NLUA_ERROR("Object::set 可能遇到并发写冲突导致原始对象丢失");
+        return;
     }
 
-    lua_pushstring(L, name.c_str());
-    push(val.get(), L);
-
+    // obj[name] = val
     lua_rawset(L, -3);
 }
 
@@ -1394,20 +1413,20 @@ self_type Object::instance() const {
     if (!d_ptr->name.empty()) {
         lua_getglobal(L, d_ptr->name.c_str());
         if (!lua_istable(L, -1)) {
-            cerr << "传入的不是存在的类名" << endl;
+            NLUA_ERROR("传入的不是存在的类名");
             return nullptr;
         }
         clsid = lua_gettop(L);
     }
     else if (d_ptr->id) {
         if (!lua_istable(L, d_ptr->id)) {
-            cerr << "传入的不是类对象" << endl;
+            NLUA_ERROR("传入的不是类对象");
             return nullptr;
         }
         clsid = d_ptr->id;
     }
     else {
-        cerr << "传入的是空对象" << endl;
+        NLUA_ERROR("传入的是空对象");
         return nullptr;
     }
 
@@ -1470,7 +1489,7 @@ bool Object::drop() {
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
-        cerr << "该变量是局部变量，不支持drop" << endl;
+        NLUA_ERROR("该变量是局部变量，不支持drop");
         return false;
     }
 
@@ -1486,7 +1505,7 @@ bool Object::drop() {
     int selfid = lua_gettop(L);
     lua_getfield(L, selfid, "__refs");
     if (!lua_isnumber(L, -1)) {
-        cerr << "该变量没有进行过grab操作" << endl;
+        NLUA_ERROR("该变量没有进行过grab操作");
         return false;
     }
 
@@ -1514,12 +1533,12 @@ return_type Object::invoke(string const &name, args_type const &args) {
     if (d_ptr->id) {
         // 是局部变量
         if (!lua_istable(L, d_ptr->id)) {
-            //cerr << "不能调用非table对象身上的 " + name + " 函数" << endl;
+            NLUA_DEBUG("不能调用非table对象身上的 " << name << " 函数");
             return nullptr;
         }
         lua_getfield(L, d_ptr->id, name.c_str());
         if (!lua_isfunction(L, -1)) {
-            //cerr << "没有找到函数 " + name << endl;
+            NLUA_DEBUG("没有找到函数 " << name);
             return nullptr;
         }
 
@@ -1530,7 +1549,7 @@ return_type Object::invoke(string const &name, args_type const &args) {
         // 获得全局变量
         lua_getglobal(L, d_ptr->name.c_str());
         if (!lua_istable(L, -1)) {
-            //cerr << "没有找到全局变量 " + d_ptr->name << endl;
+            NLUA_DEBUG("没有找到全局变量 " << d_ptr->name);
             return nullptr;
         }
         int selfid = lua_gettop(L);
@@ -1538,7 +1557,7 @@ return_type Object::invoke(string const &name, args_type const &args) {
         // 获得的函数
         lua_getfield(L, -1, name.c_str());
         if (!lua_isfunction(L, -1)) {
-            //cerr << "没有找到成员函数 " + name + "@" + d_ptr->name << endl;
+            NLUA_DEBUG("没有找到成员函数 " << name << "@" << d_ptr->name);
             return nullptr;
         }
 
@@ -1551,8 +1570,10 @@ return_type Object::invoke(string const &name, args_type const &args) {
     }
 
     int s = lua_pcall(L, args.size() + 1, 1, tbid);
-    if (LUA_OK != s)
+    if (LUA_OK != s) {
+        NLUA_DEBUG("函数调用失败");
         return nullptr;
+    }
     return at(L, -1);
 }
 
@@ -1610,7 +1631,7 @@ return_type Object::call(args_type const& args) {
     if (d_ptr->id) {
         // 是局部函数
         if (!lua_isfunction(L, d_ptr->id)) {
-            //cerr << "没有找到函数 " + name << endl;
+            NLUA_DEBUG("Object::call 对象不是函数");
             return nullptr;
         }
 
@@ -1620,7 +1641,7 @@ return_type Object::call(args_type const& args) {
         // 获得全局函数
         lua_getglobal(L, d_ptr->name.c_str());
         if (!lua_isfunction(L, -1)) {
-            //cerr << "没有找到全局函数 " + name + "@" + d_ptr->name << endl;
+            NLUA_DEBUG("Object::call 没有找到全局函数 " << d_ptr->name);
             return nullptr;
         }
     }
@@ -1630,8 +1651,10 @@ return_type Object::call(args_type const& args) {
     }
 
     int s = lua_pcall(L, args.size(), 1, tbid);
-    if (LUA_OK != s)
+    if (LUA_OK != s) {
+        NLUA_DEBUG("函数执行失败");
         return nullptr;
+    }
     return at(L, -1);
 }
 
@@ -1684,7 +1707,7 @@ shared_ptr<Variant> Object::toVariant() const
     integer oid = d_ptr->id;
     if (!oid) {
         if (d_ptr->name.empty()) {
-            cerr << "该变量既不是局部变量也不是全局变量不能转换成Variant" << endl;
+            NLUA_ERROR("该变量既不是局部变量也不是全局变量不能转换成Variant");
             return nullptr;
         }
 

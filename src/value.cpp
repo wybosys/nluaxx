@@ -56,6 +56,9 @@ return_type at(lua_State *L, int n) {
     case LUA_TFUNCTION:
     case LUA_TTABLE:
         return make_shared<Variant>(to_object(L, n));
+    default:
+        NLUA_ERROR("Value::at 遇到一个不支持的lua变量类型 " << typ);
+        break;
     }
     return make_shared<Variant>();
 }

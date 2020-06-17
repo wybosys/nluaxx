@@ -37,18 +37,20 @@ bool Context::load(string const &file) {
     NLUA_AUTOSTACK(L);
 
     auto tgt = d_ptr->find_file(file);
-    // cout << tgt << endl;
 
     if (tgt.empty()) {
-        cerr << "没有找到文件 " << file << endl;
+        NLUA_ERROR("没有找到文件 " << file);
         return false;
     }
 
     int s = luaL_dofile(L, tgt.c_str());
     if (LUA_OK != s) {
-        cerr << "加载文件失败 " << file << endl;
+        NLUA_ERROR("加载文件失败 " << file);
         return false;
     }
+
+    NLUA_DEBUG("加载文件成功" << file);
+
     return true;
 }
 
@@ -121,7 +123,7 @@ void Context::clear() {
         d_ptr->mtx_global.unlock();
     }
     else {
-        cerr << "检测到NLUA层死锁" << endl;
+        NLUA_ERROR("检测到NLUA层死锁");
         return;
     }
 
@@ -162,7 +164,7 @@ return_type Context::invoke(string const &fname, args_type const &args) {
 
     lua_getglobal(L, fname.c_str());
     if (lua_isnil(L, -1)) {
-        cerr << "没有找到lua函数 " << fname << endl;
+        NLUA_ERROR("没有找到lua函数 " << fname);
         return nullptr;
     }
 

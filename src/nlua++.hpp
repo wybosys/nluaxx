@@ -11,6 +11,7 @@
 #include <cstring>
 #include <functional>
 #include <initializer_list>
+#include <sstream>
 
 #ifndef NLUA_NS
 #define NLUA_NS nlua
@@ -26,6 +27,19 @@
 [&](args_type const& args)->return_type { \
 return make_shared<Variant>(com::function_call<decltype(&func)>()(&func, args)); \
 }
+
+#ifndef NLUA_LOG
+#define NLUA_LOG(fd, msg) (fd << (::std::ostringstream() << "NLUA: " << msg).str() << ::std::endl)
+#endif
+
+#define NLUA_INFO(msg) NLUA_LOG(::std::cout, msg)
+#define NLUA_ERROR(msg) NLUA_LOG(::std::cerr, msg)
+
+#ifdef NNT_DEBUG
+#define NLUA_DEBUG(msg) NLUA_INFO(msg)
+#else
+#define NLUA_DEBUG(msg) ()
+#endif
 
 NLUA_BEGIN
 
