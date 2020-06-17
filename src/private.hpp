@@ -11,6 +11,7 @@
 
 #include <cross/cross.hpp>
 #include <cross/sys.hpp>
+#include <cross/threads.hpp>
 
 NLUA_BEGIN
 
@@ -33,6 +34,13 @@ public:
     
     static lua_State *MainL; // 主线程L
     static thread_local ContextAutoGuard Tls; // 当前线程
+};
+
+class ContextWorkerResource
+{
+public:        
+    lua_State *L(); // 工作资源线程使用的L
+    ::std::mutex mtx; // 工作资源线程锁
 };
 
 class ContextPrivate
@@ -70,8 +78,11 @@ public:
     // 全局singleton计数器
     lua_refid_type refSingletonId;
 
-    // 各种锁
+    // 全局锁
     ::std::mutex mtx_global;
+
+    // 避免多线程写lua冲突，grab后的对象均使用Context创建的工作线程的L和对应的锁
+    ::CROSS_NS::ThreadResourceProvider<ContextWorkerResource> pvd_worker;
 };
 
 NLUA_END

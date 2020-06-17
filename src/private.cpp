@@ -29,6 +29,11 @@ ContextAutoGuard::~ContextAutoGuard()
 lua_State *ContextAutoGuard::MainL = nullptr;
 thread_local ContextAutoGuard ContextAutoGuard::Tls;
 
+lua_State *ContextWorkerResource::L()
+{
+    return ContextAutoGuard::Tls.L;
+}
+
 ContextPrivate::ContextPrivate()
     : refId(1) 
 {
