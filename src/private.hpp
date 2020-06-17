@@ -13,6 +13,19 @@ typedef function<return_type(lua_State *L, args_type const &)> luaref_func_type;
 typedef ::std::map<lua_Integer, luaref_classfunc_type> luaref_classfuncs_type;
 typedef ::std::map<lua_Integer, luaref_func_type> luaref_funcs_type;
 
+class ContextAutoGuard
+{
+public:
+
+    ContextAutoGuard();
+    ~ContextAutoGuard();
+
+    lua_State *L = nullptr; // 当前线程的环境
+    bool ismain = false;
+
+    static ContextAutoGuard& Tls();
+};
+
 class ContextPrivate
 {
 public:

@@ -8,14 +8,36 @@
 
 NLUA_BEGIN
 
-USE_STL
-USE_CROSS
+USE_STL;
+USE_CROSS;
 
-ContextPrivate::ContextPrivate()
-    : refId(1) {
+ContextAutoGuard::ContextAutoGuard()
+{
+    if (!Context::is_shared())
+        return;
+    L = lua_newthread(Context::shared().d().L);
 }
 
-ContextPrivate::~ContextPrivate() {
+ContextAutoGuard::~ContextAutoGuard()
+{
+    // pass
+}
+
+static thread_local ContextAutoGuard tls_context;
+
+ContextAutoGuard& ContextAutoGuard::Tls()
+{
+    return tls_context;
+}
+
+ContextPrivate::ContextPrivate()
+    : refId(1) 
+{
+    // pass
+}
+
+ContextPrivate::~ContextPrivate() 
+{
     clear();
     
     if (_freel) {
@@ -25,7 +47,8 @@ ContextPrivate::~ContextPrivate() {
     _freel = false;
 }
 
-void ContextPrivate::clear() {
+void ContextPrivate::clear() 
+{
     classes.clear();
     modules.clear();
     
@@ -36,7 +59,8 @@ void ContextPrivate::clear() {
     refSingletonId = 1;
 }
 
-void ContextPrivate::create() {
+void ContextPrivate::create() 
+{
     if (L && _freel) {
         lua_close(L);
     }
@@ -44,6 +68,10 @@ void ContextPrivate::create() {
     L = luaL_newstate();
     luaL_openlibs(L);
     _freel = true;
+
+    // 绑定线程环境
+    tls_context.L = L;
+    tls_context.ismain = true;
 
 #ifdef WIN32
     // windows中需要额外设置lua的package.path保证可以拿到全局安装的库
@@ -97,7 +125,8 @@ void ContextPrivate::create() {
 #endif
 }
 
-void ContextPrivate::attach(lua_State *_l) {
+void ContextPrivate::attach(lua_State *_l) 
+{
     if (_l == L)
         return;
 
@@ -107,9 +136,16 @@ void ContextPrivate::attach(lua_State *_l) {
 
     L = _l;
     _freel = false;
+
+    if (L) {
+        // 绑定线程环境
+        tls_context.L = L;
+        tls_context.ismain = true;
+    }
 }
 
-int ContextPrivate::Traceback(lua_State *L) {
+int ContextPrivate::Traceback(lua_State *L) 
+{
     if (!lua_isstring(L, 1))
         return 1;
     string msg = lua_tostring(L, 1);
@@ -117,7 +153,8 @@ int ContextPrivate::Traceback(lua_State *L) {
     return 0;
 }
 
-string ContextPrivate::find_file(string const &file) {
+string ContextPrivate::find_file(string const &file) 
+{
     if (isfile(file))
         return file;
 
@@ -133,7 +170,8 @@ string ContextPrivate::find_file(string const &file) {
     return "";
 }
 
-void ContextPrivate::update_package_paths(vector<string> const *curs) {
+void ContextPrivate::update_package_paths(vector<string> const *curs) 
+{
     if (curs == nullptr) {
         NLUA_AUTOSTACK(L);
 
@@ -176,7 +214,8 @@ void ContextPrivate::update_package_paths(vector<string> const *curs) {
     }
 }
 
-void ContextPrivate::update_cpackage_paths(vector<string> const *curs) {
+void ContextPrivate::update_cpackage_paths(vector<string> const *curs) 
+{
     if (curs == nullptr) {
         NLUA_AUTOSTACK(L);
 
