@@ -233,9 +233,14 @@ TEST (test6) {
         // 保护变量，避免被局部释放
         self->grab();      
 
-        // 稳定重现多线程写冲突
+        // 稳定重现多线程写冲突，同一个变量被多个线程并发写数据
         auto s = ctx.global("test.Test")->instance();
-        s->grab(); // 无法缓解冲突
+        s->grab();
+
+        for (int i = 0; i < 10000; ++i) {
+            s->set("a", (integer)i);
+        }
+        NLUA_DEBUG("快速写完成");
 
         // 测试长生命周期异步调用
         Timer::SetTimeout(1, [=, &ctx]() {
