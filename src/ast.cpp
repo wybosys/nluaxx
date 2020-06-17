@@ -190,90 +190,90 @@ public:
         }
 
         return_type rv;
-        int count = lua_gettop(L) - 1;
+        int count = lua_gettop(L);
         switch (count) {
         case 0: {
             rv = fnd->second(L, {});
         }
                 break;
         case 1: {
-            auto v0 = at(L, 2);
+            auto v0 = at(L, 1);
             rv = fnd->second(L, { v0.get() });
         }
                 break;
         case 2: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
+            auto v0 = at(L, 1);
+            auto v1 = at(L, 2);
             rv = fnd->second(L, { v0.get(), v1.get() });
         }
                 break;
         case 3: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
+            auto v0 = at(L, 1);
+            auto v1 = at(L, 2);
+            auto v2 = at(L, 3);
             rv = fnd->second(L, { v0.get(), v1.get(), v2.get() });
         }
                 break;
         case 4: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
-            auto v3 = at(L, 5);
+            auto v0 = at(L, 1);
+            auto v1 = at(L, 2);
+            auto v2 = at(L, 3);
+            auto v3 = at(L, 4);
             rv = fnd->second(L, { v0.get(), v1.get(), v2.get(), v3.get() });
         }
                 break;
         case 5: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
-            auto v3 = at(L, 5);
-            auto v4 = at(L, 6);
+            auto v0 = at(L, 1);
+            auto v1 = at(L, 2);
+            auto v2 = at(L, 3);
+            auto v3 = at(L, 4);
+            auto v4 = at(L, 5);
             rv = fnd->second(L, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get() });
         }
                 break;
         case 6: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
-            auto v3 = at(L, 5);
-            auto v4 = at(L, 6);
-            auto v5 = at(L, 7);
+            auto v0 = at(L, 1);
+            auto v1 = at(L, 2);
+            auto v2 = at(L, 3);
+            auto v3 = at(L, 4);
+            auto v4 = at(L, 5);
+            auto v5 = at(L, 6);
             rv = fnd->second(L, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get() });
         }
                 break;
         case 7: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
-            auto v3 = at(L, 5);
-            auto v4 = at(L, 6);
-            auto v5 = at(L, 7);
-            auto v6 = at(L, 8);
+            auto v0 = at(L, 1);
+            auto v1 = at(L, 2);
+            auto v2 = at(L, 3);
+            auto v3 = at(L, 4);
+            auto v4 = at(L, 5);
+            auto v5 = at(L, 6);
+            auto v6 = at(L, 7);
             rv = fnd->second(L, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get() });
         }
                 break;
         case 8: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
-            auto v3 = at(L, 5);
-            auto v4 = at(L, 6);
-            auto v5 = at(L, 7);
-            auto v6 = at(L, 8);
-            auto v7 = at(L, 9);
+            auto v0 = at(L, 1);
+            auto v1 = at(L, 2);
+            auto v2 = at(L, 3);
+            auto v3 = at(L, 4);
+            auto v4 = at(L, 5);
+            auto v5 = at(L, 6);
+            auto v6 = at(L, 7);
+            auto v7 = at(L, 8);
             rv = fnd->second(L, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get(), v7.get() });
         }
                 break;
         case 9: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
-            auto v3 = at(L, 5);
-            auto v4 = at(L, 6);
-            auto v5 = at(L, 7);
-            auto v6 = at(L, 8);
-            auto v7 = at(L, 9);
-            auto v8 = at(L, 10);
+            auto v0 = at(L, 1);
+            auto v1 = at(L, 2);
+            auto v2 = at(L, 3);
+            auto v3 = at(L, 4);
+            auto v4 = at(L, 5);
+            auto v5 = at(L, 6);
+            auto v6 = at(L, 7);
+            auto v7 = at(L, 8);
+            auto v8 = at(L, 9);
             rv = fnd->second(L, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get(), v7.get(), v8.get() });
         }
                 break;
