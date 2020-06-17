@@ -1739,7 +1739,7 @@ shared_ptr<Variant> Object::toVariant() const
         d_ptr->GL = nullptr;
     }
 
-    auto r = make_shared<Variant>(d_ptr->id);
+    auto r = make_shared<Variant>((integer)d_ptr->id);
     const_cast<Variant::VT&>(r->vt) = Variant::VT::OBJECT;
     return r;
 }
