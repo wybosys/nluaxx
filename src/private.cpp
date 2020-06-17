@@ -29,13 +29,13 @@ ContextAutoGuard::~ContextAutoGuard()
 lua_State *ContextAutoGuard::MainL = nullptr;
 thread_local ContextAutoGuard ContextAutoGuard::Tls;
 
-lua_State *ContextWorkerResource::L()
+ContextWorkerResource::ContextWorkerResource()
 {
-    return ContextAutoGuard::Tls.L;
+    L = ContextAutoGuard::Tls.L;
 }
 
 ContextPrivate::ContextPrivate()
-    : refId(1) 
+    : refId(1), pvd_worker(false)
 {
     // pass
 }
@@ -66,6 +66,8 @@ void ContextPrivate::clear()
 
 void ContextPrivate::create() 
 {
+    pvd_worker.stop();
+
     if (ContextAutoGuard::Tls.ismain)
     {
         // 如果时主线程，则为关闭重建的流程
@@ -156,10 +158,14 @@ void ContextPrivate::create()
         free(val);
     }
 #endif
+
+    pvd_worker.start();
 }
 
 void ContextPrivate::attach(lua_State *_l) 
 {
+    pvd_worker.stop();
+
     if (_l == L)
         return;
 
@@ -192,6 +198,8 @@ void ContextPrivate::attach(lua_State *_l)
             }
         }
     }
+
+    pvd_worker.start();
 }
 
 int ContextPrivate::Traceback(lua_State *L) 
@@ -298,6 +306,16 @@ void ContextPrivate::update_cpackage_paths(vector<string> const *curs)
             }
         }
     }
+}
+
+lua_State *GL()
+{
+    return Context::shared().d().pvd_worker->L;
+}
+
+::std::mutex& GMtx()
+{
+    return Context::shared().d().pvd_worker->mtx;
 }
 
 NLUA_END

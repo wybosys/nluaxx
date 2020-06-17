@@ -11,6 +11,8 @@ USE_NLUA;
 USE_CROSS;
 
 TEST (main) {
+    //::std::mutex mtx;
+
     // 测试原始lua
     auto &ctx = Context::shared();
 
@@ -233,31 +235,36 @@ TEST (test6) {
         // 保护变量，避免被局部释放
         self->grab();      
 
+        self->invoke("ondone");
+        self->invoke("onend");
+
         // 稳定重现多线程写冲突，同一个变量被多个线程并发写数据
         auto s = ctx.global("test.Test")->instance();
         s->grab();
 
-        for (int i = 0; i < 10000; ++i) {
+        for (int i = 0; i < 1000; ++i) {
             s->set("a", (integer)i);
         }
-        NLUA_DEBUG("快速写完成");
+        NLUA_DEBUG("快速写a完成");
 
         // 测试长生命周期异步调用
-        Timer::SetTimeout(1, [=, &ctx]() {
+        Timer::SetTimeout(0, [=, &ctx]() {
             // onend实现，ondone未实现
             self->invoke("ondone");
             self->invoke("onend");
 
-            for (int i = 0; i < 10000; ++i) {
+            for (int i = 0; i < 1000; ++i) {
                 s->set("b", (integer)i);
-                Time::Sleep(0.1);
+                Time::Sleep(0.001);
             }
+            NLUA_DEBUG("写b完成");
 
-            Timer::SetTimeout(1, [=]() {
-                for (int i = 0; i < 10000; ++i) {
+            Timer::SetTimeout(0, [=]() {
+                for (int i = 0; i < 1000; ++i) {
                     s->set("c", (integer)i);
-                    Time::Sleep(0.1);
+                    Time::Sleep(0.001);
                 }
+                NLUA_DEBUG("写c完成");
 
                 // 因为已经drop不应打印出任何东西
                 self->invoke("ondone");
@@ -269,10 +276,11 @@ TEST (test6) {
             self->drop();
         });
 
-        for (int i = 0; i < 10000; ++i) {
+        for (int i = 0; i < 1000; ++i) {
             s->set("a", (integer)i);
-            Time::Sleep(0.1);
+            Time::Sleep(0.001);
         }
+        NLUA_DEBUG("写a完成");
 
         cout << msg << endl;
         return nullptr;

@@ -38,8 +38,12 @@ public:
 
 class ContextWorkerResource
 {
-public:        
-    lua_State *L(); // 工作资源线程使用的L
+public:      
+
+    ContextWorkerResource();
+
+    lua_State *L; // 工作资源线程使用的L
+
     ::std::mutex mtx; // 工作资源线程锁
 };
 
@@ -78,12 +82,15 @@ public:
     // 全局singleton计数器
     lua_refid_type refSingletonId;
 
-    // 全局锁
-    ::std::mutex mtx_global;
-
     // 避免多线程写lua冲突，grab后的对象均使用Context创建的工作线程的L和对应的锁
     ::CROSS_NS::ThreadResourceProvider<ContextWorkerResource> pvd_worker;
 };
+
+// 工作线程 L
+extern lua_State *GL();
+
+// 工作线程 mtx
+extern ::std::mutex& GMtx();
 
 NLUA_END
 

@@ -119,8 +119,8 @@ void Context::add_cpackage_path(string const &dir) {
 
 void Context::clear() {
     // 检查是否有死锁
-    if (d_ptr->mtx_global.try_lock()) {
-        d_ptr->mtx_global.unlock();
+    if (d_ptr->pvd_worker->mtx.try_lock()) {
+        d_ptr->pvd_worker->mtx.unlock();
     }
     else {
         NLUA_ERROR("检测到NLUA层死锁");
@@ -220,12 +220,12 @@ return_type Context::invoke(string const &name, Variant const &v0, Variant const
 
 void Context::lock()
 {
-    d_ptr->mtx_global.lock();
+    d_ptr->pvd_worker->mtx.lock();
 }
 
 void Context::unlock()
 {
-    d_ptr->mtx_global.unlock();
+    d_ptr->pvd_worker->mtx.unlock();
 }
 
 NLUA_END
