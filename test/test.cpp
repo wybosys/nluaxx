@@ -5,6 +5,7 @@
 #include <cross/cross.hpp>
 #include <cross/timer.hpp>
 #include <cross/threads.hpp>
+#include <cross/datetime.hpp>
 
 USE_NLUA;
 USE_CROSS;
@@ -232,15 +233,27 @@ TEST (test6) {
         // 保护变量，避免被局部释放
         self->grab();      
 
+        // 稳定重现多线程写冲突
+        auto s = ctx.global("test.Test")->instance();
+        s->grab(); // 无法缓解冲突
+
         // 测试长生命周期异步调用
         Timer::SetTimeout(1, [=, &ctx]() {
             // onend实现，ondone未实现
             self->invoke("ondone");
             self->invoke("onend");
 
-            auto s = ctx.global("test.Test")->instance();
+            for (int i = 0; i < 10000; ++i) {
+                s->set("b", (integer)i);
+                Time::Sleep(0.1);
+            }
 
             Timer::SetTimeout(1, [=]() {
+                for (int i = 0; i < 10000; ++i) {
+                    s->set("c", (integer)i);
+                    Time::Sleep(0.1);
+                }
+
                 // 因为已经drop不应打印出任何东西
                 self->invoke("ondone");
                 self->invoke("onend");
@@ -250,6 +263,11 @@ TEST (test6) {
 
             self->drop();
         });
+
+        for (int i = 0; i < 10000; ++i) {
+            s->set("a", (integer)i);
+            Time::Sleep(0.1);
+        }
 
         cout << msg << endl;
         return nullptr;
