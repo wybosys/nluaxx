@@ -38,12 +38,6 @@ void Field::declare_in(Context &ctx, Class const &clz) const {
 class ObjectPrivate {
 public:
 
-    ObjectPrivate()
-        : mtx(GMtx())
-    {
-        // pass
-    }
-
     // 如果传入自定义C数据结构，则self指针将指向该结构
     struct UserData {
         void *data = nullptr;
@@ -55,9 +49,6 @@ public:
 
     // grab后的栈
     lua_State *GL = nullptr;
-
-    // 锁
-    ::std::mutex& mtx;
 
     // 当前栈上对象的id（local对象）
     int id = 0;
@@ -1216,7 +1207,6 @@ Object::~Object() {
 
 void *Object::payload() const {
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
-    NNT_AUTOGUARD(d_ptr->mtx);
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
@@ -1241,7 +1231,6 @@ void *Object::payload() const {
 
 void Object::payload(void *data) {
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
-    NNT_AUTOGUARD(d_ptr->mtx);
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
@@ -1266,7 +1255,6 @@ void Object::payload(void *data) {
 
 return_type Object::get(string const &name) const {
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
-    NNT_AUTOGUARD(d_ptr->mtx);
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
@@ -1284,7 +1272,6 @@ return_type Object::get(string const &name) const {
 
 void Object::set(string const &name, value_type const &val) {
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
-    NNT_AUTOGUARD(d_ptr->mtx);
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
@@ -1310,7 +1297,6 @@ void Object::set(string const &name, value_type const &val) {
 
 self_type Context::global(string const &name) const {
     auto L = d_ptr->L;
-    NNT_AUTOGUARD(GMtx());
 
     if (name.find('.') != string::npos) {
         // 多级模块
@@ -1394,7 +1380,6 @@ void Object::setfor(Object &r) const {
 
 bool Object::has(string const &name) const {
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
-    NNT_AUTOGUARD(d_ptr->mtx);
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
@@ -1424,7 +1409,6 @@ bool Object::isnil() const {
 
 self_type Object::instance() const {
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
-    NNT_AUTOGUARD(d_ptr->mtx);
     // NLUA_AUTOSTACK(L); 因需要返回局部变量所以不能恢复
 
     int clsid;
@@ -1471,8 +1455,6 @@ self_type Object::instance() const {
 }
 
 void Object::grab() {
-    NNT_AUTOGUARD(d_ptr->mtx);
-
     if (!d_ptr->GL) {
         // grab后的操作均位于独立L上进行，此时可以使用Resrouce的锁避免冲突
         d_ptr->GL = GL();
@@ -1524,8 +1506,6 @@ bool Object::drop() {
         return false;
     }
 
-    NNT_AUTOGUARD(GMtx());
-
     auto L = d_ptr->GL;
     NLUA_AUTOSTACK(L);
 
@@ -1561,7 +1541,6 @@ bool Object::drop() {
 
 return_type Object::invoke(string const &name, args_type const &args) {
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
-    NNT_AUTOGUARD(d_ptr->mtx)
     NLUA_AUTOSTACK(L);
 
     lua_pushcfunction(L, ContextPrivate::Traceback);
@@ -1660,7 +1639,6 @@ return_type Object::invoke(string const &name, Variant const &v0, Variant const 
 
 return_type Object::call(args_type const& args) {
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
-    NNT_AUTOGUARD(d_ptr->mtx)
     NLUA_AUTOSTACK(L);
 
     lua_pushcfunction(L, ContextPrivate::Traceback);
@@ -1750,8 +1728,6 @@ shared_ptr<Variant> Object::toVariant() const
         }
 
         auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
-        NNT_AUTOGUARD(d_ptr->mtx);
-
         lua_getglobal(L, d_ptr->name.c_str());
         oid = lua_gettop(L);
     }

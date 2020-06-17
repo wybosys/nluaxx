@@ -171,6 +171,8 @@ public:
     void declare();
 };
 
+#define NLUA_AUTOGUARD(ctx) ::std::lock_guard<::NLUA_NS::Context> _NNT_COMBINE(__auto_guard_, __LINE__)(ctx);
+
 NLUA_END
 
 #include "ast.hpp"

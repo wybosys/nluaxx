@@ -232,6 +232,8 @@ TEST (test6) {
     clz->add(make_shared<Field>("ondone", nullptr));
     clz->add_field("onend", nullptr);
     clz->add("play", [&](self_type &self, arg_type const &msg) -> return_type {
+        NLUA_AUTOGUARD(ctx);
+
         // 保护变量，避免被局部释放
         self->grab();      
 
@@ -249,6 +251,8 @@ TEST (test6) {
 
         // 测试长生命周期异步调用
         Timer::SetTimeout(0, [=, &ctx]() {
+            NLUA_AUTOGUARD(ctx);
+
             // onend实现，ondone未实现
             self->invoke("ondone");
             self->invoke("onend");
@@ -259,7 +263,9 @@ TEST (test6) {
             }
             NLUA_DEBUG("写b完成");
 
-            Timer::SetTimeout(0, [=]() {
+            Timer::SetTimeout(0, [=, &ctx]() {
+                NLUA_AUTOGUARD(ctx);
+
                 for (int i = 0; i < 1000; ++i) {
                     s->set("c", (integer)i);
                     Time::Sleep(0.001);
