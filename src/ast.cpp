@@ -1,4 +1,5 @@
 #include "nlua++.hpp"
+#define __NLUA_PRIVATE__
 #include "ast.hpp"
 #include "liblua.hpp"
 #include "value.hpp"

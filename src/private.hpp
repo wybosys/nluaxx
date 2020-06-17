@@ -1,9 +1,16 @@
 #ifndef __NLUA_AST_PRIVATE_H_INCLUDED
 #define __NLUA_AST_PRIVATE_H_INCLUDED
 
+#ifndef __NLUA_PRIVATE__
+#error "禁止在外部引用该文件"
+#endif
+
 #include "liblua.hpp"
 #include <atomic>
 #include <mutex>
+
+#include <cross/cross.hpp>
+#include <cross/sys.hpp>
 
 NLUA_BEGIN
 
@@ -21,7 +28,8 @@ public:
     ~ContextAutoGuard();
 
     lua_State *L = nullptr; // 当前线程的环境
-    bool ismain = false;
+    bool ismain = false; // 是否时主线程
+    ::CROSS_NS::tid_t tid; // 当前的线程号
 
     static ContextAutoGuard& Tls();
 };

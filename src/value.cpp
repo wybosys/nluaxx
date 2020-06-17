@@ -1,4 +1,5 @@
 ﻿#include "nlua++.hpp"
+#define __NLUA_PRIVATE__
 #include "value.hpp"
 
 NLUA_BEGIN

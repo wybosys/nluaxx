@@ -1,4 +1,5 @@
 #include "nlua++.hpp"
+#define __NLUA_PRIVATE__
 #include "private.hpp"
 #include "value.hpp"
 
@@ -13,6 +14,8 @@ USE_CROSS;
 
 ContextAutoGuard::ContextAutoGuard()
 {
+    tid = get_thread_id();
+
     if (!Context::is_shared())
         return;
     L = lua_newthread(Context::shared().d().L);
