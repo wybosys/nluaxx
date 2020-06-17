@@ -10,7 +10,6 @@
 #include <mutex>
 
 #include <cross/cross.hpp>
-#include <cross/sys.hpp>
 #include <cross/threads.hpp>
 
 NLUA_BEGIN
@@ -30,7 +29,6 @@ public:
 
     lua_State *L = nullptr; // 当前线程的环境
     bool ismain = false; // 是否时主线程
-    ::CROSS_NS::tid_t tid; // 当前的线程号
     
     static lua_State *MainL; // 主线程L
     static thread_local ContextAutoGuard Tls; // 当前线程

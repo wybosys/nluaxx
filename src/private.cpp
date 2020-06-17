@@ -14,8 +14,6 @@ USE_CROSS;
 
 ContextAutoGuard::ContextAutoGuard()
 {
-    tid = get_thread_id();
-
     if (!MainL)
         return;
     L = lua_newthread(MainL);
