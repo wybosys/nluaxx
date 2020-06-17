@@ -228,15 +228,17 @@ TEST (test6) {
     clz->name = "Test";
     clz->add(make_shared<Field>("ondone", nullptr));
     clz->add_field("onend", nullptr);
-    clz->add("play", [&](self_type &self, Variant const &msg) -> return_type {
+    clz->add("play", [&](self_type &self, arg_type const &msg) -> return_type {
         // 保护变量，避免被局部释放
-        self->grab();
+        self->grab();      
 
         // 测试长生命周期异步调用
-        Timer::SetTimeout(1, [=]() {
+        Timer::SetTimeout(1, [=, &ctx]() {
             // onend实现，ondone未实现
             self->invoke("ondone");
             self->invoke("onend");
+
+            auto s = ctx.global("test.Test")->instance();
 
             Timer::SetTimeout(1, [=]() {
                 // 因为已经drop不应打印出任何东西

@@ -16,9 +16,9 @@ ContextAutoGuard::ContextAutoGuard()
 {
     tid = get_thread_id();
 
-    if (!Context::is_shared())
+    if (!MainL)
         return;
-    L = lua_newthread(Context::shared().d().L);
+    L = lua_newthread(MainL);
 }
 
 ContextAutoGuard::~ContextAutoGuard()
@@ -26,12 +26,8 @@ ContextAutoGuard::~ContextAutoGuard()
     // pass
 }
 
-static thread_local ContextAutoGuard tls_context;
-
-ContextAutoGuard& ContextAutoGuard::Tls()
-{
-    return tls_context;
-}
+lua_State *ContextAutoGuard::MainL = nullptr;
+thread_local ContextAutoGuard ContextAutoGuard::Tls;
 
 ContextPrivate::ContextPrivate()
     : refId(1) 
@@ -46,6 +42,7 @@ ContextPrivate::~ContextPrivate()
     if (_freel) {
         lua_close(L);
     }
+
     L = nullptr;
     _freel = false;
 }
@@ -64,17 +61,45 @@ void ContextPrivate::clear()
 
 void ContextPrivate::create() 
 {
-    if (L && _freel) {
-        lua_close(L);
-    }
-    
-    L = luaL_newstate();
-    luaL_openlibs(L);
-    _freel = true;
+    if (ContextAutoGuard::Tls.ismain)
+    {
+        // 如果时主线程，则为关闭重建的流程
+        if (L && _freel) {
+            lua_close(L);
+        }
 
-    // 绑定线程环境
-    tls_context.L = L;
-    tls_context.ismain = true;
+        L = luaL_newstate();
+        luaL_openlibs(L);
+        _freel = true;
+
+        ContextAutoGuard::MainL = L;
+        ContextAutoGuard::Tls.L = L;
+    }
+    else
+    {
+        // 如果主线程L已经存在，则当前为其他线程，走获取逻辑
+        if (ContextAutoGuard::MainL)
+        {
+            L = ContextAutoGuard::Tls.L;
+            _freel = false;
+        }
+        else
+        {
+            // 不存在主线程L，仍为主线程逻辑
+            if (L && _freel) {
+                lua_close(L);
+            }
+
+            L = luaL_newstate();
+            luaL_openlibs(L);
+            _freel = true;
+
+            // 绑定主线程环境
+            ContextAutoGuard::MainL = L;
+            ContextAutoGuard::Tls.L = L;
+            ContextAutoGuard::Tls.ismain = true;
+        }
+    }
 
 #ifdef WIN32
     // windows中需要额外设置lua的package.path保证可以拿到全局安装的库
@@ -140,10 +165,27 @@ void ContextPrivate::attach(lua_State *_l)
     L = _l;
     _freel = false;
 
-    if (L) {
-        // 绑定线程环境
-        tls_context.L = L;
-        tls_context.ismain = true;
+    if (L) 
+    {
+        if (ContextAutoGuard::Tls.ismain) 
+        {
+            ContextAutoGuard::MainL = L;
+            ContextAutoGuard::Tls.L = L;
+        }
+        else
+        {
+            if (ContextAutoGuard::MainL)
+            {
+                ContextAutoGuard::Tls.L = L;
+            }
+            else
+            {
+                // 绑定主线程环境
+                ContextAutoGuard::MainL = L;
+                ContextAutoGuard::Tls.L = L;
+                ContextAutoGuard::Tls.ismain = true;
+            }
+        }
     }
 }
 
