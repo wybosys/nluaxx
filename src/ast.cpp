@@ -615,9 +615,6 @@ public:
             lua_pushvalue(L, objid);
             lua_setglobal(L, sig->_globalvar.c_str());
 
-            // 返回对象
-            lua_pushvalue(L, objid);
-
             // 获得singleton对象，用于调用初始化函数
             if (sig->init) {
                 auto self = make_shared<Object>();
@@ -625,6 +622,9 @@ public:
                 self->d_ptr->L = L;
                 sig->init(self);
             }
+
+            // 返回对象
+            lua_pushvalue(L, objid);
         }
         return 1;
     }
