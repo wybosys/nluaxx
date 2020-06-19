@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\cross\stringbuilder.hpp" />
     <ClInclude Include="..\..\src\cross\sys.hpp" />
     <ClInclude Include="..\..\src\private.hpp" />
     <ClInclude Include="..\..\src\ast.hpp" />

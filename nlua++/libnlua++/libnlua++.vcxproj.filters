@@ -63,6 +63,9 @@
     <ClInclude Include="..\..\src\cross\sys.hpp">
       <Filter>cross</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\cross\stringbuilder.hpp">
+      <Filter>cross</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\nlua++.cpp">

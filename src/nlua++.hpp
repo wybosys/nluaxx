@@ -12,6 +12,7 @@
 #include <functional>
 #include <initializer_list>
 #include <sstream>
+#include <cross/stringbuilder.hpp>
 
 #ifndef NLUA_NS
 #define NLUA_NS nlua
@@ -29,7 +30,7 @@ return make_shared<Variant>(com::function_call<decltype(&func)>()(&func, args));
 }
 
 #ifndef NLUA_LOG
-#define NLUA_LOG(fd, msg) (fd << (::std::ostringstream() << "NLUA: " << msg).str() << ::std::endl)
+#define NLUA_LOG(fd, msg) (fd << (stringbuilder() << "NLUA: " << msg) << ::std::endl)
 #endif
 
 #define NLUA_INFO(msg) NLUA_LOG(::std::cout, msg)
