@@ -6,6 +6,7 @@
 #include <cross/timer.hpp>
 #include <cross/threads.hpp>
 #include <cross/datetime.hpp>
+#include <cross/stringbuilder.hpp>
 
 USE_NLUA;
 USE_CROSS;

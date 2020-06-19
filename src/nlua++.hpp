@@ -12,7 +12,6 @@
 #include <functional>
 #include <initializer_list>
 #include <sstream>
-#include <cross/stringbuilder.hpp>
 
 #ifndef NLUA_NS
 #define NLUA_NS nlua

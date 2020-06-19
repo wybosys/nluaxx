@@ -6,6 +6,7 @@
 #include <cross/cross.hpp>
 #include <cross/str.hpp>
 #include <cross/fs.hpp>
+#include <cross/stringbuilder.hpp>
 
 NLUA_BEGIN
 

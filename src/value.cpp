@@ -1,6 +1,7 @@
 ﻿#include "nlua++.hpp"
 #define __NLUA_PRIVATE__
 #include "value.hpp"
+#include <cross/stringbuilder.hpp>
 
 NLUA_BEGIN
 
