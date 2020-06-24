@@ -15,29 +15,34 @@ extern void push(Variant const *v, lua_State *L) {
 
 void push(Variant const &v, lua_State *L) {
     switch (v.vt) {
-        case Variant::VT::NIL:
-            lua_pushnil(L);
-            break;
-        case Variant::VT::POINTER:
-            lua_pushlightuserdata(L, v.toPointer());
-            break;
-        case Variant::VT::NUMBER:
-            lua_pushnumber(L, v.toNumber());
-            break;
-        case Variant::VT::INTEGER:
-            lua_pushinteger(L, v.toInteger());
-            break;
-        case Variant::VT::STRING: {
-            auto const &s = v.toString();
-            lua_pushlstring(L, s.c_str(), s.length());
+    case Variant::VT::NIL: {
+        lua_pushnil(L);
+    } break;
+    case Variant::VT::POINTER: {
+        auto ptr = v.toPointer();
+        if (ptr) {
+            lua_pushlightuserdata(L, ptr);
         }
-            break;
-        case Variant::VT::BOOLEAN:
-            lua_pushboolean(L, v.toBool());
-            break;
-        case Variant::VT::OBJECT:
-            lua_pushvalue(L, v.toInteger());
-            break;
+        else {
+            lua_pushnil(L);
+        }
+    } break;
+    case Variant::VT::NUMBER: {
+        lua_pushnumber(L, v.toNumber());
+    } break;
+    case Variant::VT::INTEGER: {
+        lua_pushinteger(L, v.toInteger());
+    } break;
+    case Variant::VT::STRING: {
+        auto const &s = v.toString();
+        lua_pushlstring(L, s.c_str(), s.length());
+    } break;
+    case Variant::VT::BOOLEAN: {
+        lua_pushboolean(L, v.toBool());
+    } break;
+    case Variant::VT::OBJECT: {
+        lua_pushvalue(L, v.toInteger());
+    } break;
     }
 }
 
