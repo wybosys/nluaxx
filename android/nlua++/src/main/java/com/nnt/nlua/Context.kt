@@ -26,6 +26,16 @@ class Context {
 
     private external fun jni_loadbuffer(bytes: ByteArray): Boolean
 
+    // 获得全局对象
+    fun global(keypath: String): Object? {
+        val idx = jni_global(keypath)
+        if (idx == -1)
+            return null
+        return com.nnt.nlua.Object(idx)
+    }
+
+    private external fun jni_global(keypath: String): Int
+
     companion object {
         private var _shared: Context? = null
 
