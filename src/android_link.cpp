@@ -1,5 +1,6 @@
 #include <jni.h>
-#include "nlua++.hpp"
+#include <nlua++/nlua++.hpp>
+#include <ajni++/ajni++.hpp>
 
 USE_NLUA;
 

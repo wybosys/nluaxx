@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 project(tester)
 
 # 获得项目根目录
+get_filename_component(LIB_HOME ../../../ ABSOLUTE)
 get_filename_component(LIB_DIR ../../../src/ ABSOLUTE)
 
 # 添加lua解释器目录
@@ -15,5 +16,7 @@ include_directories(${LIB_DIR}/lua/5.3)
 add_subdirectory(${LIB_DIR} nlua++)
 
 # 构造测试so
+include_directories(${LIB_HOME}/include)
+include_directories(${LIB_DIR})
 add_library(tester SHARED test.cpp ${LIB_DIR}/android_link.cpp)
 target_link_libraries(tester lua nlua++ ajni++)
