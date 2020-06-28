@@ -1,0 +1,5 @@
+include ':app'
+rootProject.name = 'app'
+
+include ':nlua++'
+project(':nlua++').projectDir = new File('nlua++')
