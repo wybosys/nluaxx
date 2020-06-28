@@ -12,5 +12,5 @@ include_directories(${LIB_DIR}/lua/5.3)
 add_subdirectory(${LIB_DIR} nlua++)
 
 # 构造测试so
-add_library(tester SHARED test/test.cpp)
+add_library(tester SHARED test.cpp ${LIB_DIR}/android_link.cpp)
 target_link_libraries(tester lua nlua++)

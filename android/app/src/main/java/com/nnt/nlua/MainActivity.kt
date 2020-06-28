@@ -11,5 +11,8 @@ class MainActivity() : AppCompatActivity() {
 
         // 加载so
         ReLinker.loadLibrary(this, "tester")
+
+        // 测试
+        Context.shared.create()
     }
 }
