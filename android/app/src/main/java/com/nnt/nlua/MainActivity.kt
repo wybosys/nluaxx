@@ -1,4 +1,4 @@
-package com.nnt.nlua_test
+package com.nnt.nlua
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +10,6 @@ class MainActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // 加载so
-        ReLinker.loadLibrary(this, "nlua")
+        ReLinker.loadLibrary(this, "tester")
     }
 }
