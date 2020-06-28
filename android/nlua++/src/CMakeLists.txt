@@ -8,6 +8,7 @@ get_filename_component(LIB_DIR ../../../src/ ABSOLUTE)
 add_subdirectory(${LIB_DIR}/lua lua)
 
 # 添加nlua项目
+include_directories(${LIB_DIR}/lua/5.3)
 add_subdirectory(${LIB_DIR} nlua++)
 
 # 构造测试so
