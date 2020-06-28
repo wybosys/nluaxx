@@ -20,7 +20,8 @@ class MainActivity() : AppCompatActivity() {
         Context.shared.load(stm.readBytes())
 
         // 获得脚本中的函数
-        Context.shared.global("Test0")
+        val obj = Context.shared.global("Test0")
+
         //if (obj == null)
         //Log.e("NLUA", "获取函数失败")
 

@@ -3,34 +3,23 @@
 #include <ajni++/ajni++.hpp>
 
 USE_NLUA;
+USE_AJNI;
 
-extern "C" JNIEXPORT void JNICALL
-Java_com_nnt_nlua_Context_jni_1create(JNIEnv *env, jobject thiz)
+AJNI_API(void) Java_com_nnt_nlua_Context_jni_1create(JNIEnv *env, jobject thiz)
 {
     Context::shared().create();
 }
 
-extern "C" JNIEXPORT jboolean JNICALL
-Java_com_nnt_nlua_Context_jni_1loadfile(JNIEnv *env, jobject thiz, jstring file)
+AJNI_API(jboolean) Java_com_nnt_nlua_Context_jni_1loadfile(JNIEnv *env, jobject thiz, jstring file)
 {
-    jboolean copied;
-    char const *str = env->GetStringUTFChars(file, &copied);
-    bool r = Context::shared().load(string(str));
-    if (copied)
-        env->ReleaseStringUTFChars(file, str);
-    return r;
+    return Context::shared().load(Variant(file).toString());
 }
 
-extern "C" JNIEXPORT jboolean JNICALL
-Java_com_nnt_nlua_Context_jni_1loadbuffer(JNIEnv *env, jobject thiz, jbyteArray arr)
+AJNI_API(jboolean) Java_com_nnt_nlua_Context_jni_1loadbuffer(JNIEnv *env,
+                                                             jobject thiz,
+                                                             jbyteArray arr)
 {
-    size_t len = env->GetArrayLength(arr);
-    jboolean copied;
-    void *str = env->GetByteArrayElements(arr, &copied);
-    bool r = Context::shared().load(str, len);
-    if (copied)
-        env->ReleaseByteArrayElements(arr, (jbyte *) str, 0);
-    return r;
+    return true;
 }
 
 template<typename T>
@@ -72,10 +61,9 @@ private:
 };
 
 // 保存返回给Java层的C++对象
-static GsObject<Object> gs_objects;
+// static GsObject<Object> gs_objects;
 
-extern "C" JNIEXPORT jint JNICALL
-Java_com_nnt_nlua_Context_jni_1global(JNIEnv *env, jobject thiz, jstring keypath)
+AJNI_API(jint) Java_com_nnt_nlua_Context_jni_1global(JNIEnv *env, jobject thiz, jstring keypath)
 {
     /*
     jboolean copied;
@@ -91,8 +79,7 @@ Java_com_nnt_nlua_Context_jni_1global(JNIEnv *env, jobject thiz, jstring keypath
     return -1;
 }
 
-extern "C" JNIEXPORT void JNICALL
-Java_com_nnt_nlua_Object_jni_1finalize(JNIEnv *env, jobject thiz, jint idx)
+AJNI_API(void) Java_com_nnt_nlua_Object_jni_1finalize(JNIEnv *env, jobject thiz, jint idx)
 {
     //gs_objects.remove(idx);
 }
