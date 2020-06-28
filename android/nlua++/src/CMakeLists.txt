@@ -7,6 +7,9 @@ get_filename_component(LIB_DIR ../../../src/ ABSOLUTE)
 # 添加lua解释器目录
 add_subdirectory(${LIB_DIR}/lua lua)
 
+# 添加nlua项目
+add_subdirectory(${LIB_DIR} nlua++)
+
 # 构造测试so
 add_library(tester SHARED test/test.cpp)
-target_link_libraries(tester lua)
+target_link_libraries(tester lua nlua++)
