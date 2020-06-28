@@ -51,10 +51,12 @@ using ::std::shared_ptr;
 using ::std::make_shared;
 using ::std::function;
 
-class error : public ::std::exception
+class error: public ::std::exception
 {
 public:
-    explicit error(int code, string const &msg = "") : _code(code), _msg(msg) {}
+    explicit error(int code, string const &msg = "")
+        : _code(code), _msg(msg)
+    {}
 
     virtual const char *what() const throw()
     {
@@ -79,16 +81,25 @@ class Module;
 class Variant;
 
 typedef shared_ptr<Variant> return_type;
+
 typedef shared_ptr<Variant> value_type;
+
 typedef Variant arg_type;
-typedef ::std::initializer_list<arg_type const*> args_type;
+
+typedef ::std::initializer_list<arg_type const *> args_type;
+
 typedef shared_ptr<Object> self_type;
 
-class Any {
+class Any
+{
 public:
-    Any(shared_ptr<Class> const &r) : clazz(r) {}
+    Any(shared_ptr<Class> const &r)
+        : clazz(r)
+    {}
 
-    Any(shared_ptr<Object> const &r) : object(r) {}
+    Any(shared_ptr<Object> const &r)
+        : object(r)
+    {}
 
     shared_ptr<Class> clazz;
     shared_ptr<Object> object;
@@ -96,12 +107,13 @@ public:
 
 NNT_CLASS_PREPARE(Context);
 
-class Context {
-    NNT_CLASS_DECL(Context);
+class Context
+{
+NNT_CLASS_DECL(Context);
 
 public:
 
-    NNT_SINGLETON_DECL(Context);
+NNT_SINGLETON_DECL(Context);
 
     // 创建一个空上下文
     Context();
@@ -117,6 +129,9 @@ public:
     // 加载文件
     bool load(string const &);
 
+    // 加载缓存
+    bool load(void *, size_t);
+
     // 执行函数
     return_type invoke(string const &fname, args_type const &args = {});
 
@@ -126,19 +141,65 @@ public:
 
     return_type invoke(string const &name, Variant const &, Variant const &, Variant const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type
+    invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type invoke(string const &name,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type invoke(string const &name,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type invoke(string const &name,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type invoke(string const &name,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type invoke(string const &name,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type invoke(string const &name,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &,
+                       Variant const &);
 
     // 添加查找包的目录
     void add_package_path(string const &);
@@ -149,7 +210,7 @@ public:
     self_type global(string const &) const;
 
     // 获得全局单件对象
-    self_type singleton(string const&) const;
+    self_type singleton(string const &) const;
 
     typedef shared_ptr<Module> module_type;
     typedef ::std::map<string, module_type> modules_type;

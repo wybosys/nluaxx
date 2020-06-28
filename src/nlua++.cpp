@@ -15,25 +15,30 @@ USE_CROSS;
 
 NNT_SINGLETON_IMPL(Context);
 
-Context::Context() {
+Context::Context()
+{
     NNT_CLASS_CONSTRUCT()
 }
 
-Context::~Context() {
+Context::~Context()
+{
     NNT_CLASS_DESTORY()
 }
 
-Context &Context::attach(void *_l) {
-    d_ptr->attach((lua_State *)_l);
+Context &Context::attach(void *_l)
+{
+    d_ptr->attach((lua_State *) _l);
     return *this;
 }
 
-Context &Context::create() {
+Context &Context::create()
+{
     d_ptr->create();
     return *this;
 }
 
-bool Context::load(string const &file) {
+bool Context::load(string const &file)
+{
     auto L = d_ptr->L;
     NLUA_AUTOSTACK(L);
 
@@ -55,7 +60,24 @@ bool Context::load(string const &file) {
     return true;
 }
 
-void Context::add_package_path(string const &dir) {
+bool Context::load(void *buf, size_t len)
+{
+    auto L = d_ptr->L;
+    NLUA_AUTOSTACK(L);
+
+    int s = luaL_loadbuffer(L, (char const *) buf, len, "load-buffer");
+    if (LUA_OK != s) {
+        NLUA_ERROR("加载缓存失败");
+        return false;
+    }
+
+    NLUA_DEBUG("加载缓存成功");
+
+    return true;
+}
+
+void Context::add_package_path(string const &dir)
+{
     auto fdir = absolute(dir);
     if (fdir.empty())
         return;
@@ -90,7 +112,8 @@ void Context::add_package_path(string const &dir) {
     }
 }
 
-void Context::add_cpackage_path(string const &dir) {
+void Context::add_cpackage_path(string const &dir)
+{
     auto L = d_ptr->L;
     NLUA_AUTOSTACK(L);
 
@@ -118,7 +141,8 @@ void Context::add_cpackage_path(string const &dir) {
     }
 }
 
-void Context::clear() {
+void Context::clear()
+{
     // 检查是否有死锁
     if (d_ptr->pvd_worker->mtx.try_lock()) {
         d_ptr->pvd_worker->mtx.unlock();
@@ -132,11 +156,13 @@ void Context::clear() {
     d_ptr->clear();
 }
 
-void Context::add(class_type &cls) {
+void Context::add(class_type &cls)
+{
     d_ptr->classes[cls->name] = cls;
 }
 
-void Context::add(module_type &m) {
+void Context::add(module_type &m)
+{
     auto fnd = d_ptr->modules.find(m->name);
     if (fnd != d_ptr->modules.end()) {
         fnd->second->merge(*m);
@@ -146,7 +172,8 @@ void Context::add(module_type &m) {
     }
 }
 
-void Context::declare() {
+void Context::declare()
+{
     for (auto &e : d_ptr->classes) {
         e.second->declare_in(*this);
     }
@@ -156,7 +183,8 @@ void Context::declare() {
     }
 }
 
-return_type Context::invoke(string const &fname, args_type const &args) {
+return_type Context::invoke(string const &fname, args_type const &args)
+{
     auto L = d_ptr->L;
     NLUA_AUTOSTACK(L);
 
@@ -179,44 +207,104 @@ return_type Context::invoke(string const &fname, args_type const &args) {
     return at(L, -1);
 }
 
-return_type Context::invoke(string const &name, Variant const &v0) {
-    return invoke(name, { &v0 });
+return_type Context::invoke(string const &name, Variant const &v0)
+{
+    return invoke(name, {&v0});
 }
 
-return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1) {
-    return invoke(name, { &v0, &v1 });
+return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1)
+{
+    return invoke(name, {&v0, &v1});
 }
 
-return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2) {
-    return invoke(name, { &v0, &v1, &v2 });
+return_type
+Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2)
+{
+    return invoke(name, {&v0, &v1, &v2});
 }
 
-return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3) {
-    return invoke(name, { &v0, &v1, &v2, &v3 });
+return_type Context::invoke(string const &name,
+                            Variant const &v0,
+                            Variant const &v1,
+                            Variant const &v2,
+                            Variant const &v3)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3});
 }
 
-return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4) {
-    return invoke(name, { &v0, &v1, &v2, &v3, &v4 });
+return_type Context::invoke(string const &name,
+                            Variant const &v0,
+                            Variant const &v1,
+                            Variant const &v2,
+                            Variant const &v3,
+                            Variant const &v4)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3, &v4});
 }
 
-return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5) {
-    return invoke(name, { &v0, &v1, &v2, &v3, &v4, &v5 });
+return_type Context::invoke(string const &name,
+                            Variant const &v0,
+                            Variant const &v1,
+                            Variant const &v2,
+                            Variant const &v3,
+                            Variant const &v4,
+                            Variant const &v5)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3, &v4, &v5});
 }
 
-return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5, Variant const &v6) {
-    return invoke(name, { &v0, &v1, &v2, &v3, &v4, &v5, &v6 });
+return_type Context::invoke(string const &name,
+                            Variant const &v0,
+                            Variant const &v1,
+                            Variant const &v2,
+                            Variant const &v3,
+                            Variant const &v4,
+                            Variant const &v5,
+                            Variant const &v6)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3, &v4, &v5, &v6});
 }
 
-return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5, Variant const &v6, Variant const &v7) {
-    return invoke(name, { &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7 });
+return_type Context::invoke(string const &name,
+                            Variant const &v0,
+                            Variant const &v1,
+                            Variant const &v2,
+                            Variant const &v3,
+                            Variant const &v4,
+                            Variant const &v5,
+                            Variant const &v6,
+                            Variant const &v7)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7});
 }
 
-return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5, Variant const &v6, Variant const &v7, Variant const &v8) {
-    return invoke(name, { &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8 });
+return_type Context::invoke(string const &name,
+                            Variant const &v0,
+                            Variant const &v1,
+                            Variant const &v2,
+                            Variant const &v3,
+                            Variant const &v4,
+                            Variant const &v5,
+                            Variant const &v6,
+                            Variant const &v7,
+                            Variant const &v8)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8});
 }
 
-return_type Context::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5, Variant const &v6, Variant const &v7, Variant const &v8, Variant const &v9) {
-    return invoke(name, { &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9 });
+return_type Context::invoke(string const &name,
+                            Variant const &v0,
+                            Variant const &v1,
+                            Variant const &v2,
+                            Variant const &v3,
+                            Variant const &v4,
+                            Variant const &v5,
+                            Variant const &v6,
+                            Variant const &v7,
+                            Variant const &v8,
+                            Variant const &v9)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9});
 }
 
 void Context::lock()

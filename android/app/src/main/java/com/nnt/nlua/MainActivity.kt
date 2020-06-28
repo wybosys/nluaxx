@@ -14,5 +14,9 @@ class MainActivity() : AppCompatActivity() {
 
         // 测试
         Context.shared.create()
+
+        // 加载包中的lua脚本
+        val stm = resources.openRawResource(R.raw.test0)
+        Context.shared.load(stm.readBytes())
     }
 }
