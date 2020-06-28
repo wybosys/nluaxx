@@ -126,6 +126,11 @@ inline ::std::basic_ostream <_CharT, _Traits> &operator<<(::std::basic_ostream <
         case Variant::VT::BOOLEAN:
             stm << v.toBool();
             break;
+        case Variant::VT::NIL:
+            break;
+        case Variant::VT::OBJECT:
+            stm << v.toPointer();
+            break;
     }
     return stm;
 }

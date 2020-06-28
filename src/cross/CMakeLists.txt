@@ -13,4 +13,4 @@ timer.cpp
 )
 
 add_library(cross STATIC ${CROSS_SRCS})
-target_link_libraries(cross pthread)
+target_link_libraries(cross)

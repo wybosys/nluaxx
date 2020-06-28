@@ -33,6 +33,8 @@ Variant::VT FromCom(com::Variant<>::VT vt) {
             return Variant::VT::BOOLEAN;
         case com::Variant<>::VT::STRING:
             return Variant::VT::STRING;
+        default:
+            break;
     }
     return Variant::VT::NIL;
 }
@@ -110,6 +112,8 @@ integer Variant::toInteger() const {
             return (integer) round(_var.toDouble());
         case com::Variant<>::VT::STRING:
             return toint(_var.toString());
+        default:
+            break;
     }
     return 0;
 }
@@ -122,6 +126,10 @@ number Variant::toNumber() const {
             return _var.toDouble();
         case com::Variant<>::VT::STRING:
             return todouble(_var.toString());
+        case com::Variant<>::VT::NIL:
+            return 0;
+        default:
+            break;
     }
     return toInteger();
 }
@@ -137,7 +145,7 @@ string Variant::toString() const {
         return _var.toString();
 
     if (_var.vt == com::Variant<>::VT::FLOAT ||
-        _var.vt == com::Variant<>::VT::DOUBLE) 
+        _var.vt == com::Variant<>::VT::DOUBLE)
     {
         return tostr(toNumber());
     }
@@ -151,6 +159,8 @@ void *Variant::toPointer() const {
             return _var.toObject();
         case com::Variant<>::VT::POINTER:
             return _var.toPointer();
+        default:
+            break;
     }
     return nullptr;
 }
