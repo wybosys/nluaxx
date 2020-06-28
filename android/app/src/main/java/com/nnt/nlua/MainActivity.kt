@@ -1,7 +1,6 @@
 package com.nnt.nlua
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.getkeepsafe.relinker.ReLinker
 
@@ -21,11 +20,11 @@ class MainActivity() : AppCompatActivity() {
         Context.shared.load(stm.readBytes())
 
         // 获得脚本中的函数
-        val obj = Context.shared.global("Test0")
-        if (obj == null)
-            Log.e("NLUA", "获取函数失败")
+        Context.shared.global("Test0")
+        //if (obj == null)
+        //Log.e("NLUA", "获取函数失败")
 
         // 调用函数
-        obj!!.call()
+        //obj!!.call()
     }
 }

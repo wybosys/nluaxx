@@ -44,7 +44,7 @@ class Context {
                 if (_shared == null) {
                     _shared = Context()
                 }
-                return _shared!!
+                return _shared as Context
             }
     }
 }
