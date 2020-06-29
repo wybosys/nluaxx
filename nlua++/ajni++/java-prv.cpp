@@ -165,6 +165,40 @@ shared_ptr<JVariant> JObject::Extract(jobject _obj)
     return _V(_obj);
 }
 
+shared_ptr<JObject> JObject::Putin(shared_ptr<JVariant> const &var)
+{
+    if (!var || var->isnil())
+        return nullptr;
+
+    auto &ctx = Env.context();
+
+    switch (var->vt) {
+        case JVariant::VT::OBJECT:
+            return var->toObject();
+        case JVariant::VT::BOOLEAN: {
+            auto STD_BOOLEAN = ctx.register_class<jre::Boolean>();
+            return STD_BOOLEAN->construct(var->toBool())->toObject();
+        }
+        case JVariant::VT::INTEGER: {
+            auto STD_INTEGER = ctx.register_class<jre::Integer>();
+            return STD_INTEGER->construct(var->toInteger())->toObject();
+        }
+        case JVariant::VT::NUMBER: {
+            auto STD_DOUBLE = ctx.register_class<jre::Double>();
+            return STD_DOUBLE->construct(var->toNumber())->toObject();
+        }
+        case JVariant::VT::STRING: {
+            auto STD_STRING = ctx.register_class<jre::String>();
+            return STD_STRING->construct(var->toString())->toObject();
+        }
+            break;
+        default:
+            break;
+    }
+    Logger::Error("无法将类型 " + ::CROSS_NS::tostr((int) var->vt) + " 转换成为JObject");
+    return nullptr;
+}
+
 # define JOBJECT_IMPL_EXTRACT_ARR \
 size_t sz = Env.GetArrayLength(arr); \
 auto o = make_shared<JArray>(); \

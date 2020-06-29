@@ -3,7 +3,7 @@
 
 AJNI_BEGIN_NS(jre)
 
-class Object : public JClass
+class Object: public JClass
 {
 public:
     static JClassPath const CLASSPATH;
@@ -13,7 +13,7 @@ public:
     JMemberMethod toString;
 };
 
-class ClassLoader : public JClass
+class ClassLoader: public JClass
 {
 public:
     static JClassPath const CLASSPATH;
@@ -23,7 +23,7 @@ public:
     JMemberMethod loadClass;
 };
 
-class Throwable : public Object
+class Throwable: public Object
 {
 public:
     static JClassPath const CLASSPATH;
@@ -31,7 +31,7 @@ public:
     Throwable(JClassPath const & = CLASSPATH);
 };
 
-class Boolean : public JClass
+class Boolean: public JClass
 {
 public:
     static JClassPath const CLASSPATH;
@@ -41,7 +41,7 @@ public:
     JMemberMethod booleanValue;
 };
 
-class Number : public JClass
+class Number: public JClass
 {
 public:
     static JClassPath const CLASSPATH;
@@ -51,7 +51,7 @@ public:
     JMemberMethod longValue;
 };
 
-class Float : public Number
+class Float: public Number
 {
 public:
     static JClassPath const CLASSPATH;
@@ -61,7 +61,7 @@ public:
     JMemberMethod floatValue;
 };
 
-class Double : public Number
+class Double: public Number
 {
 public:
     static JClassPath const CLASSPATH;
@@ -71,7 +71,17 @@ public:
     JMemberMethod doubleValue;
 };
 
-class String : public JClass
+class Integer: public Number
+{
+public:
+    static JClassPath const CLASSPATH;
+
+    Integer(JClassPath const & = CLASSPATH);
+
+    JMemberMethod intValue;
+};
+
+class String: public JClass
 {
 public:
     static JClassPath const CLASSPATH;
@@ -86,7 +96,7 @@ namespace TypeSignature
 extern const JTypeSignature CALLBACK;
 }
 
-class Callback : public JClass
+class Callback: public JClass
 {
 public:
     static JClassPath const CLASSPATH;

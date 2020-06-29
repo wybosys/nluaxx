@@ -1,71 +1,35 @@
 #include <jni.h>
 #include <nlua++/nlua++.hpp>
+#define __NLUA_PRIVATE__
+#include <nlua++/android-prv.hpp>
 #include <ajni++/ajni++.hpp>
 
 USE_NLUA;
 USE_AJNI;
 
-AJNI_API(void) Java_com_nnt_nlua_Context_jni_1create(JNIEnv *env, jobject thiz)
+#define NLUA_FUNC(cls, name) AJNI_FUNCNAME(com_nnt_nlua, cls, name)
+
+AJNI_API(void)
+NLUA_FUNC(Context, jni_1create)(JNIEnv *env, jobject thiz)
 {
     Context::shared().create();
 }
 
-AJNI_API(jboolean) Java_com_nnt_nlua_Context_jni_1loadfile(JNIEnv *env, jobject thiz,
-                                                           jstring file)
+AJNI_API(jboolean)
+NLUA_FUNC(Context, jni_1loadfile)(JNIEnv *env, jobject thiz, jstring file)
 {
     return Context::shared().load(Variant(file).toString());
 }
 
-AJNI_API(jboolean) Java_com_nnt_nlua_Context_jni_1loadbuffer(JNIEnv *env,
-                                                             jobject thiz,
-                                                             jbyteArray arr)
+AJNI_API(jboolean)
+NLUA_FUNC(Context, jni_1loadbuffer)(JNIEnv *env, jobject thiz, jbyteArray arr)
 {
     auto bytes = JObject::Extract(arr)->toArray()->toBytes();
     return Context::shared().load(&bytes->at(0), bytes->size());
 }
 
-template<typename T>
-class GsObject
-{
-public:
-
-    GsObject()
-        : _cnt(0)
-    {}
-
-    typedef shared_ptr<T> object_type;
-
-    size_t add(object_type const &v)
-    {
-        NNT_AUTOGUARD(_mtx);
-        size_t idx = ++_cnt;
-        _map[idx] = v;
-        return idx;
-    }
-
-    void remove(size_t idx)
-    {
-        NNT_AUTOGUARD(_mtx);
-        _map.erase(idx);
-    }
-
-    object_type get(size_t idx)
-    {
-        NNT_AUTOGUARD(_mtx);
-        auto fnd = _map.find(idx);
-        return fnd == _map.end() ? nullptr : fnd->second;
-    }
-
-private:
-    ::std::map<size_t, object_type> _map;
-    ::std::atomic<size_t> _cnt;
-    ::std::mutex _mtx;
-};
-
-// 保存返回给Java层的C++对象
-static GsObject<Object> gs_objects;
-
-AJNI_API(jint) Java_com_nnt_nlua_Context_jni_1global(JNIEnv *env, jobject thiz, jstring keypath)
+AJNI_API(jint)
+NLUA_FUNC(Context, jni_1global)(JNIEnv *env, jobject thiz, jstring keypath)
 {
     auto r = Context::shared().global(JVariant(keypath).toString());
     if (!r)
@@ -74,18 +38,195 @@ AJNI_API(jint) Java_com_nnt_nlua_Context_jni_1global(JNIEnv *env, jobject thiz, 
     return gs_objects.add(r);
 }
 
-AJNI_API(void) Java_com_nnt_nlua_Object_jni_1finalize(JNIEnv *env, jobject thiz, jint idx)
+AJNI_API(void)
+NLUA_FUNC(Object, jni_1finalize)(JNIEnv *env, jobject thiz, jint idx)
 {
     gs_objects.remove(idx);
 }
 
-AJNI_API(jobject) Java_com_nnt_nlua_Object_jni_1call0(JNIEnv *env, jobject thiz, jint idx)
+#define NLUA_OBJECT_CALL_BEGIN \
+    auto fnd = gs_objects.get(idx); \
+if (!fnd) { \
+Logger::Error("没有找到LUA对象"); \
+return nullptr; \
+} \
+auto r = JObject::Putin(toAjni(
+
+#define NLUA_OBJECT_CALL_END \
+)); \
+return r ? r->asReturn() : nullptr;
+
+AJNI_API(jobject)
+NLUA_FUNC(Object, jni_1call0)(JNIEnv *env, jobject thiz, jint idx)
 {
     auto fnd = gs_objects.get(idx);
     if (!fnd) {
         Logger::Error("没有找到LUA对象");
         return nullptr;
     }
-    // auto r = fnd->call();
-    return nullptr;
+    auto r = JObject::Putin(toAjni(fnd->call()));
+    return r ? r->asReturn() : nullptr;
+}
+
+AJNI_API(jobject)
+NLUA_FUNC(Object, jni_1call1)(JNIEnv *env, jobject thiz, jint idx, jobject p0)
+{
+    NLUA_OBJECT_CALL_BEGIN
+        fnd->call(*fromAjni(JObject::Extract(p0)))
+    NLUA_OBJECT_CALL_END
+}
+
+AJNI_API(jobject)
+NLUA_FUNC(Object, jni_1call2)(JNIEnv *env, jobject thiz, jint idx, jobject p0, jobject p1)
+{
+    NLUA_OBJECT_CALL_BEGIN
+        fnd->call(*fromAjni(JObject::Extract(p0)), *fromAjni(JObject::Extract(p1)))
+    NLUA_OBJECT_CALL_END
+}
+
+AJNI_API(jobject)
+NLUA_FUNC(Object, jni_1call3)(JNIEnv *env,
+                              jobject thiz,
+                              jint idx,
+                              jobject p0,
+                              jobject p1,
+                              jobject p2)
+{
+    NLUA_OBJECT_CALL_BEGIN
+        fnd->call(*fromAjni(JObject::Extract(p0)),
+                  *fromAjni(JObject::Extract(p1)),
+                  *fromAjni(JObject::Extract(p2)))
+    NLUA_OBJECT_CALL_END
+}
+
+AJNI_API(jobject)
+NLUA_FUNC(Object, jni_1call4)(JNIEnv *env,
+                              jobject thiz,
+                              jint idx,
+                              jobject p0,
+                              jobject p1,
+                              jobject p2,
+                              jobject p3)
+{
+    NLUA_OBJECT_CALL_BEGIN
+        fnd->call(*fromAjni(JObject::Extract(p0)),
+                  *fromAjni(JObject::Extract(p1)),
+                  *fromAjni(JObject::Extract(p2)),
+                  *fromAjni(JObject::Extract(p3)))
+    NLUA_OBJECT_CALL_END
+}
+
+AJNI_API(jobject)
+NLUA_FUNC(Object, jni_1call5)(JNIEnv *env,
+                              jobject thiz,
+                              jint idx,
+                              jobject p0,
+                              jobject p1,
+                              jobject p2,
+                              jobject p3,
+                              jobject p4)
+{
+    NLUA_OBJECT_CALL_BEGIN
+        fnd->call(*fromAjni(JObject::Extract(p0)),
+                  *fromAjni(JObject::Extract(p1)),
+                  *fromAjni(JObject::Extract(p2)),
+                  *fromAjni(JObject::Extract(p3)),
+                  *fromAjni(JObject::Extract(p4)))
+    NLUA_OBJECT_CALL_END
+}
+
+AJNI_API(jobject)
+NLUA_FUNC(Object, jni_1call6)(JNIEnv *env,
+                              jobject thiz,
+                              jint idx,
+                              jobject p0,
+                              jobject p1,
+                              jobject p2,
+                              jobject p3,
+                              jobject p4,
+                              jobject p5)
+{
+    NLUA_OBJECT_CALL_BEGIN
+        fnd->call(*fromAjni(JObject::Extract(p0)),
+                  *fromAjni(JObject::Extract(p1)),
+                  *fromAjni(JObject::Extract(p2)),
+                  *fromAjni(JObject::Extract(p3)),
+                  *fromAjni(JObject::Extract(p4)),
+                  *fromAjni(JObject::Extract(p5)))
+    NLUA_OBJECT_CALL_END
+}
+
+AJNI_API(jobject)
+NLUA_FUNC(Object, jni_1call7)(JNIEnv *env,
+                              jobject thiz,
+                              jint idx,
+                              jobject p0,
+                              jobject p1,
+                              jobject p2,
+                              jobject p3,
+                              jobject p4,
+                              jobject p5,
+                              jobject p6)
+{
+    NLUA_OBJECT_CALL_BEGIN
+        fnd->call(*fromAjni(JObject::Extract(p0)),
+                  *fromAjni(JObject::Extract(p1)),
+                  *fromAjni(JObject::Extract(p2)),
+                  *fromAjni(JObject::Extract(p3)),
+                  *fromAjni(JObject::Extract(p4)),
+                  *fromAjni(JObject::Extract(p5)),
+                  *fromAjni(JObject::Extract(p6)))
+    NLUA_OBJECT_CALL_END
+}
+
+AJNI_API(jobject)
+NLUA_FUNC(Object, jni_1call8)(JNIEnv *env,
+                              jobject thiz,
+                              jint idx,
+                              jobject p0,
+                              jobject p1,
+                              jobject p2,
+                              jobject p3,
+                              jobject p4,
+                              jobject p5,
+                              jobject p6,
+                              jobject p7)
+{
+    NLUA_OBJECT_CALL_BEGIN
+        fnd->call(*fromAjni(JObject::Extract(p0)),
+                  *fromAjni(JObject::Extract(p1)),
+                  *fromAjni(JObject::Extract(p2)),
+                  *fromAjni(JObject::Extract(p3)),
+                  *fromAjni(JObject::Extract(p4)),
+                  *fromAjni(JObject::Extract(p5)),
+                  *fromAjni(JObject::Extract(p6)),
+                  *fromAjni(JObject::Extract(p7)))
+    NLUA_OBJECT_CALL_END
+}
+
+AJNI_API(jobject)
+NLUA_FUNC(Object, jni_1call9)(JNIEnv *env,
+                              jobject thiz,
+                              jint idx,
+                              jobject p0,
+                              jobject p1,
+                              jobject p2,
+                              jobject p3,
+                              jobject p4,
+                              jobject p5,
+                              jobject p6,
+                              jobject p7,
+                              jobject p8)
+{
+    NLUA_OBJECT_CALL_BEGIN
+        fnd->call(*fromAjni(JObject::Extract(p0)),
+                  *fromAjni(JObject::Extract(p1)),
+                  *fromAjni(JObject::Extract(p2)),
+                  *fromAjni(JObject::Extract(p3)),
+                  *fromAjni(JObject::Extract(p4)),
+                  *fromAjni(JObject::Extract(p5)),
+                  *fromAjni(JObject::Extract(p6)),
+                  *fromAjni(JObject::Extract(p7)),
+                  *fromAjni(JObject::Extract(p8)))
+    NLUA_OBJECT_CALL_END
 }

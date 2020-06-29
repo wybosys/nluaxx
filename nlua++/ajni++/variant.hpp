@@ -44,6 +44,9 @@ public:
     static shared_ptr<JVariant> Extract(jfloatArray);
     static shared_ptr<JVariant> Extract(jdoubleArray);
 
+    // 将var转换成obj，如果本身就是obj则直接返回，如果是pod类型，则转换为对应的Java对象
+    static shared_ptr<JObject> Putin(shared_ptr<JVariant> const &);
+
     // 是否时空对象
     bool isnil() const;
 
