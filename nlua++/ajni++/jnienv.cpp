@@ -96,7 +96,8 @@ void JEnv::BindVM(JavaVM *vm, JNIEnv *env)
             gs_vm->AttachCurrentThread(&tls_guard.env, nullptr);
             tls_guard.detach = false;
         }
-    } else {
+    }
+    else {
         tls_guard.env = env;
     }
 
@@ -165,9 +166,11 @@ JEnv::class_type JEnv::FindClass(string const &str)
         // 如果从其他逻辑而不是JNI回调调用，则大概率env==null，需要加以保护
         Check();
         clz = d_ptr->safeFindClass(str);
-    } else if (tls_guard.ismain) {
+    }
+    else if (tls_guard.ismain) {
         clz = tls_env->FindClass(str.c_str());
-    } else {
+    }
+    else {
         Logger::Fatal("不能在线程中使用FindClass命令，请确认是否调用了 ajnix.Activity.Bind 函数");
         return nullptr;
     }
@@ -179,6 +182,8 @@ JEnv::class_type JEnv::FindClass(string const &str)
 
     auto r = make_shared<JClass>();
     r->_clazz._reset(clz);
+    tls_env->DeleteLocalRef(clz);
+
     return r;
 }
 
@@ -225,18 +230,22 @@ JEnv::string_type JEnv::GetStaticStringField(JClass const &cls, jfieldID id)
 
     auto r = make_shared<JString>();
     r->_reset(s);
+    tls_env->DeleteLocalRef(s);
+
     return r;
 }
 
 JEnv::array_type JEnv::GetStaticArrayField(JClass const &cls, jfieldID id)
 {
-    auto o = (jarray) tls_env->GetStaticObjectField((jclass) cls._clazz._obj, id);
+    auto o = (jobjectArray) tls_env->GetStaticObjectField((jclass) cls._clazz._obj, id);
     if (!o)
         return nullptr;
     size_t sz = tls_env->GetArrayLength(o);
 
     auto r = make_shared<JArray>();
     r->_reset(o, sz);
+    tls_env->DeleteLocalRef(o);
+
     return r;
 }
 
@@ -330,6 +339,8 @@ JEnv::object_type JEnv::GetObjectField(JObject const &obj, jfieldID fid)
 
     auto r = make_shared<JObject>();
     r->_reset(jo);
+    tls_env->DeleteLocalRef(jo);
+
     return r;
 }
 
@@ -341,18 +352,22 @@ JEnv::string_type JEnv::GetStringField(JObject const &obj, jfieldID fid)
 
     auto r = make_shared<JString>();
     r->_reset(jo);
+    tls_env->DeleteLocalRef(jo);
+
     return r;
 }
 
 JEnv::array_type JEnv::GetArrayField(JObject const &obj, jfieldID fid)
 {
-    auto jo = (jarray) tls_env->GetObjectField(obj._obj, fid);
+    auto jo = (jobjectArray) tls_env->GetObjectField(obj._obj, fid);
     if (!jo)
         return nullptr;
     size_t sz = tls_env->GetArrayLength(jo);
 
     auto r = make_shared<JArray>();
     r->_reset(jo, sz);
+    tls_env->DeleteLocalRef(jo);
+
     return r;
 }
 
@@ -400,7 +415,8 @@ void JEnv::SetObjectField(JObject const &obj, jfieldID id, object_type const &v)
 {
     if (v) {
         tls_env->SetObjectField(obj._obj, id, v->_obj);
-    } else {
+    }
+    else {
         tls_env->SetObjectField(obj._obj, id, nullptr);
     }
 }
@@ -451,7 +467,6 @@ void JEnv::SetDoubleField(JObject const &obj, jfieldID id, jdouble v)
 {
     tls_env->SetDoubleField(obj._obj, id, v);
 }
-
 
 jmethodID JEnv::GetMethodID(JClass const &cls, string const &name, string const &sig)
 {
@@ -521,6 +536,8 @@ JEnv::object_type JEnv::CallStaticObjectMethod(JClass const &cls, jmethodID id, 
 
     auto r = make_shared<JObject>();
     r->_reset(o);
+    tls_env->DeleteLocalRef(o);
+
     return r;
 }
 
@@ -532,18 +549,23 @@ JEnv::string_type JEnv::CallStaticStringMethod(JClass const &cls, jmethodID id, 
 
     auto r = make_shared<JString>();
     r->_reset(o);
+    tls_env->DeleteLocalRef(o);
+
     return r;
 }
 
 JEnv::array_type JEnv::CallStaticArrayMethod(JClass const &cls, jmethodID id, JValues const &vals)
 {
-    auto o = (jarray) tls_env->CallStaticObjectMethodA((jclass) cls._clazz._obj, id, vals._args());
+    auto o =
+        (jobjectArray) tls_env->CallStaticObjectMethodA((jclass) cls._clazz._obj, id, vals._args());
     if (!o)
         return nullptr;
     size_t sz = tls_env->GetArrayLength(o);
 
     auto r = make_shared<JArray>();
     r->_reset(o, sz);
+    tls_env->DeleteLocalRef(o);
+
     return r;
 }
 
@@ -600,6 +622,8 @@ JEnv::object_type JEnv::CallObjectMethod(JObject const &obj, jmethodID id, JValu
 
     auto r = make_shared<JObject>();
     r->_reset(o);
+    tls_env->DeleteLocalRef(o);
+
     return r;
 }
 
@@ -611,18 +635,22 @@ JEnv::string_type JEnv::CallStringMethod(JObject const &obj, jmethodID id, JValu
 
     auto r = make_shared<JString>();
     r->_reset(o);
+    tls_env->DeleteLocalRef(o);
+
     return r;
 }
 
 JEnv::array_type JEnv::CallArrayMethod(JObject const &obj, jmethodID id, JValues const &vals)
 {
-    auto o = (jarray) tls_env->CallObjectMethodA(obj._obj, id, vals._args());
+    auto o = (jobjectArray) tls_env->CallObjectMethodA(obj._obj, id, vals._args());
     if (!o)
         return nullptr;
     size_t sz = tls_env->GetArrayLength(o);
 
     auto r = make_shared<JArray>();
     r->_reset(o, sz);
+    tls_env->DeleteLocalRef(o);
+
     return r;
 }
 
@@ -644,6 +672,24 @@ jbyte const *JEnv::GetBytes(JArray const &arr)
 jchar const *JEnv::GetChars(JArray const &arr)
 {
     return tls_env->GetCharArrayElements((jcharArray) arr._arr._obj, JNI_FALSE);
+}
+
+void JEnv::ProcessBytes(JArray const &arr, ::std::function<void(jbyte const *)> proc)
+{
+    jboolean cp;
+    auto r = tls_env->GetByteArrayElements((jbyteArray) arr._arr._obj, &cp);
+    proc(r);
+    if (cp)
+        tls_env->ReleaseByteArrayElements((jbyteArray) arr._arr._obj, r, 0);
+}
+
+void JEnv::ProcessChars(JArray const &arr, ::std::function<void(jchar const *)> proc)
+{
+    jboolean cp;
+    auto r = tls_env->GetCharArrayElements((jcharArray) arr._arr._obj, &cp);
+    proc(r);
+    if (cp)
+        tls_env->ReleaseCharArrayElements((jcharArray) arr._arr._obj, r, 0);
 }
 
 jobject JEnv::NewLocalRef(jobject obj)
@@ -700,17 +746,29 @@ void JEnv::ExceptionClear()
 namespace TypeSignature
 {
 const JTypeSignature CLASS = "Ljava/lang/Class;";
+
 const JTypeSignature STRING = "Ljava/lang/String;";
+
 const JTypeSignature OBJECT = "Ljava/lang/Object;";
+
 const JTypeSignature BOOLEAN = "Z";
+
 const JTypeSignature BYTE = "B";
+
 const JTypeSignature CHAR = "C";
+
 const JTypeSignature SHORT = "S";
+
 const JTypeSignature INT = "I";
+
 const JTypeSignature LONG = "J";
+
 const JTypeSignature FLOAT = "F";
+
 const JTypeSignature DOUBLE = "D";
+
 const JTypeSignature VOID = "V";
+
 const JTypeSignature BYTEARRAY = "[B";
 } // namespace TypeSignature
 

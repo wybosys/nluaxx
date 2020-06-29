@@ -18,7 +18,8 @@ jobject gs_context = nullptr; // 业务层android上下文
 
 // 所有线程的AutoGuard资源
 static ::std::mutex gsmtx_tlses;
-static ::std::set<JEnvThreadAutoGuard*> gs_tlses;
+
+static ::std::set<JEnvThreadAutoGuard *> gs_tlses;
 
 JEnvThreadAutoGuard::JEnvThreadAutoGuard()
 {
@@ -52,7 +53,8 @@ void JEnvThreadAutoGuard::bind()
         if (env) {
             Logger::Info("线程" + tids + ": 获得业务定义的线程级JNIEnv");
             return;
-        } else {
+        }
+        else {
             Logger::Fatal("线程" + tids + ": 获得业务定义的线程级JNIEnv 失败");
             return;
         }
@@ -65,7 +67,7 @@ void JEnvThreadAutoGuard::bind()
         detach = true;
     }
 
-    Logger::Info("线程" + tids  + ": 获得线程级JNIEnv");
+    Logger::Info("线程" + tids + ": 获得线程级JNIEnv");
 }
 
 void JEnvThreadAutoGuard::Clear()
@@ -113,16 +115,20 @@ void JEnvThreadAutoGuard::check()
     Logger::Info("线程" + tids + ": 获得线程级JNIEnv");
 }
 
-shared_ptr<JVariant> JObject::Extract(jobject _obj) {
+shared_ptr<JVariant> JObject::Extract(jobject _obj)
+{
     if (_obj == nullptr) {
         return ::std::make_shared<JVariant>(); // 不能返回null，客户端收到的是引用类型，通过vt判断
     }
 
     auto obj = make_shared<JObject>();
     obj->_reset(_obj);
+    Env.DeleteLocalRef(_obj);
 
-    auto& ctx = Env.context();
+    // 从具体的java类型中获取数据
+    auto &ctx = Env.context();
 
+    // 判断是否是number数字对象
     auto STD_NUMBER = ctx.register_class<jre::Number>();
     if (Env.IsInstanceOf(*obj, *STD_NUMBER)) {
         auto STD_DOUBLE = ctx.register_class<jre::Double>();
@@ -141,44 +147,99 @@ shared_ptr<JVariant> JObject::Extract(jobject _obj) {
         return ref->longValue(ref);
     }
 
+    // 判断是否是boolean对象
     auto STD_BOOLEAN = ctx.register_class<jre::Boolean>();
     if (Env.IsInstanceOf(*obj, *STD_BOOLEAN)) {
         JEntry<jre::Boolean> ref(obj);
         return ref->booleanValue(ref);
     }
 
+    // 判断是否是string对象
     auto STD_STRING = ctx.register_class<jre::String>();
     if (Env.IsInstanceOf(*obj, *STD_STRING)) {
         JEntry<jre::String> ref(obj);
         return ref->getBytes(ref);
     }
 
+    // 自定义类型
     return _V(_obj);
 }
 
-namespace TypeSignature {
+# define JOBJECT_IMPL_EXTRACT_ARR \
+size_t sz = Env.GetArrayLength(arr); \
+auto o = make_shared<JArray>(); \
+o->_reset(arr, sz); \
+return make_shared<JVariant>(o);
 
-    // 简化switch写法的工具函数
-    TS GetTypeForSwitch(JTypeSignature const& ts)
-    {
-        static ::std::map<string, TS> gs_types = {
-                {CLASS, TS::CLASS},
-                {STRING, TS::STRING},
-                {OBJECT, TS::OBJECT},
-                {BOOLEAN, TS::BOOLEAN},
-                {BYTE, TS::BYTE},
-                {CHAR, TS::CHAR},
-                {SHORT, TS::SHORT},
-                {INT, TS::INT},
-                {LONG, TS::LONG},
-                {FLOAT, TS::FLOAT},
-                {DOUBLE, TS::DOUBLE},
-                {VOID, TS::VOID},
-                {BYTEARRAY, TS::BYTEARRAY}
-        };
-        auto fnd = gs_types.find(ts);
-        return fnd == gs_types.end() ? TS::UNKNOWN : fnd->second;
-    }
+shared_ptr<JVariant> JObject::Extract(jobjectArray arr)
+{
+    JOBJECT_IMPL_EXTRACT_ARR;
+}
+
+shared_ptr<JVariant> JObject::Extract(jbooleanArray arr)
+{
+    JOBJECT_IMPL_EXTRACT_ARR;
+}
+
+shared_ptr<JVariant> JObject::Extract(jbyteArray arr)
+{
+    JOBJECT_IMPL_EXTRACT_ARR;
+}
+
+shared_ptr<JVariant> JObject::Extract(jcharArray arr)
+{
+    JOBJECT_IMPL_EXTRACT_ARR;
+}
+
+shared_ptr<JVariant> JObject::Extract(jshortArray arr)
+{
+    JOBJECT_IMPL_EXTRACT_ARR;
+}
+
+shared_ptr<JVariant> JObject::Extract(jintArray arr)
+{
+    JOBJECT_IMPL_EXTRACT_ARR;
+}
+
+shared_ptr<JVariant> JObject::Extract(jlongArray arr)
+{
+    JOBJECT_IMPL_EXTRACT_ARR;
+}
+
+shared_ptr<JVariant> JObject::Extract(jfloatArray arr)
+{
+    JOBJECT_IMPL_EXTRACT_ARR;
+}
+
+shared_ptr<JVariant> JObject::Extract(jdoubleArray arr)
+{
+    JOBJECT_IMPL_EXTRACT_ARR;
+}
+
+namespace TypeSignature
+{
+
+// 简化switch写法的工具函数
+TS GetTypeForSwitch(JTypeSignature const &ts)
+{
+    static ::std::map<string, TS> gs_types = {
+        {CLASS, TS::CLASS},
+        {STRING, TS::STRING},
+        {OBJECT, TS::OBJECT},
+        {BOOLEAN, TS::BOOLEAN},
+        {BYTE, TS::BYTE},
+        {CHAR, TS::CHAR},
+        {SHORT, TS::SHORT},
+        {INT, TS::INT},
+        {LONG, TS::LONG},
+        {FLOAT, TS::FLOAT},
+        {DOUBLE, TS::DOUBLE},
+        {VOID, TS::VOID},
+        {BYTEARRAY, TS::BYTEARRAY}
+    };
+    auto fnd = gs_types.find(ts);
+    return fnd == gs_types.end() ? TS::UNKNOWN : fnd->second;
+}
 }
 
 AJNI_END

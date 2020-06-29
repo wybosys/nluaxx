@@ -9,20 +9,22 @@
 
 AJNI_BEGIN
 
-namespace kotlin {
-    class JClass;
+namespace kotlin
+{
+class JClass;
 }
 
 class JVariant;
 class JArray;
 
-typedef ::std::vector<JVariant const*> args_type;
+typedef ::std::vector<JVariant const *> args_type;
 
-class JObject {
+class JObject
+{
 public:
 
     JObject();
-    JObject(JObject const&);
+    JObject(JObject const &);
 
     // 释放引用计数
     virtual ~JObject();
@@ -32,19 +34,29 @@ public:
 
     // 转换成具体的Variant类型，和Variant(JObject)不同，转换会读取具体对象内部信息，返回C++数据构成的Variant对象
     static shared_ptr<JVariant> Extract(jobject);
+    static shared_ptr<JVariant> Extract(jobjectArray);
+    static shared_ptr<JVariant> Extract(jbooleanArray);
+    static shared_ptr<JVariant> Extract(jbyteArray);
+    static shared_ptr<JVariant> Extract(jcharArray);
+    static shared_ptr<JVariant> Extract(jshortArray);
+    static shared_ptr<JVariant> Extract(jintArray);
+    static shared_ptr<JVariant> Extract(jlongArray);
+    static shared_ptr<JVariant> Extract(jfloatArray);
+    static shared_ptr<JVariant> Extract(jdoubleArray);
 
     // 是否时空对象
     bool isnil() const;
 
-    JObject& operator = (JObject const&);
+    JObject &operator=(JObject const &);
 
 protected:
 
     // 只允许特殊情况使用
-    class _JGlobalObject {
+    class _JGlobalObject
+    {
     public:
 
-        _JGlobalObject(JObject const&);
+        _JGlobalObject(JObject const &);
 
         void grab();
         bool drop();
@@ -72,10 +84,12 @@ protected:
     friend class JArray;
     friend class JVariant;
     friend class kotlin::JClass;
-    template <typename T> friend class JEntry;
+    template<typename T> friend
+    class JEntry;
 };
 
-class JString {
+class JString
+{
 public:
 
     JString();
@@ -84,7 +98,8 @@ public:
 
     ~JString();
 
-    inline operator const string &() const {
+    inline operator const string &() const
+    {
         return _str;
     }
 
@@ -105,18 +120,52 @@ class JArray
 {
 public:
 
+    // 数组中数据类型
+    enum struct VT
+    {
+        UNKNOWN,
+        OBJECT,
+        BOOLEAN,
+        BYTE,
+        CHAR,
+        SHORT,
+        INT,
+        LONG,
+        FLOAT,
+        DOUBLE
+    };
+
     JArray();
     ~JArray();
 
-    inline size_t size() const {
+    // 获取数组长度
+    inline size_t size() const
+    {
         return _sz;
     }
 
+    // array转换成string
     string toString() const;
+
+    typedef ::COMXX_NS::Variant<>::bytes_type bytes_type;
+
+    // 转换为bytes对象
+    shared_ptr<bytes_type> toBytes() const;
+
+    // 数据类型
+    const VT vt = VT::UNKNOWN;
 
 protected:
 
-    void _reset(jarray, size_t);
+    void _reset(jobjectArray, size_t);
+    void _reset(jbooleanArray, size_t);
+    void _reset(jbyteArray, size_t);
+    void _reset(jcharArray, size_t);
+    void _reset(jshortArray, size_t);
+    void _reset(jintArray, size_t);
+    void _reset(jlongArray, size_t);
+    void _reset(jfloatArray, size_t);
+    void _reset(jdoubleArray, size_t);
 
 private:
 
@@ -124,11 +173,13 @@ private:
     size_t _sz;
 
     friend class JEnv;
+    friend class JObject;
 };
 
 class JVariant;
 
-class JValue {
+class JValue
+{
 public:
 
     JValue(JVariant const &);
@@ -137,7 +188,8 @@ public:
 
     ~JValue();
 
-    inline operator jvalue() const {
+    inline operator jvalue() const
+    {
         return _val;
     }
 
@@ -148,16 +200,18 @@ private:
     size_t _fnidx = 0; // 如果是函数对象，保存函数的本地索引
 };
 
-class JValues {
+class JValues
+{
 public:
 
     JValues() = default;
-    JValues(::std::initializer_list<args_type::value_type> const&);
+    JValues(::std::initializer_list<args_type::value_type> const &);
     JValues(args_type const &);
 
-    typedef shared_ptr <JValue> value_type;
+    typedef shared_ptr<JValue> value_type;
 
-    inline size_t size() const {
+    inline size_t size() const
+    {
         return _vals.size();
     }
 
@@ -167,7 +221,8 @@ private:
     ::std::vector<jvalue> _jvals;
 
     // 返回jni函数需要的参数列表
-    inline jvalue const* _args() const {
+    inline jvalue const *_args() const
+    {
         return &_jvals[0];
     }
 
@@ -175,36 +230,41 @@ private:
 };
 
 typedef ptrdiff_t integer;
+
 typedef double number;
 
-class JVariant {
+class JVariant
+{
 private:
 
-    class JComVariantTypes : public ::com::VariantTypes<> {
+    class JComVariantTypes: public ::com::VariantTypes<>
+    {
     public:
         typedef _jobject object_type;
         typedef JString string_type;
     };
 
-    class JComFunctionTypes : public ::COMXX_NS::FunctionTypes<
-            JVariant,
-            shared_ptr<JVariant>,
-            JVariant const&
-            > {};
+    class JComFunctionTypes: public ::COMXX_NS::FunctionTypes<
+        JVariant,
+        shared_ptr < JVariant>,
+                             JVariant const&
+    > {};
 
 public:
 
     typedef ::COMXX_NS::Variant<JComVariantTypes> variant_type;
     typedef ::COMXX_NS::Function<JComFunctionTypes> function_type;
 
-    enum struct VT {
+    enum struct VT
+    {
         NIL,
         OBJECT,
         BOOLEAN,
         INTEGER,
         NUMBER,
         STRING,
-        FUNCTION
+        FUNCTION,
+        ARRAY
     };
 
     const VT vt;
@@ -237,6 +297,8 @@ public:
 
     JVariant(jobject);
 
+    JVariant(shared_ptr<JArray> const &);
+
     JVariant(function_type::fun0_type);
     JVariant(function_type::fun1_type);
     JVariant(function_type::fun2_type);
@@ -248,7 +310,7 @@ public:
     JVariant(function_type::fun8_type);
     JVariant(function_type::fun9_type);
 
-    string const &toString() const;
+    string toString() const;
 
     integer toInteger() const;
 
@@ -256,22 +318,31 @@ public:
 
     bool toBool() const;
 
-    inline operator string const &() const {
+    inline operator string() const
+    {
         return toString();
     }
 
-    inline operator variant_type const &() const {
+    inline operator variant_type const &() const
+    {
         return _var;
     }
 
-    inline shared_ptr<function_type> toFunction() const {
+    inline shared_ptr<function_type> toFunction() const
+    {
         return _fun;
     }
 
-    shared_ptr<JObject> toObject() const;
-    static shared_ptr<JVariant> FromObject(JObject const&);
+    inline shared_ptr<JArray> toArray() const
+    {
+        return _arr;
+    }
 
-    inline bool isnil() const {
+    shared_ptr<JObject> toObject() const;
+    static shared_ptr<JVariant> FromObject(JObject const &);
+
+    inline bool isnil() const
+    {
         return vt == VT::NIL;
     }
 
@@ -282,16 +353,20 @@ private:
 
     variant_type _var;
     shared_ptr<function_type> _fun;
+    shared_ptr<JArray> _arr;
 
 };
 
-template <typename T>
-inline shared_ptr<JVariant> _V(T const& v) {
+template<typename T>
+inline shared_ptr<JVariant> _V(T const &v)
+{
     return make_shared<JVariant>(v);
 }
 
 template<typename _CharT, typename _Traits>
-static ::std::basic_ostream <_CharT, _Traits> &operator<<(::std::basic_ostream <_CharT, _Traits> &stm, JVariant const &v) {
+static ::std::basic_ostream<_CharT, _Traits> &
+operator<<(::std::basic_ostream<_CharT, _Traits> &stm, JVariant const &v)
+{
     switch (v.vt) {
         default:
             break;
@@ -315,7 +390,9 @@ static ::std::basic_ostream <_CharT, _Traits> &operator<<(::std::basic_ostream <
 }
 
 template<typename _CharT, typename _Traits>
-static ::std::basic_ostream <_CharT, _Traits> &operator<<(::std::basic_ostream <_CharT, _Traits> &stm, shared_ptr <JVariant> const &v) {
+static ::std::basic_ostream<_CharT, _Traits> &
+operator<<(::std::basic_ostream<_CharT, _Traits> &stm, shared_ptr<JVariant> const &v)
+{
     if (!v)
         return stm;
     return stm << *v;
@@ -325,13 +402,15 @@ AJNI_END
 
 COMXX_BEGIN
 
-template <>
-inline jobject grab<jobject>(jobject obj) {
+template<>
+inline jobject grab<jobject>(jobject obj)
+{
     return ::AJNI_NS::Env.NewLocalRef(obj);
 }
 
-template <>
-inline bool drop<jobject>(jobject obj) {
+template<>
+inline bool drop<jobject>(jobject obj)
+{
     ::AJNI_NS::Env.DeleteLocalRef(obj);
     return true;
 }

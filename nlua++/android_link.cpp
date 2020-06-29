@@ -20,7 +20,8 @@ AJNI_API(jboolean) Java_com_nnt_nlua_Context_jni_1loadbuffer(JNIEnv *env,
                                                              jobject thiz,
                                                              jbyteArray arr)
 {
-    return true;
+    auto bytes = JObject::Extract(arr)->toArray()->toBytes();
+    return Context::shared().load(&bytes->at(0), bytes->size());
 }
 
 template<typename T>

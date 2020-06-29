@@ -71,6 +71,12 @@ bool Context::load(void *buf, size_t len)
         return false;
     }
 
+    s = lua_pcall(L, 0, LUA_MULTRET, 0);
+    if (LUA_OK != s) {
+        NLUA_ERROR("运行缓存内容失败");
+        return false;
+    }
+
     NLUA_DEBUG("加载缓存成功");
 
     return true;
