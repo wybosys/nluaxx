@@ -75,7 +75,7 @@ Variant::Variant(void *v)
 {
 }
 
-Variant::Variant(nullptr_t)
+Variant::Variant(::std::nullptr_t)
     : vt(VT::POINTER), _var(nullptr)
 {
 }

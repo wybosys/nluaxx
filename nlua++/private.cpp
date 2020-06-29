@@ -30,6 +30,7 @@ ContextAutoGuard::~ContextAutoGuard()
 }
 
 lua_State *ContextAutoGuard::MainL = nullptr;
+
 thread_local ContextAutoGuard ContextAutoGuard::Tls;
 
 ContextWorkerResource::ContextWorkerResource()
@@ -43,10 +44,10 @@ ContextPrivate::ContextPrivate()
     // pass
 }
 
-ContextPrivate::~ContextPrivate() 
+ContextPrivate::~ContextPrivate()
 {
     clear();
-    
+
     if (_freel) {
         lua_close(L);
     }
@@ -59,11 +60,11 @@ ContextPrivate::~ContextPrivate()
     pvd_worker.stop();
 }
 
-void ContextPrivate::clear() 
+void ContextPrivate::clear()
 {
     classes.clear();
     modules.clear();
-    
+
     refId = 1;
     refClassFuncs.clear();
     refFuncs.clear();
@@ -71,12 +72,11 @@ void ContextPrivate::clear()
     refSingletonId = 1;
 }
 
-void ContextPrivate::create() 
+void ContextPrivate::create()
 {
     pvd_worker.stop();
 
-    if (ContextAutoGuard::Tls.ismain)
-    {
+    if (ContextAutoGuard::Tls.ismain) {
         // 如果时主线程，则为关闭重建的流程
         if (L && _freel) {
             lua_close(L);
@@ -89,16 +89,13 @@ void ContextPrivate::create()
         ContextAutoGuard::MainL = L;
         ContextAutoGuard::Tls.L = L;
     }
-    else
-    {
+    else {
         // 如果主线程L已经存在，则当前为其他线程，走获取逻辑
-        if (ContextAutoGuard::MainL)
-        {
+        if (ContextAutoGuard::MainL) {
             L = ContextAutoGuard::Tls.L;
             _freel = false;
         }
-        else
-        {
+        else {
             // 不存在主线程L，仍为主线程逻辑
             if (L && _freel) {
                 lua_close(L);
@@ -169,7 +166,7 @@ void ContextPrivate::create()
     pvd_worker.start();
 }
 
-void ContextPrivate::attach(lua_State *_l) 
+void ContextPrivate::attach(lua_State *_l)
 {
     pvd_worker.stop();
 
@@ -183,21 +180,16 @@ void ContextPrivate::attach(lua_State *_l)
     L = _l;
     _freel = false;
 
-    if (L) 
-    {
-        if (ContextAutoGuard::Tls.ismain) 
-        {
+    if (L) {
+        if (ContextAutoGuard::Tls.ismain) {
             ContextAutoGuard::MainL = L;
             ContextAutoGuard::Tls.L = L;
         }
-        else
-        {
-            if (ContextAutoGuard::MainL)
-            {
+        else {
+            if (ContextAutoGuard::MainL) {
                 ContextAutoGuard::Tls.L = L;
             }
-            else
-            {
+            else {
                 // 绑定主线程环境
                 ContextAutoGuard::MainL = L;
                 ContextAutoGuard::Tls.L = L;
@@ -209,7 +201,7 @@ void ContextPrivate::attach(lua_State *_l)
     pvd_worker.start();
 }
 
-int ContextPrivate::Traceback(lua_State *L) 
+int ContextPrivate::Traceback(lua_State *L)
 {
     if (!lua_isstring(L, 1))
         return 1;
@@ -218,7 +210,7 @@ int ContextPrivate::Traceback(lua_State *L)
     return 0;
 }
 
-string ContextPrivate::find_file(string const &file) 
+string ContextPrivate::find_file(string const &file)
 {
     if (isfile(file))
         return file;
@@ -235,7 +227,7 @@ string ContextPrivate::find_file(string const &file)
     return "";
 }
 
-void ContextPrivate::update_package_paths(vector<string> const *curs) 
+void ContextPrivate::update_package_paths(vector<string> const *curs)
 {
     if (curs == nullptr) {
         NLUA_AUTOSTACK(L);
@@ -279,7 +271,7 @@ void ContextPrivate::update_package_paths(vector<string> const *curs)
     }
 }
 
-void ContextPrivate::update_cpackage_paths(vector<string> const *curs) 
+void ContextPrivate::update_cpackage_paths(vector<string> const *curs)
 {
     if (curs == nullptr) {
         NLUA_AUTOSTACK(L);
@@ -320,7 +312,7 @@ lua_State *GL()
     return Context::shared().d().pvd_worker->L;
 }
 
-::std::mutex& GMtx()
+::std::mutex &GMtx()
 {
     return Context::shared().d().pvd_worker->mtx;
 }

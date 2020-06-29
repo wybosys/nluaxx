@@ -11,7 +11,8 @@
 USE_NLUA;
 USE_CROSS;
 
-TEST (main) {
+TEST (main)
+{
     //::std::mutex mtx;
 
     // 测试原始lua
@@ -21,7 +22,8 @@ TEST (main) {
     ctx.invoke("main");
 }
 
-TEST (test0) {
+TEST (test0)
+{
     // 测试c++定义lua类，以及从lua调用c++
     auto &ctx = Context::shared();
 
@@ -31,11 +33,13 @@ TEST (test0) {
     auto clz = make_shared<Class>();
     clz->name = "Test";
 
-    clz->add("proc", [=](self_type &self) -> return_type {
+    clz->add("proc", [=](self_type &self) -> return_type
+    {
         return make_shared<Variant>("c++");
     });
 
-    clz->add_static("sproc", [=](Variant const &v) -> return_type {
+    clz->add_static("sproc", [=](Variant const &v) -> return_type
+    {
         return make_shared<Variant>(v);
     });
 
@@ -54,9 +58,10 @@ TEST (test0) {
 
     auto clz22 = make_shared<Class>();
     clz22->name = "Abc";
-    clz22->add("proc", [=](self_type&)->return_type {
+    clz22->add("proc", [=](self_type &) -> return_type
+    {
         return _V("abc");
-        });
+    });
     m2->add(clz22);
     module->add(m2);
 
@@ -78,7 +83,8 @@ TEST (test0) {
     ctx.invoke("test0_a");
 }
 
-TEST (test1) {
+TEST (test1)
+{
     // 测试 c++ 变量
     auto &ctx = Context::shared();
 
@@ -99,17 +105,19 @@ TEST (test1) {
         });
          */
 
-        clz->add("proc", [=](self_type &self, Variant const &v) -> return_type {
+        clz->add("proc", [=](self_type &self, Variant const &v) -> return_type
+        {
             if (v.isnil())
                 cout << "收到空参数" << endl;
             return make_shared<Variant>(v);
         });
 
-        clz->add("done", [=](self_type &self) -> return_type {
-                    CHECK_EQUAL(self->get("a")->toInteger(), 123);
-                    CHECK_EQUAL(self->invoke("b")->toInteger(), 123);
-                    CHECK_EQUAL(self->invoke("proc", 123L)->toInteger(), 123);
-                    CHECK_EQUAL(self->has("xxxxxxxx"), false);
+        clz->add("done", [=](self_type &self) -> return_type
+        {
+                CHECK_EQUAL(self->get("a")->toInteger(), 123);
+                CHECK_EQUAL(self->invoke("b")->toInteger(), 123);
+                CHECK_EQUAL(self->invoke("proc", 123L)->toInteger(), 123);
+                CHECK_EQUAL(self->has("xxxxxxxx"), false);
             return nullptr;
         });
 
@@ -124,7 +132,8 @@ TEST (test1) {
     ctx.invoke("test1");
 }
 
-TEST (test2) {
+TEST (test2)
+{
     // 测试c++调lua函数
     auto &ctx = Context::shared();
 
@@ -132,33 +141,37 @@ TEST (test2) {
     ctx.invoke("test2");
 
     auto gs_test = ctx.global("gs_test");
-            CHECK_EQUAL(gs_test->invoke("proc")->toString(), "nlua++");
+        CHECK_EQUAL(gs_test->invoke("proc")->toString(), "nlua++");
     gs_test->set("msg", 123L);
-            CHECK_EQUAL(gs_test->get("msg")->toInteger(), 123);
-            CHECK_EQUAL(gs_test->invoke("proc")->toInteger(), 123);
+        CHECK_EQUAL(gs_test->get("msg")->toInteger(), 123);
+        CHECK_EQUAL(gs_test->invoke("proc")->toInteger(), 123);
 
     auto Test = ctx.global("Test");
-            CHECK_EQUAL(Test->invoke("sproc")->toString(), "lua");
+        CHECK_EQUAL(Test->invoke("sproc")->toString(), "lua");
 }
 
-TEST (test3) {
+TEST (test3)
+{
     // 定义 lua 的单件
     auto &ctx = Context::shared();
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
-    clz->singleton("shared", [=](self_type& self) {
+    clz->singleton("shared", [=](self_type &self)
+    {
         cout << "初始化" << endl;
-        self->set("abc", 123);
-    }, [=](self_type& self) {
-        CHECK_EQUAL(self->get("abc")->toInteger(), 123);
-        cout << "析构" << endl;
-    });
-    clz->add("proc", [=, &ctx](self_type &self) -> return_type {
-        self->set("abc", 456);
+        self->set("abc", (integer) 123);
+    }, [=](self_type &self)
+                   {
+                           CHECK_EQUAL(self->get("abc")->toInteger(), 123);
+                       cout << "析构" << endl;
+                   });
+    clz->add("proc", [=, &ctx](self_type &self) -> return_type
+    {
+        self->set("abc", (integer) 456);
         // 拿静态对象
         auto obj = ctx.singleton("Test");
-        CHECK_EQUAL(obj->get("abc")->toInteger(), 456);
+            CHECK_EQUAL(obj->get("abc")->toInteger(), 456);
         return nullptr;
     });
     clz->declare_in(ctx);
@@ -167,18 +180,21 @@ TEST (test3) {
     ctx.invoke("test3");
 }
 
-int test4_a() {
+int test4_a()
+{
     return 0;
 }
 
-TEST (test4) {
+TEST (test4)
+{
     auto &ctx = Context::shared();
 
     ctx.load("test4.lua");
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
-    clz->add_static("proc", [=]() -> return_type {
+    clz->add_static("proc", [=]() -> return_type
+    {
         return nullptr;
     });
     clz->declare_in(ctx);
@@ -214,7 +230,8 @@ TEST (test4) {
     cout << "共耗时 " << tc.seconds() << " s" << endl;
 }
 
-TEST (test5) {
+TEST (test5)
+{
     // 测试 ss
     auto &ctx = Context::shared();
 
@@ -222,7 +239,8 @@ TEST (test5) {
     ctx.invoke("test5");
 }
 
-TEST (test6) {
+TEST (test6)
+{
     auto &ctx = Context::shared();
 
     auto m = make_shared<Module>();
@@ -232,11 +250,12 @@ TEST (test6) {
     clz->name = "Test";
     clz->add(make_shared<Field>("ondone", nullptr));
     clz->add_field("onend", nullptr);
-    clz->add("play", [&](self_type &self, arg_type const &msg) -> return_type {
+    clz->add("play", [&](self_type &self, arg_type const &msg) -> return_type
+    {
         NLUA_AUTOGUARD(ctx);
 
         // 保护变量，避免被局部释放
-        self->grab();      
+        self->grab();
 
         self->invoke("ondone");
         self->invoke("onend");
@@ -246,12 +265,13 @@ TEST (test6) {
         s->grab();
 
         for (int i = 0; i < 1000; ++i) {
-            s->set("a", (integer)i);
+            s->set("a", (integer) i);
         }
         NLUA_DEBUG("快速写a完成");
 
         // 测试长生命周期异步调用
-        Timer::SetTimeout(0, [=, &ctx]() {
+        Timer::SetTimeout(0, [=, &ctx]()
+        {
             NLUA_AUTOGUARD(ctx);
 
             // onend实现，ondone未实现
@@ -259,16 +279,17 @@ TEST (test6) {
             self->invoke("onend");
 
             for (int i = 0; i < 1000; ++i) {
-                s->set("b", (integer)i);
+                s->set("b", (integer) i);
                 Time::Sleep(0.001);
             }
             NLUA_DEBUG("写b完成");
 
-            Timer::SetTimeout(0, [=, &ctx]() {
+            Timer::SetTimeout(0, [=, &ctx]()
+            {
                 NLUA_AUTOGUARD(ctx);
 
                 for (int i = 0; i < 1000; ++i) {
-                    s->set("c", (integer)i);
+                    s->set("c", (integer) i);
                     Time::Sleep(0.001);
                 }
                 NLUA_DEBUG("写c完成");
@@ -278,13 +299,13 @@ TEST (test6) {
                 self->invoke("onend");
 
                 self->drop(); // 重复drop但是可以不引起崩溃
-                });
+            });
 
             self->drop();
         });
 
         for (int i = 0; i < 1000; ++i) {
-            s->set("a", (integer)i);
+            s->set("a", (integer) i);
             Time::Sleep(0.001);
         }
         NLUA_DEBUG("写a完成");
@@ -304,40 +325,49 @@ TEST (test6) {
     ctx.invoke("test6");
 }
 
-class Test7Object {
+class Test7Object
+{
 public:
-    Test7Object() {
+    Test7Object()
+    {
         cout << "实例化 Test7Object" << endl;
     }
 
-    ~Test7Object() {
+    ~Test7Object()
+    {
         cout << "析构 Test7Object" << endl;
     }
 
     string txt;
 };
 
-TEST (test7) {
+TEST (test7)
+{
     // 测试c++生命期绑定至lua对象
     auto &ctx = Context::shared();
+    NLUA_AUTOGUARD(ctx);
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
 
-    clz->init([=](self_type &self, Variant const &v0, Variant const &v1) {
-                CHECK_EQUAL(v0.toInteger(), 1);
-                CHECK_EQUAL(v1.toInteger(), 2);
-        self->bind<Test7Object>().txt = "test7";
-    });
-    clz->fini([=](self_type &self) {
-        self->unbind<Test7Object>();
-    });
-    clz->add("proc", [=](self_type &self) -> return_type {
+    clz->init([=](self_type &self, Variant const &v0, Variant const &v1)
+              {
+                      CHECK_EQUAL(v0.toInteger(), 1);
+                      CHECK_EQUAL(v1.toInteger(), 2);
+                  self->bind<Test7Object>().txt = "test7";
+              });
+    clz->fini([=](self_type &self)
+              {
+                  self->unbind<Test7Object>();
+              });
+    clz->add("proc", [=](self_type &self) -> return_type
+    {
         return make_shared<Variant>(self->payload<Test7Object>().txt);
     });
-    clz->add("proc2", [=](self_type &self)->return_type {
+    clz->add("proc2", [=](self_type &self) -> return_type
+    {
         return self->get("abc");
-        });
+    });
 
     auto m = make_shared<Module>();
     m->name = "test";
@@ -350,20 +380,22 @@ TEST (test7) {
     ctx.invoke("test7");
 }
 
-TEST(test8)
+TEST (test8)
 {
     //c++ 实例化lua对象，并讲c++生命期绑定到lua对象上
     auto &ctx = Context::shared();
+    NLUA_AUTOGUARD(ctx);
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
 
-    clz->add_static("proc", [&]()->return_type {
+    clz->add_static("proc", [&]() -> return_type
+    {
         auto abc = ctx.global("abc.Abc");
         auto r = abc->instance();
-        CHECK_EQUAL(r->invoke("proc")->toString(), "abc");
+            CHECK_EQUAL(r->invoke("proc")->toString(), "abc");
         return r->toVariant();
-        });
+    });
 
     auto m = make_shared<Module>();
     m->name = "test";
@@ -376,7 +408,8 @@ TEST(test8)
     ctx.invoke("test8");
 }
 
-TEST (test999) {
+TEST (test999)
+{
     return; // 协程测试会阻塞单元测试流程
     // 测试协程
     auto &ctx = Context::shared();
@@ -385,7 +418,8 @@ TEST (test999) {
     ctx.invoke("test999");
 }
 
-int main() {
+int main()
+{
     Context::shared().create();
     Context::shared().add_package_path("../test");
 

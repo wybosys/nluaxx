@@ -42,7 +42,7 @@ public:
 
     Variant(char const *);
 
-    Variant(nullptr_t);
+    Variant(::std::nullptr_t);
 
     Variant(com_variant_type const &);
 

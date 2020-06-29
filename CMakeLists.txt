@@ -3,24 +3,24 @@ project(nlua++)
 
 set(CMAKE_CXX_STANDARD 11)
 
-include_directories(src)
+add_subdirectory(nlua++/cross)
+
+include_directories(nlua++)
 set(NLUA_SRCS
-        src/core.cpp
-        src/variant.cpp
-        src/value.cpp
-        src/str.cpp
-        src/fs.cpp
-        src/nlua++.cpp
-        )
+    nlua++/ast.cpp
+    nlua++/variant.cpp
+    nlua++/value.cpp
+    nlua++/nlua++.cpp
+    nlua++/private.cpp
+    )
 
 macro(build_nlua ver lib DEFS)
-    add_library(nlua++-${ver} STATIC ${NLUA_SRCS})
-    target_compile_definitions(nlua++-${ver} PUBLIC ${DEFS})
-    target_link_libraries(nlua++-${ver} ${lib})
-    add_executable(test_nlua++-${ver}
-            test/timer.cpp
-            test/test.cpp)
-    target_link_libraries(test_nlua++-${ver} nlua++-${ver} UnitTest++ pthread)
+  add_library(nlua++-${ver} STATIC ${NLUA_SRCS})
+  target_compile_definitions(nlua++-${ver} PUBLIC ${DEFS})
+  target_link_libraries(nlua++-${ver} ${lib})
+  add_executable(test_nlua++-${ver}
+      test/test.cpp)
+  target_link_libraries(test_nlua++-${ver} nlua++-${ver} UnitTest++ pthread cross)
 endmacro()
 
 build_nlua(jit luajit-5.1 NLUA_JIT)

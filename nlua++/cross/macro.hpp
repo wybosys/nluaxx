@@ -353,7 +353,7 @@ public:
 private:
     T *_ptr;
 
-    shared_ref(nullptr_t) : _ptr(nullptr) {}
+    shared_ref(::std::nullptr_t) : _ptr(nullptr) {}
 
     static shared_ref<T> _assign(T *ptr)
     {

@@ -20,24 +20,24 @@
 #define NLUA_INCLUDE(DIR, FILE) <DIR/FILE>
 
 #ifdef NLUA_JIT
-#include NLUA_INCLUDE(NLUA_LIBJIT, lua.hpp)
+#include NLUA_INCLUDE(NLUA_LIBJIT,lua.hpp)
 #define LUA_INCLUDED
 #endif
 
 #ifdef NLUA_51
-#include NLUA_INCLUDE(NLUA_LIB51, lua.hpp)
+#include NLUA_INCLUDE(NLUA_LIB51,lua.hpp)
 #define LUA_OK 0
 #define LUA_INCLUDED
 #endif
 
 #ifdef NLUA_52
-#include NLUA_INCLUDE(NLUA_LIB52, lua.hpp)
+#include NLUA_INCLUDE(NLUA_LIB52,lua.hpp)
 #define LUA_INCLUDED
 #endif
 
 #ifdef NLUA_53
 #define LUA_COMPAT_APIINTCASTS
-#include NLUA_INCLUDE(NLUA_LIB53, lua.hpp)
+#include NLUA_INCLUDE(NLUA_LIB53,lua.hpp)
 #define LUA_INCLUDED
 #endif
 
