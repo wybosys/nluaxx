@@ -10,7 +10,8 @@ AJNI_API(void) Java_com_nnt_nlua_Context_jni_1create(JNIEnv *env, jobject thiz)
     Context::shared().create();
 }
 
-AJNI_API(jboolean) Java_com_nnt_nlua_Context_jni_1loadfile(JNIEnv *env, jobject thiz, jstring file)
+AJNI_API(jboolean) Java_com_nnt_nlua_Context_jni_1loadfile(JNIEnv *env, jobject thiz,
+                                                           jstring file)
 {
     return Context::shared().load(Variant(file).toString());
 }
@@ -61,25 +62,18 @@ private:
 };
 
 // 保存返回给Java层的C++对象
-// static GsObject<Object> gs_objects;
+static GsObject<Object> gs_objects;
 
 AJNI_API(jint) Java_com_nnt_nlua_Context_jni_1global(JNIEnv *env, jobject thiz, jstring keypath)
 {
-    /*
-    jboolean copied;
-    char const *str = env->GetStringUTFChars(keypath, &copied);
-    auto r = Context::shared().global(str);
-    if (copied)
-        env->ReleaseStringUTFChars(keypath, str);
+    auto r = Context::shared().global(JVariant(keypath).toString());
     if (!r)
         return -1;
     // 需要将c++的实体保存到全局再返回给java
     return gs_objects.add(r);
-     */
-    return -1;
 }
 
 AJNI_API(void) Java_com_nnt_nlua_Object_jni_1finalize(JNIEnv *env, jobject thiz, jint idx)
 {
-    //gs_objects.remove(idx);
+    gs_objects.remove(idx);
 }
