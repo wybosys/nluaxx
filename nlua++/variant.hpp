@@ -5,13 +5,18 @@ NLUA_BEGIN
 
 class Object;
 
+// lua整形只有一种
 typedef ptrdiff_t integer;
+
+// lua浮点也只有一种
 typedef double number;
 
-class Variant {
+class Variant
+{
 public:
 
-    enum struct VT {
+    enum struct VT
+    {
         NIL,
         INTEGER,
         NUMBER,
@@ -55,7 +60,7 @@ public:
 
     string toString() const;
 
-    shared_ptr<Object> const& toObject() const;
+    shared_ptr<Object> const &toObject() const;
 
     operator integer() const;
 
@@ -65,11 +70,12 @@ public:
 
     operator void *() const;
 
-    operator string () const;
+    operator string() const;
 
     operator com_variant_type const &() const;
 
-    inline bool isnil() const {
+    inline bool isnil() const
+    {
         return vt == VT::NIL;
     }
 
@@ -80,36 +86,45 @@ private:
 
 };
 
-inline Variant::operator integer() const {
+inline Variant::operator integer() const
+{
     return toInteger();
 }
 
-inline Variant::operator number() const {
+inline Variant::operator number() const
+{
     return toNumber();
 }
 
-inline Variant::operator bool() const {
+inline Variant::operator bool() const
+{
     return toBool();
 }
 
-inline Variant::operator void *() const {
+inline Variant::operator void *() const
+{
     return toPointer();
 }
 
-inline Variant::operator string () const {
+inline Variant::operator string() const
+{
     return toString();
 }
 
-inline Variant::operator com_variant_type const &() const {
+inline Variant::operator com_variant_type const &() const
+{
     return _var;
 }
 
-inline shared_ptr<Object> const& Variant::toObject() const {
+inline shared_ptr<Object> const &Variant::toObject() const
+{
     return _obj;
 }
 
 template<typename _CharT, typename _Traits>
-inline ::std::basic_ostream <_CharT, _Traits> &operator<<(::std::basic_ostream <_CharT, _Traits> &stm, Variant const &v) {
+inline ::std::basic_ostream<_CharT, _Traits> &
+operator<<(::std::basic_ostream<_CharT, _Traits> &stm, Variant const &v)
+{
     switch (v.vt) {
         case Variant::VT::STRING:
             stm << v.toString();
@@ -136,14 +151,17 @@ inline ::std::basic_ostream <_CharT, _Traits> &operator<<(::std::basic_ostream <
 }
 
 template<typename _CharT, typename _Traits>
-inline ::std::basic_ostream <_CharT, _Traits> &operator<<(::std::basic_ostream <_CharT, _Traits> &stm, shared_ptr <Variant> const &v) {
+inline ::std::basic_ostream<_CharT, _Traits> &
+operator<<(::std::basic_ostream<_CharT, _Traits> &stm, shared_ptr<Variant> const &v)
+{
     if (!v)
         return stm;
     return stm << *v;
 }
 
 template<typename V>
-inline shared_ptr <Variant> _V(V const &v) {
+inline shared_ptr<Variant> _V(V const &v)
+{
     return make_shared<Variant>(v);
 }
 
