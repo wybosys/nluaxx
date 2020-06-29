@@ -2,19 +2,19 @@
 #define __NLUA_LIBLUA_H_INCLUDED
 
 #ifndef NLUA_LIBJIT
-#define NLUA_LIBJIT luajit - 2.1
+#define NLUA_LIBJIT luajit-2.1
 #endif
 
 #ifndef NLUA_LIB51
-#define NLUA_LIB51 lua5 .1
+#define NLUA_LIB51 lua5.1
 #endif
 
 #ifndef NLUA_LIB52
-#define NLUA_LIB52 lua5 .2
+#define NLUA_LIB52 lua5.2
 #endif
 
 #ifndef NLUA_LIB53
-#define NLUA_LIB53 lua5 .3
+#define NLUA_LIB53 lua5.3
 #endif
 
 #define NLUA_INCLUDE(DIR, FILE) <DIR/FILE>

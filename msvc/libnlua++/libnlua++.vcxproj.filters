@@ -18,91 +18,94 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\com++.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\liblua.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\macro.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\nlua++.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\value.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\variant.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cross\cross.hpp">
+    <ClInclude Include="..\..\nlua++\cross\cross.hpp">
       <Filter>cross</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cross\str.hpp">
+    <ClInclude Include="..\..\nlua++\cross\datetime.hpp">
       <Filter>cross</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cross\datetime.hpp">
+    <ClInclude Include="..\..\nlua++\cross\fs.hpp">
       <Filter>cross</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cross\timer.hpp">
+    <ClInclude Include="..\..\nlua++\cross\macro.hpp">
       <Filter>cross</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cross\threads.hpp">
+    <ClInclude Include="..\..\nlua++\cross\memory.hpp">
       <Filter>cross</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cross\fs.hpp">
+    <ClInclude Include="..\..\nlua++\cross\str.hpp">
       <Filter>cross</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ast.hpp">
+    <ClInclude Include="..\..\nlua++\cross\stringbuilder.hpp">
+      <Filter>cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\nlua++\cross\sys.hpp">
+      <Filter>cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\nlua++\cross\threads.hpp">
+      <Filter>cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\nlua++\cross\timer.hpp">
+      <Filter>cross</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\nlua++\ast.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\private.hpp">
+    <ClInclude Include="..\..\nlua++\com++.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cross\sys.hpp">
-      <Filter>cross</Filter>
+    <ClInclude Include="..\..\nlua++\liblua.hpp">
+      <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cross\stringbuilder.hpp">
-      <Filter>cross</Filter>
+    <ClInclude Include="..\..\nlua++\macro.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\nlua++\nlua++.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\nlua++\private.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\nlua++\value.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\nlua++\variant.hpp">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\nlua++.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\value.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\variant.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cross\str.cpp">
+    <ClCompile Include="..\..\nlua++\cross\datetime.cpp">
       <Filter>cross</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cross\datetime.cpp">
+    <ClCompile Include="..\..\nlua++\cross\fs.cpp">
       <Filter>cross</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cross\timer.cpp">
+    <ClCompile Include="..\..\nlua++\cross\str.cpp">
       <Filter>cross</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cross\threads.cpp">
+    <ClCompile Include="..\..\nlua++\cross\sys.cpp">
       <Filter>cross</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cross\fs.cpp">
+    <ClCompile Include="..\..\nlua++\cross\threads.cpp">
       <Filter>cross</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\ast.cpp">
+    <ClCompile Include="..\..\nlua++\cross\timer.cpp">
+      <Filter>cross</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\nlua++\ast.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\private.cpp">
+    <ClCompile Include="..\..\nlua++\nlua++.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cross\sys.cpp">
-      <Filter>cross</Filter>
+    <ClCompile Include="..\..\nlua++\private.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\nlua++\value.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\nlua++\variant.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

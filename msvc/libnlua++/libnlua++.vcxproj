@@ -72,14 +72,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>../../src;D:\sdks\opt\include;C:\Program Files %28x86%29\Lua\5.1\include;$(IncludePath)</IncludePath>
+    <IncludePath>../../nlua++;D:\sdks\opt\include;C:\Program Files %28x86%29\Lua\5.1\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>../../src;D:\sdks\opt\include;C:\Program Files %28x86%29\Lua\5.1\include;$(IncludePath)</IncludePath>
+    <IncludePath>../../nlua++;D:\sdks\opt\include;C:\Program Files %28x86%29\Lua\5.1\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -153,57 +153,58 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\cross\stringbuilder.hpp" />
-    <ClInclude Include="..\..\src\cross\sys.hpp" />
-    <ClInclude Include="..\..\src\private.hpp" />
-    <ClInclude Include="..\..\src\ast.hpp" />
-    <ClInclude Include="..\..\src\com++.hpp" />
-    <ClInclude Include="..\..\src\cross\cross.hpp" />
-    <ClInclude Include="..\..\src\cross\datetime.hpp" />
-    <ClInclude Include="..\..\src\cross\fs.hpp" />
-    <ClInclude Include="..\..\src\cross\str.hpp" />
-    <ClInclude Include="..\..\src\cross\threads.hpp" />
-    <ClInclude Include="..\..\src\cross\timer.hpp" />
-    <ClInclude Include="..\..\src\liblua.hpp" />
-    <ClInclude Include="..\..\src\macro.hpp" />
-    <ClInclude Include="..\..\src\nlua++.hpp" />
-    <ClInclude Include="..\..\src\value.hpp" />
-    <ClInclude Include="..\..\src\variant.hpp" />
+    <ClInclude Include="..\..\nlua++\ast.hpp" />
+    <ClInclude Include="..\..\nlua++\com++.hpp" />
+    <ClInclude Include="..\..\nlua++\cross\cross.hpp" />
+    <ClInclude Include="..\..\nlua++\cross\datetime.hpp" />
+    <ClInclude Include="..\..\nlua++\cross\fs.hpp" />
+    <ClInclude Include="..\..\nlua++\cross\macro.hpp" />
+    <ClInclude Include="..\..\nlua++\cross\memory.hpp" />
+    <ClInclude Include="..\..\nlua++\cross\str.hpp" />
+    <ClInclude Include="..\..\nlua++\cross\stringbuilder.hpp" />
+    <ClInclude Include="..\..\nlua++\cross\sys.hpp" />
+    <ClInclude Include="..\..\nlua++\cross\threads.hpp" />
+    <ClInclude Include="..\..\nlua++\cross\timer.hpp" />
+    <ClInclude Include="..\..\nlua++\liblua.hpp" />
+    <ClInclude Include="..\..\nlua++\macro.hpp" />
+    <ClInclude Include="..\..\nlua++\nlua++.hpp" />
+    <ClInclude Include="..\..\nlua++\private.hpp" />
+    <ClInclude Include="..\..\nlua++\value.hpp" />
+    <ClInclude Include="..\..\nlua++\variant.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\cross\sys.cpp">
+    <ClCompile Include="..\..\nlua++\ast.cpp" />
+    <ClCompile Include="..\..\nlua++\cross\datetime.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\private.cpp" />
-    <ClCompile Include="..\..\src\ast.cpp" />
-    <ClCompile Include="..\..\src\cross\datetime.cpp">
+    <ClCompile Include="..\..\nlua++\cross\fs.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\cross\fs.cpp">
+    <ClCompile Include="..\..\nlua++\cross\str.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\cross\str.cpp">
+    <ClCompile Include="..\..\nlua++\cross\sys.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\cross\threads.cpp">
+    <ClCompile Include="..\..\nlua++\cross\threads.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\cross\timer.cpp">
+    <ClCompile Include="..\..\nlua++\cross\timer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\src\nlua++.cpp" />
-    <ClCompile Include="..\..\src\value.cpp" />
-    <ClCompile Include="..\..\src\variant.cpp" />
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="..\..\nlua++\nlua++.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\nlua++\private.cpp" />
+    <ClCompile Include="..\..\nlua++\value.cpp" />
+    <ClCompile Include="..\..\nlua++\variant.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

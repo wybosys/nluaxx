@@ -64,8 +64,11 @@ return_type at(lua_State *L, int n)
         case LUA_TBOOLEAN:
             return make_shared<Variant>(!!lua_toboolean(L, n));
         case LUA_TNUMBER: {
-            if (lua_isinteger(L, n))
-                return make_shared<Variant>((integer) lua_tointeger(L, n));
+#if LUA_VERSION_NUM > 501
+            if (lua_isinteger(L, n)) {
+                return make_shared<Variant>((integer)lua_tointeger(L, n));
+            }
+#endif
             return make_shared<Variant>(lua_tonumber(L, n));
         }
         case LUA_TNIL:
