@@ -78,3 +78,14 @@ AJNI_API(void) Java_com_nnt_nlua_Object_jni_1finalize(JNIEnv *env, jobject thiz,
 {
     gs_objects.remove(idx);
 }
+
+AJNI_API(jobject) Java_com_nnt_nlua_Object_jni_1call0(JNIEnv *env, jobject thiz, jint idx)
+{
+    auto fnd = gs_objects.get(idx);
+    if (!fnd) {
+        Logger::Error("没有找到LUA对象");
+        return nullptr;
+    }
+    // auto r = fnd->call();
+    return nullptr;
+}

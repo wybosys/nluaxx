@@ -10,7 +10,9 @@ class Object(val idx: Int) {
     private external fun jni_finalize(idx: Int)
 
     // 调用函数
-    fun call() {
-        
+    fun call(): Any? {
+        return jni_call0(idx)
     }
+
+    private external fun jni_call0(idx: Int): Any?
 }

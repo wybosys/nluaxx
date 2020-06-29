@@ -29,6 +29,6 @@ class MainActivity() : AppCompatActivity() {
         }
 
         // 调用函数
-        obj!!.call()
+        obj.call()
     }
 }

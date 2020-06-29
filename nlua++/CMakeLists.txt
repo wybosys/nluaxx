@@ -6,11 +6,13 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(.)
 
 set(NLUA_SRCS
-ast.cpp
-nlua++.cpp
-private.cpp
-value.cpp
-variant.cpp)
+    ast.cpp
+    nlua++.cpp
+    private.cpp
+    value.cpp
+    variant.cpp
+    android-prv.cpp
+    )
 
 add_subdirectory(cross)
 
