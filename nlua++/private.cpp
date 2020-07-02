@@ -13,6 +13,8 @@ NLUA_BEGIN
 USE_STL;
 USE_CROSS;
 
+#if NLUA_MT
+
 ContextAutoGuard::ContextAutoGuard()
 {
     if (!MainL)
@@ -38,8 +40,14 @@ ContextWorkerResource::ContextWorkerResource()
     L = ContextAutoGuard::Tls.L;
 }
 
+#endif
+
 ContextPrivate::ContextPrivate()
-    : refId(1), pvd_worker(false)
+    : refId(1)
+
+#if NLUA_MT
+    , pvd_worker(false)
+#endif
 {
     // pass
 }
@@ -56,8 +64,10 @@ ContextPrivate::~ContextPrivate()
     L = nullptr;
     _freel = false;
 
+#if NLUA_MT
     // 停止资源
     pvd_worker.stop();
+#endif
 }
 
 void ContextPrivate::clear()
@@ -74,6 +84,7 @@ void ContextPrivate::clear()
 
 void ContextPrivate::create()
 {
+#if NLUA_MT
     pvd_worker.stop();
 
     if (ContextAutoGuard::Tls.ismain) {
@@ -111,6 +122,14 @@ void ContextPrivate::create()
             ContextAutoGuard::Tls.ismain = true;
         }
     }
+
+#else
+
+    L = luaL_newstate();
+    luaL_openlibs(L);
+    _freel = true;
+
+#endif
 
 #ifdef WIN32
     // windows中需要额外设置lua的package.path保证可以拿到全局安装的库
@@ -163,12 +182,16 @@ void ContextPrivate::create()
     }
 #endif
 
+#if NLUA_MT
     pvd_worker.start();
+#endif
 }
 
 void ContextPrivate::attach(lua_State *_l)
 {
+#if NLUA_MT
     pvd_worker.stop();
+#endif
 
     if (_l == L)
         return;
@@ -179,6 +202,8 @@ void ContextPrivate::attach(lua_State *_l)
 
     L = _l;
     _freel = false;
+
+#if NLUA_MT
 
     if (L) {
         if (ContextAutoGuard::Tls.ismain) {
@@ -199,6 +224,7 @@ void ContextPrivate::attach(lua_State *_l)
     }
 
     pvd_worker.start();
+#endif
 }
 
 int ContextPrivate::Traceback(lua_State *L)
@@ -307,6 +333,8 @@ void ContextPrivate::update_cpackage_paths(vector<string> const *curs)
     }
 }
 
+#if NLUA_MT
+
 lua_State *GL()
 {
     return Context::shared().d().pvd_worker->L;
@@ -316,5 +344,7 @@ lua_State *GL()
 {
     return Context::shared().d().pvd_worker->mtx;
 }
+
+#endif
 
 NLUA_END

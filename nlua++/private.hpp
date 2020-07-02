@@ -20,6 +20,8 @@ typedef function<return_type(lua_State *L, args_type const &)> luaref_func_type;
 typedef ::std::map<lua_Integer, luaref_classfunc_type> luaref_classfuncs_type;
 typedef ::std::map<lua_Integer, luaref_func_type> luaref_funcs_type;
 
+#if NLUA_MT
+
 class ContextAutoGuard
 {
 public:
@@ -44,6 +46,8 @@ public:
 
     ::std::mutex mtx; // 工作资源线程锁
 };
+
+#endif
 
 class ContextPrivate
 {
@@ -80,15 +84,27 @@ public:
     // 全局singleton计数器
     lua_refid_type refSingletonId;
 
+#if NLUA_MT
+
     // 避免多线程写lua冲突，grab后的对象均使用Context创建的工作线程的L和对应的锁
     ::CROSS_NS::ThreadResourceProvider<ContextWorkerResource> pvd_worker;
+
+#else
+
+    ::std::mutex mtx_global;
+
+#endif
 };
+
+#if NLUA_MT
 
 // 工作线程 L
 extern lua_State *GL();
 
 // 工作线程 mtx
 extern ::std::mutex& GMtx();
+
+#endif
 
 NLUA_END
 
