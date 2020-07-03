@@ -8,8 +8,8 @@ function test6_a()
     local t = test.Test:new()
     t.onend = function(self)
         print("onend")
-        if self.ondone then
-           print("unimplement ondone")
+        if not self.ondone then
+            print("unimplement ondone")
         end
     end
     t:play("play message")

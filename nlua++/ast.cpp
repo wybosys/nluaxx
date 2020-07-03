@@ -568,7 +568,7 @@ public:
 
         auto ud = (ObjectPrivate::UserData *) lua_touserdata(L, -1);
         if (ud->freed) {
-            NLUA_ERROR("ImpDestroy重复释放");
+            NLUA_INFO("ImpDestroy已经释放");
             return 0; // 已经释放
         }
         // 弹出ud
@@ -588,11 +588,11 @@ public:
         // 调用对象的fini函数
         lua_pushstring(L, "__fini__");
         lua_rawget(L, 4);
-        // func 4
-
         lua_pushvalue(L, 1);
         lua_pcall(L, 1, 0, 2);
+        // func 4
 
+        // 已经释放，重置标记
         ud->data = nullptr;
         ud->freed = true;
         return 0;
@@ -1624,7 +1624,7 @@ self_type Object::instance() const
     int objid = lua_gettop(L);
 
     lua_pushvalue(L, metaid);
-    lua_setmetatable(L, -2);
+    lua_setmetatable(L, objid);
 
     auto r = make_shared<Object>();
     r->d_ptr->L = L;

@@ -108,7 +108,7 @@ TEST (test1)
         clz->add("proc", [=](self_type &self, Variant const &v) -> return_type
         {
             if (v.isnil())
-                cout << "收到空参数" << endl;
+                NLUA_INFO("收到空参数");
             return make_shared<Variant>(v);
         });
 
@@ -159,12 +159,12 @@ TEST (test3)
     clz->name = "Test";
     clz->singleton("shared", [=](self_type &self)
     {
-        cout << "初始化" << endl;
+        NLUA_INFO("初始化");
         self->set("abc", (integer) 123);
     }, [=](self_type &self)
                    {
                            CHECK_EQUAL(self->get("abc")->toInteger(), 123);
-                       cout << "析构" << endl;
+                       NLUA_INFO("析构");
                    });
     clz->add("proc", [=, &ctx](self_type &self) -> return_type
     {
@@ -207,27 +207,27 @@ TEST (test4)
 
     integer cnt = 100000;
 
-    cout << "开始测试lua函数执行 " << cnt << " 次" << endl;
+    NLUA_INFO("开始测试lua函数执行 " << cnt << " 次");
     ctx.invoke("test4_a", cnt);
-    cout << "共耗时 " << tc.seconds() << " s" << endl;
+    NLUA_INFO("共耗时 " << tc.seconds() << " s");
 
-    cout << "开始测试c++调用lua函数 " << cnt << " 次" << endl;
+    NLUA_INFO("开始测试c++调用lua函数 " << cnt << " 次");
     for (int i = 0; i < cnt; ++i) {
         ctx.invoke("test4");
     }
-    cout << "共耗时 " << tc.seconds() << " s" << endl;
+    NLUA_INFO("共耗时 " << tc.seconds() << " s");
 
-    cout << "开始测试c++调用 " << cnt << " 次" << endl;
+    NLUA_INFO("开始测试c++调用 " << cnt << " 次");
     for (int i = 0; i < cnt; ++i) {
         test4_a();
     }
-    cout << "共耗时 " << tc.seconds() << " s" << endl;
+    NLUA_INFO("共耗时 " << tc.seconds() << " s");
 
-    cout << "开始测试c++调用c++实现的lua函数 " << cnt << " 次" << endl;
+    NLUA_INFO("开始测试c++调用c++实现的lua函数 " << cnt << " 次");
     for (int i = 0; i < cnt; ++i) {
         Test->invoke("proc");
     }
-    cout << "共耗时 " << tc.seconds() << " s" << endl;
+    NLUA_INFO("共耗时 " << tc.seconds() << " s");
 }
 
 TEST (test5)
@@ -310,7 +310,7 @@ TEST (test6)
         }
         NLUA_DEBUG("写a完成");
 
-        cout << msg << endl;
+        NLUA_INFO(msg);
         return nullptr;
     });
 
@@ -330,12 +330,12 @@ class Test7Object
 public:
     Test7Object()
     {
-        cout << "实例化 Test7Object" << endl;
+        NLUA_INFO("实例化 Test7Object");
     }
 
     ~Test7Object()
     {
-        cout << "析构 Test7Object" << endl;
+        NLUA_INFO("析构 Test7Object");
     }
 
     string txt;
