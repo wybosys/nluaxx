@@ -7,8 +7,9 @@ NLUA_BEGIN
 
 NNT_CLASS_PREPARE(Function)
 
-class Function {
-    NNT_CLASS_DECL(Function)
+class Function
+{
+NNT_CLASS_DECL(Function)
 
 public:
     Function();
@@ -21,43 +22,151 @@ public:
     typedef function<void(self_type &self, args_type const &)> basefunc_type;
 
     typedef function<void(self_type &self)> basefunc0_type;
-    typedef function<void(self_type &self, Variant const &)> basefunc1_type;
-    typedef function<void(self_type &self, Variant const &, Variant const &)> basefunc2_type;
-    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &)> basefunc3_type;
-    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &)> basefunc4_type;
-    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> basefunc5_type;
-    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> basefunc6_type;
-    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> basefunc7_type;
-    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> basefunc8_type;
-    typedef function<void(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> basefunc9_type;
+    typedef function<void(self_type &self, arg_type const &)> basefunc1_type;
+    typedef function<void(self_type &self, arg_type const &, arg_type const &)> basefunc2_type;
+    typedef function<void(self_type &self, arg_type const &, arg_type const &, arg_type const &)> basefunc3_type;
+    typedef function<void(self_type &self, arg_type const &, arg_type const &, arg_type const &, arg_type const &)>
+        basefunc4_type;
+    typedef function<void(self_type &self,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &)> basefunc5_type;
+    typedef function<void(self_type &self,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &)> basefunc6_type;
+    typedef function<void(self_type &self,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &)> basefunc7_type;
+    typedef function<void(self_type &self,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &)> basefunc8_type;
+    typedef function<void(self_type &self,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &,
+                          arg_type const &)> basefunc9_type;
 
     // 类函数
     typedef function<return_type(self_type &self, args_type const &)> classfunc_type;
 
     typedef function<return_type(self_type &self)> classfunc0_type;
-    typedef function<return_type(self_type &self, Variant const &)> classfunc1_type;
-    typedef function<return_type(self_type &self, Variant const &, Variant const &)> classfunc2_type;
-    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &)> classfunc3_type;
-    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc4_type;
-    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc5_type;
-    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc6_type;
-    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc7_type;
-    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc8_type;
-    typedef function<return_type(self_type &self, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> classfunc9_type;
+    typedef function<return_type(self_type &self, arg_type const &)> classfunc1_type;
+    typedef function<return_type(self_type &self, arg_type const &, arg_type const &)> classfunc2_type;
+    typedef function<return_type(self_type &self, arg_type const &, arg_type const &, arg_type const &)>
+        classfunc3_type;
+    typedef function<return_type(self_type &self,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &)>
+        classfunc4_type;
+    typedef function<return_type(self_type &self,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &)> classfunc5_type;
+    typedef function<return_type(self_type &self,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &)> classfunc6_type;
+    typedef function<return_type(self_type &self,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &)> classfunc7_type;
+    typedef function<return_type(self_type &self,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &)> classfunc8_type;
+    typedef function<return_type(self_type &self,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &)> classfunc9_type;
 
     // 静态函数
     typedef function<return_type(args_type const &)> func_type;
 
     typedef function<return_type()> func0_type;
-    typedef function<return_type(Variant const &)> func1_type;
-    typedef function<return_type(Variant const &, Variant const &)> func2_type;
-    typedef function<return_type(Variant const &, Variant const &, Variant const &)> func3_type;
-    typedef function<return_type(Variant const &, Variant const &, Variant const &, Variant const &)> func4_type;
-    typedef function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func5_type;
-    typedef function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func6_type;
-    typedef function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func7_type;
-    typedef function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func8_type;
-    typedef function<return_type(Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &)> func9_type;
+    typedef function<return_type(arg_type const &)> func1_type;
+    typedef function<return_type(arg_type const &, arg_type const &)> func2_type;
+    typedef function<return_type(arg_type const &, arg_type const &, arg_type const &)> func3_type;
+    typedef function<return_type(arg_type const &, arg_type const &, arg_type const &, arg_type const &)> func4_type;
+    typedef function<return_type(arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &)>
+        func5_type;
+    typedef function<return_type(arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &)> func6_type;
+    typedef function<return_type(arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &)> func7_type;
+    typedef function<return_type(arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &)> func8_type;
+    typedef function<return_type(arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &,
+                                 arg_type const &)> func9_type;
 
     // 实现的成员函数
     classfunc_type classfunc;
@@ -72,15 +181,18 @@ public:
     void declare_in(Context &, Class const &) const;
 };
 
-class Field {
+class Field
+{
 public:
     template<typename T>
-    Field(string const &_name, T const &_v) {
+    Field(string const &_name, T const &_v)
+    {
         name = _name;
         val = make_shared<Variant>(_v);
     }
 
-    explicit Field(string const &_name) {
+    explicit Field(string const &_name)
+    {
         name = _name;
     }
 
@@ -97,10 +209,11 @@ public:
     void declare_in(Context &, Class const &) const;
 };
 
-class Singleton {
+class Singleton
+{
 public:
 
-    typedef function<void(self_type&)> ini_type;
+    typedef function<void(self_type &)> ini_type;
 
     // 用于获得单件的函数名，支持自定义
     string name;
@@ -123,8 +236,9 @@ protected:
 
 NNT_CLASS_PREPARE(Class)
 
-class Class {
-    NNT_CLASS_DECL(Class)
+class Class
+{
+NNT_CLASS_DECL(Class)
 
 public:
     Class();
@@ -141,82 +255,83 @@ public:
     typedef ::std::vector<function_type> initfunctions_type;
 
     // 定义构造函数
-    Class &init(Function::basefunc_type, size_t args);
+    Class &init(Function::basefunc_type &&, size_t args);
 
-    Class &init(Function::basefunc0_type);
+    Class &init(Function::basefunc0_type &&);
 
-    Class &init(Function::basefunc1_type);
+    Class &init(Function::basefunc1_type &&);
 
-    Class &init(Function::basefunc2_type);
+    Class &init(Function::basefunc2_type &&);
 
-    Class &init(Function::basefunc3_type);
+    Class &init(Function::basefunc3_type &&);
 
-    Class &init(Function::basefunc4_type);
+    Class &init(Function::basefunc4_type &&);
 
-    Class &init(Function::basefunc5_type);
+    Class &init(Function::basefunc5_type &&);
 
-    Class &init(Function::basefunc6_type);
+    Class &init(Function::basefunc6_type &&);
 
-    Class &init(Function::basefunc7_type);
+    Class &init(Function::basefunc7_type &&);
 
-    Class &init(Function::basefunc8_type);
+    Class &init(Function::basefunc8_type &&);
 
-    Class &init(Function::basefunc9_type);
+    Class &init(Function::basefunc9_type &&);
 
     // 定义析构函数
-    Class &fini(Function::basefunc0_type);
+    Class &fini(Function::basefunc0_type &&);
 
     // 添加成员函数
-    Class &add(string const &, Function::classfunc_type);
+    Class &add(string const &, Function::classfunc_type &&);
 
-    Class &add(string const &, Function::classfunc0_type);
+    Class &add(string const &, Function::classfunc0_type &&);
 
-    Class &add(string const &, Function::classfunc1_type);
+    Class &add(string const &, Function::classfunc1_type &&);
 
-    Class &add(string const &, Function::classfunc2_type);
+    Class &add(string const &, Function::classfunc2_type &&);
 
-    Class &add(string const &, Function::classfunc3_type);
+    Class &add(string const &, Function::classfunc3_type &&);
 
-    Class &add(string const &, Function::classfunc4_type);
+    Class &add(string const &, Function::classfunc4_type &&);
 
-    Class &add(string const &, Function::classfunc5_type);
+    Class &add(string const &, Function::classfunc5_type &&);
 
-    Class &add(string const &, Function::classfunc6_type);
+    Class &add(string const &, Function::classfunc6_type &&);
 
-    Class &add(string const &, Function::classfunc7_type);
+    Class &add(string const &, Function::classfunc7_type &&);
 
-    Class &add(string const &, Function::classfunc8_type);
+    Class &add(string const &, Function::classfunc8_type &&);
 
-    Class &add(string const &, Function::classfunc9_type);
+    Class &add(string const &, Function::classfunc9_type &&);
 
     // 添加静态函数
-    Class &add_static(string const &, Function::func_type);
+    Class &add_static(string const &, Function::func_type &&);
 
-    Class &add_static(string const &, Function::func0_type);
+    Class &add_static(string const &, Function::func0_type &&);
 
-    Class &add_static(string const &, Function::func1_type);
+    Class &add_static(string const &, Function::func1_type &&);
 
-    Class &add_static(string const &, Function::func2_type);
+    Class &add_static(string const &, Function::func2_type &&);
 
-    Class &add_static(string const &, Function::func3_type);
+    Class &add_static(string const &, Function::func3_type &&);
 
-    Class &add_static(string const &, Function::func4_type);
+    Class &add_static(string const &, Function::func4_type &&);
 
-    Class &add_static(string const &, Function::func5_type);
+    Class &add_static(string const &, Function::func5_type &&);
 
-    Class &add_static(string const &, Function::func6_type);
+    Class &add_static(string const &, Function::func6_type &&);
 
-    Class &add_static(string const &, Function::func7_type);
+    Class &add_static(string const &, Function::func7_type &&);
 
-    Class &add_static(string const &, Function::func8_type);
+    Class &add_static(string const &, Function::func8_type &&);
 
-    Class &add_static(string const &, Function::func9_type);
+    Class &add_static(string const &, Function::func9_type &&);
 
     // 添加成员变量
     Class &add(field_type const &);
 
-    template <typename T>
-    inline Class &add_field(string const& name, T const& v) {
+    template<typename T>
+    inline Class &add_field(string const &name, T const &v)
+    {
         return add(make_shared<Field>(name, v));
     }
 
@@ -227,7 +342,7 @@ public:
     functions_type const &functions() const;
 
     // 设置为单件模式，名称为 name 和 free_name
-    Class &singleton(string const &_name, Singleton::ini_type _init = nullptr, Singleton::ini_type _fini = nullptr);
+    Class &singleton(string const &_name, Singleton::ini_type &&_init = nullptr, Singleton::ini_type &&_fini = nullptr);
 
     // 返回单件的定义
     singleton_type singleton() const;
@@ -249,8 +364,9 @@ public:
 
 NNT_CLASS_PREPARE(Module)
 
-class Module {
-    NNT_CLASS_DECL(Module)
+class Module
+{
+NNT_CLASS_DECL(Module)
 
 public:
     Module();
@@ -264,15 +380,15 @@ public:
     typedef ::std::map<string, class_type> classes_type;
 
     // 将类添加到模块中
-    bool add(class_type const&);
+    bool add(class_type const &);
 
     typedef shared_ptr<Module> module_type;
     typedef ::std::map<string, module_type> modules_type;
 
     // 添加子模块
-    bool add(module_type const&);
+    bool add(module_type const &);
 
-    typedef Module const* parent_type;
+    typedef Module const *parent_type;
     typedef ::std::vector<parent_type> parents_type;
 
     // 父模块
@@ -294,8 +410,9 @@ public:
 
 NNT_CLASS_PREPARE(Object)
 
-class Object {
-    NNT_CLASS_DECL(Object);
+class Object
+{
+NNT_CLASS_DECL(Object);
 
     friend class Context;
 
@@ -313,8 +430,9 @@ public:
     void *payload() const;
 
     template<class T>
-    inline T &payload() const {
-        return *(T *)payload();
+    inline T &payload() const
+    {
+        return *(T *) payload();
     }
 
     // 设置隐含的指针地址
@@ -322,7 +440,7 @@ public:
 
     // 实例化连接对象, 如果传null则自动new一个出来
     template<class T>
-    T &bind(T* = nullptr);
+    T &bind(T * = nullptr);
 
     // 释放连接对象
     template<class T>
@@ -335,7 +453,8 @@ public:
     void set(string const &, value_type const &);
 
     template<typename T>
-    void set(string const &name, T const &v) {
+    void set(string const &name, T const &v)
+    {
         set(name, make_shared<Variant>(v));
     }
 
@@ -366,55 +485,133 @@ public:
 
     return_type invoke(string const &name);
 
-    return_type invoke(string const &name, Variant const &);
+    return_type invoke(string const &name, arg_type const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &);
+    return_type invoke(string const &name, arg_type const &, arg_type const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &);
+    return_type invoke(string const &name, arg_type const &, arg_type const &, arg_type const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type invoke(string const &name, arg_type const &, arg_type const &, arg_type const &, arg_type const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type
+    invoke(string const &name,
+           arg_type const &,
+           arg_type const &,
+           arg_type const &,
+           arg_type const &,
+           arg_type const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type invoke(string const &name,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type invoke(string const &name,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type invoke(string const &name,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type invoke(string const &name,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &);
 
-    return_type invoke(string const &name, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &, Variant const &);
+    return_type invoke(string const &name,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &,
+                       arg_type const &);
 
     // 对象是函数对象
-    return_type call(args_type const&);
+    return_type call(args_type const &);
 
     return_type call();
 
-    return_type call(Variant const&);
+    return_type call(arg_type const &);
 
-    return_type call(Variant const&, Variant const&);
+    return_type call(arg_type const &, arg_type const &);
 
-    return_type call(Variant const&, Variant const&, Variant const&);
+    return_type call(arg_type const &, arg_type const &, arg_type const &);
 
-    return_type call(Variant const&, Variant const&, Variant const&, Variant const&);
+    return_type call(arg_type const &, arg_type const &, arg_type const &, arg_type const &);
 
-    return_type call(Variant const&, Variant const&, Variant const&, Variant const&, Variant const&);
+    return_type call(arg_type const &, arg_type const &, arg_type const &, arg_type const &, arg_type const &);
 
-    return_type call(Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&);
+    return_type
+    call(arg_type const &, arg_type const &, arg_type const &, arg_type const &, arg_type const &, arg_type const &);
 
-    return_type call(Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&);
+    return_type call(arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &);
 
-    return_type call(Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&);
+    return_type call(arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &);
 
-    return_type call(Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&);
+    return_type call(arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &);
 
-    return_type call(Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&, Variant const&);
+    return_type call(arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &,
+                     arg_type const &);
 
 };
 
 template<class T>
-inline T &Object::bind(T *ptr) {
+inline T &Object::bind(T *ptr)
+{
     unbind<T>();
     auto pl = ptr ? ptr : new T();
     payload(pl);
@@ -422,8 +619,9 @@ inline T &Object::bind(T *ptr) {
 }
 
 template<class T>
-inline void Object::unbind() {
-    auto pl = (T *)payload();
+inline void Object::unbind()
+{
+    auto pl = (T *) payload();
     if (pl) {
         delete pl;
         payload(nullptr);

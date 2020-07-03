@@ -16,7 +16,8 @@ NLUA_BEGIN
 USE_STL;
 USE_CROSS;
 
-void Field::declare_in(Context &ctx) const {
+void Field::declare_in(Context &ctx) const
+{
     auto L = ctx.d().L;
     NLUA_AUTOSTACK(L);
 
@@ -24,7 +25,8 @@ void Field::declare_in(Context &ctx) const {
     lua_setglobal(L, name.c_str());
 }
 
-void Field::declare_in(Context &ctx, Class const &clz) const {
+void Field::declare_in(Context &ctx, Class const &clz) const
+{
     auto L = ctx.d().L;
     NLUA_AUTOSTACK(L);
 
@@ -36,11 +38,13 @@ void Field::declare_in(Context &ctx, Class const &clz) const {
     lua_rawset(L, clzid);
 }
 
-class ObjectPrivate {
+class ObjectPrivate
+{
 public:
 
     // 如果传入自定义C数据结构，则self指针将指向该结构
-    struct UserData {
+    struct UserData
+    {
         void *data = nullptr;
         bool freed = false; // 已经释放
     };
@@ -65,11 +69,13 @@ public:
 
 ObjectPrivate::lua_global_refid_type ObjectPrivate::RefId(1);
 
-class FunctionPrivate {
+class FunctionPrivate
+{
 public:
 
-    static int ImpClassFunction(lua_State *L) {
-        auto pctx = (ContextPrivate *)lua_topointer(L, lua_upvalueindex(1));
+    static int ImpClassFunction(lua_State *L)
+    {
+        auto pctx = (ContextPrivate *) lua_topointer(L, lua_upvalueindex(1));
         auto fnid = lua_tointeger(L, lua_upvalueindex(2));
 
         auto fnd = pctx->refClassFuncs.find(fnid);
@@ -85,93 +91,98 @@ public:
 
         int count = lua_gettop(L) - 1; // last argument is at index lua_gettop(L)
         switch (count) {
-        case 0: {
-            rv = fnd->second(L, self, {});
-        }
+            case 0: {
+                rv = fnd->second(L, self, {});
+            }
                 break;
-        case 1: {
-            auto v0 = at(L, 2);
-            rv = fnd->second(L, self, { v0.get() });
-        }
+            case 1: {
+                auto v0 = at(L, 2);
+                rv = fnd->second(L, self, {v0.get()});
+            }
                 break;
-        case 2: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            rv = fnd->second(L, self, { v0.get(), v1.get() });
-        }
+            case 2: {
+                auto v0 = at(L, 2);
+                auto v1 = at(L, 3);
+                rv = fnd->second(L, self, {v0.get(), v1.get()});
+            }
                 break;
-        case 3: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
-            rv = fnd->second(L, self, { v0.get(), v1.get(), v2.get() });
-        }
+            case 3: {
+                auto v0 = at(L, 2);
+                auto v1 = at(L, 3);
+                auto v2 = at(L, 4);
+                rv = fnd->second(L, self, {v0.get(), v1.get(), v2.get()});
+            }
                 break;
-        case 4: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
-            auto v3 = at(L, 5);
-            rv = fnd->second(L, self, { v0.get(), v1.get(), v2.get(), v3.get() });
-        }
+            case 4: {
+                auto v0 = at(L, 2);
+                auto v1 = at(L, 3);
+                auto v2 = at(L, 4);
+                auto v3 = at(L, 5);
+                rv = fnd->second(L, self, {v0.get(), v1.get(), v2.get(), v3.get()});
+            }
                 break;
-        case 5: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
-            auto v3 = at(L, 5);
-            auto v4 = at(L, 6);
-            rv = fnd->second(L, self, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get() });
-        }
+            case 5: {
+                auto v0 = at(L, 2);
+                auto v1 = at(L, 3);
+                auto v2 = at(L, 4);
+                auto v3 = at(L, 5);
+                auto v4 = at(L, 6);
+                rv = fnd->second(L, self, {v0.get(), v1.get(), v2.get(), v3.get(), v4.get()});
+            }
                 break;
-        case 6: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
-            auto v3 = at(L, 5);
-            auto v4 = at(L, 6);
-            auto v5 = at(L, 7);
-            rv = fnd->second(L, self, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get() });
-        }
+            case 6: {
+                auto v0 = at(L, 2);
+                auto v1 = at(L, 3);
+                auto v2 = at(L, 4);
+                auto v3 = at(L, 5);
+                auto v4 = at(L, 6);
+                auto v5 = at(L, 7);
+                rv = fnd->second(L, self, {v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get()});
+            }
                 break;
-        case 7: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
-            auto v3 = at(L, 5);
-            auto v4 = at(L, 6);
-            auto v5 = at(L, 7);
-            auto v6 = at(L, 8);
-            rv = fnd->second(L, self, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get() });
-        }
+            case 7: {
+                auto v0 = at(L, 2);
+                auto v1 = at(L, 3);
+                auto v2 = at(L, 4);
+                auto v3 = at(L, 5);
+                auto v4 = at(L, 6);
+                auto v5 = at(L, 7);
+                auto v6 = at(L, 8);
+                rv = fnd->second(L, self, {v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get()});
+            }
                 break;
-        case 8: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
-            auto v3 = at(L, 5);
-            auto v4 = at(L, 6);
-            auto v5 = at(L, 7);
-            auto v6 = at(L, 8);
-            auto v7 = at(L, 9);
-            rv = fnd->second(L, self, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get(), v7.get() });
-        }
+            case 8: {
+                auto v0 = at(L, 2);
+                auto v1 = at(L, 3);
+                auto v2 = at(L, 4);
+                auto v3 = at(L, 5);
+                auto v4 = at(L, 6);
+                auto v5 = at(L, 7);
+                auto v6 = at(L, 8);
+                auto v7 = at(L, 9);
+                rv = fnd->second(L,
+                                 self,
+                                 {v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get(), v7.get()});
+            }
                 break;
-        case 9: {
-            auto v0 = at(L, 2);
-            auto v1 = at(L, 3);
-            auto v2 = at(L, 4);
-            auto v3 = at(L, 5);
-            auto v4 = at(L, 6);
-            auto v5 = at(L, 7);
-            auto v6 = at(L, 8);
-            auto v7 = at(L, 9);
-            auto v8 = at(L, 10);
-            rv = fnd->second(L, self, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get(), v7.get(), v8.get() });
-        }
+            case 9: {
+                auto v0 = at(L, 2);
+                auto v1 = at(L, 3);
+                auto v2 = at(L, 4);
+                auto v3 = at(L, 5);
+                auto v4 = at(L, 6);
+                auto v5 = at(L, 7);
+                auto v6 = at(L, 8);
+                auto v7 = at(L, 9);
+                auto v8 = at(L, 10);
+                rv = fnd->second(L,
+                                 self,
+                                 {v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get(), v7.get(),
+                                  v8.get()});
+            }
                 break;
-        default:
-            break;
+            default:
+                break;
         }
 
         if (rv) {
@@ -182,8 +193,9 @@ public:
         return 0;
     }
 
-    static int ImpStaticFunction(lua_State *L) {
-        auto pctx = (ContextPrivate *)lua_topointer(L, lua_upvalueindex(1));
+    static int ImpStaticFunction(lua_State *L)
+    {
+        auto pctx = (ContextPrivate *) lua_topointer(L, lua_upvalueindex(1));
         auto fnid = lua_tointeger(L, lua_upvalueindex(2));
 
         auto fnd = pctx->refFuncs.find(fnid);
@@ -195,93 +207,95 @@ public:
         return_type rv;
         int count = lua_gettop(L);
         switch (count) {
-        case 0: {
-            rv = fnd->second(L, {});
-        }
+            case 0: {
+                rv = fnd->second(L, {});
+            }
                 break;
-        case 1: {
-            auto v0 = at(L, 1);
-            rv = fnd->second(L, { v0.get() });
-        }
+            case 1: {
+                auto v0 = at(L, 1);
+                rv = fnd->second(L, {v0.get()});
+            }
                 break;
-        case 2: {
-            auto v0 = at(L, 1);
-            auto v1 = at(L, 2);
-            rv = fnd->second(L, { v0.get(), v1.get() });
-        }
+            case 2: {
+                auto v0 = at(L, 1);
+                auto v1 = at(L, 2);
+                rv = fnd->second(L, {v0.get(), v1.get()});
+            }
                 break;
-        case 3: {
-            auto v0 = at(L, 1);
-            auto v1 = at(L, 2);
-            auto v2 = at(L, 3);
-            rv = fnd->second(L, { v0.get(), v1.get(), v2.get() });
-        }
+            case 3: {
+                auto v0 = at(L, 1);
+                auto v1 = at(L, 2);
+                auto v2 = at(L, 3);
+                rv = fnd->second(L, {v0.get(), v1.get(), v2.get()});
+            }
                 break;
-        case 4: {
-            auto v0 = at(L, 1);
-            auto v1 = at(L, 2);
-            auto v2 = at(L, 3);
-            auto v3 = at(L, 4);
-            rv = fnd->second(L, { v0.get(), v1.get(), v2.get(), v3.get() });
-        }
+            case 4: {
+                auto v0 = at(L, 1);
+                auto v1 = at(L, 2);
+                auto v2 = at(L, 3);
+                auto v3 = at(L, 4);
+                rv = fnd->second(L, {v0.get(), v1.get(), v2.get(), v3.get()});
+            }
                 break;
-        case 5: {
-            auto v0 = at(L, 1);
-            auto v1 = at(L, 2);
-            auto v2 = at(L, 3);
-            auto v3 = at(L, 4);
-            auto v4 = at(L, 5);
-            rv = fnd->second(L, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get() });
-        }
+            case 5: {
+                auto v0 = at(L, 1);
+                auto v1 = at(L, 2);
+                auto v2 = at(L, 3);
+                auto v3 = at(L, 4);
+                auto v4 = at(L, 5);
+                rv = fnd->second(L, {v0.get(), v1.get(), v2.get(), v3.get(), v4.get()});
+            }
                 break;
-        case 6: {
-            auto v0 = at(L, 1);
-            auto v1 = at(L, 2);
-            auto v2 = at(L, 3);
-            auto v3 = at(L, 4);
-            auto v4 = at(L, 5);
-            auto v5 = at(L, 6);
-            rv = fnd->second(L, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get() });
-        }
+            case 6: {
+                auto v0 = at(L, 1);
+                auto v1 = at(L, 2);
+                auto v2 = at(L, 3);
+                auto v3 = at(L, 4);
+                auto v4 = at(L, 5);
+                auto v5 = at(L, 6);
+                rv = fnd->second(L, {v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get()});
+            }
                 break;
-        case 7: {
-            auto v0 = at(L, 1);
-            auto v1 = at(L, 2);
-            auto v2 = at(L, 3);
-            auto v3 = at(L, 4);
-            auto v4 = at(L, 5);
-            auto v5 = at(L, 6);
-            auto v6 = at(L, 7);
-            rv = fnd->second(L, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get() });
-        }
+            case 7: {
+                auto v0 = at(L, 1);
+                auto v1 = at(L, 2);
+                auto v2 = at(L, 3);
+                auto v3 = at(L, 4);
+                auto v4 = at(L, 5);
+                auto v5 = at(L, 6);
+                auto v6 = at(L, 7);
+                rv = fnd->second(L, {v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get()});
+            }
                 break;
-        case 8: {
-            auto v0 = at(L, 1);
-            auto v1 = at(L, 2);
-            auto v2 = at(L, 3);
-            auto v3 = at(L, 4);
-            auto v4 = at(L, 5);
-            auto v5 = at(L, 6);
-            auto v6 = at(L, 7);
-            auto v7 = at(L, 8);
-            rv = fnd->second(L, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get(), v7.get() });
-        }
+            case 8: {
+                auto v0 = at(L, 1);
+                auto v1 = at(L, 2);
+                auto v2 = at(L, 3);
+                auto v3 = at(L, 4);
+                auto v4 = at(L, 5);
+                auto v5 = at(L, 6);
+                auto v6 = at(L, 7);
+                auto v7 = at(L, 8);
+                rv = fnd->second(L, {v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get(), v7.get()});
+            }
                 break;
-        case 9: {
-            auto v0 = at(L, 1);
-            auto v1 = at(L, 2);
-            auto v2 = at(L, 3);
-            auto v3 = at(L, 4);
-            auto v4 = at(L, 5);
-            auto v5 = at(L, 6);
-            auto v6 = at(L, 7);
-            auto v7 = at(L, 8);
-            auto v8 = at(L, 9);
-            rv = fnd->second(L, { v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get(), v7.get(), v8.get() });
-        }
+            case 9: {
+                auto v0 = at(L, 1);
+                auto v1 = at(L, 2);
+                auto v2 = at(L, 3);
+                auto v3 = at(L, 4);
+                auto v4 = at(L, 5);
+                auto v5 = at(L, 6);
+                auto v6 = at(L, 7);
+                auto v7 = at(L, 8);
+                auto v8 = at(L, 9);
+                rv = fnd->second(L,
+                                 {v0.get(), v1.get(), v2.get(), v3.get(), v4.get(), v5.get(), v6.get(), v7.get(),
+                                  v8.get()});
+            }
                 break;
-        default:
-            break;
+            default:
+                break;
         }
 
         if (rv) {
@@ -293,15 +307,18 @@ public:
     }
 };
 
-Function::Function() {
+Function::Function()
+{
     NNT_CLASS_CONSTRUCT()
 }
 
-Function::~Function() {
+Function::~Function()
+{
     NNT_CLASS_DESTORY()
 }
 
-void Function::declare_in(Context &ctx) const {
+void Function::declare_in(Context &ctx) const
+{
     auto L = ctx.d().L;
     NLUA_AUTOSTACK(L);
 
@@ -309,7 +326,8 @@ void Function::declare_in(Context &ctx) const {
     auto id = pctx->refId++;
 
     // 注册到全局对照表中，用于激活函数时查找真正的执行函数
-    pctx->refFuncs[id] = [&](lua_State *L, args_type const &args) -> return_type {
+    pctx->refFuncs[id] = [&](lua_State *L, args_type const &args) -> return_type
+    {
         try {
             NLUA_DEBUG("调用C++函数： " << name);
             return this->func(args);
@@ -334,7 +352,8 @@ void Function::declare_in(Context &ctx) const {
     lua_setglobal(L, name.c_str());
 }
 
-void Function::declare_in(Context &ctx, Class const &clz) const {
+void Function::declare_in(Context &ctx, Class const &clz) const
+{
     auto L = ctx.d().L;
     NLUA_AUTOSTACK(L);
 
@@ -349,7 +368,8 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
 
     if (classfunc) {
         // 注册到全局对照表中，用于激活函数时查找真正的执行函数
-        pctx->refClassFuncs[id] = [&](lua_State *L, self_type &self, args_type const &args) -> return_type {
+        pctx->refClassFuncs[id] = [&](lua_State *L, self_type &self, args_type const &args) -> return_type
+        {
             try {
                 // NLUA_DEBUG("调用C++成员函数： " << name);
 
@@ -358,7 +378,7 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
                     self->d().id = 0;
                     self->d().name = clz.singleton()->_globalvar;
                 }
-                
+
                 return this->classfunc(self, args);
             }
             catch (error &e) {
@@ -377,7 +397,8 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
     }
     else {
         // 注册静态函数
-        pctx->refFuncs[id] = [&](lua_State *L, args_type const &args) -> return_type {
+        pctx->refFuncs[id] = [&](lua_State *L, args_type const &args) -> return_type
+        {
             try {
                 // NLUA_DEBUG("调用C++静态函数： " << name);
 
@@ -401,15 +422,18 @@ void Function::declare_in(Context &ctx, Class const &clz) const {
     lua_rawset(L, clzid);
 }
 
-class ClassPrivate {
+class ClassPrivate
+{
 public:
 
-    ClassPrivate() {
+    ClassPrivate()
+    {
         // pass
     }
 
     // 仅输出定义段
-    void body_declare_in(Context &ctx, Class const &_curclass) {
+    void body_declare_in(Context &ctx, Class const &_curclass)
+    {
         auto L = ctx.d().L;
         NLUA_AUTOSTACK(L);
 
@@ -442,7 +466,8 @@ public:
     }
 
     // 实例化类型
-    static int ImpNew(lua_State *L) {
+    static int ImpNew(lua_State *L)
+    {
         // NLUA_AUTOSTACK(L); 会导致实例化的栈被弹出
 
         int clzid = 1;
@@ -529,7 +554,8 @@ public:
     }
 
     // 析构函数实现
-    static int ImpDestroy(lua_State *L) {
+    static int ImpDestroy(lua_State *L)
+    {
         // self 1
 
         // 如果已经释放，则不调用
@@ -573,7 +599,8 @@ public:
     }
 
     // 单件实现
-    static int ImpGetSingleton(lua_State *L) {
+    static int ImpGetSingleton(lua_State *L)
+    {
         lua_pushstring(L, "__shared");
         lua_rawget(L, 1);
         if (lua_isnil(L, -1)) {
@@ -606,8 +633,8 @@ public:
             lua_rawset(L, 1);
 
             // 获得对应的C++定义
-            auto sig = (Singleton *)lua_topointer(L, lua_upvalueindex(1));
-            auto pctx = (ContextPrivate *)lua_topointer(L, lua_upvalueindex(2));
+            auto sig = (Singleton *) lua_topointer(L, lua_upvalueindex(1));
+            auto pctx = (ContextPrivate *) lua_topointer(L, lua_upvalueindex(2));
 
             // 绑定到全局中
             ostringstream oss;
@@ -630,13 +657,14 @@ public:
         return 1;
     }
 
-    static int ImpFreeSingleton(lua_State *L) {
+    static int ImpFreeSingleton(lua_State *L)
+    {
         lua_pushstring(L, "__shared");
         lua_rawget(L, 1);
         if (!lua_isnil(L, -1)) {
             int objid = lua_gettop(L);
 
-            auto sig = (Singleton *)lua_topointer(L, lua_upvalueindex(1));
+            auto sig = (Singleton *) lua_topointer(L, lua_upvalueindex(1));
 
             if (sig->fini) {
                 auto self = make_shared<Object>();
@@ -665,23 +693,28 @@ public:
     Class::function_type fini;
 };
 
-Class::Class() {
+Class::Class()
+{
     NNT_CLASS_CONSTRUCT();
 }
 
-Class::~Class() {
+Class::~Class()
+{
     NNT_CLASS_DESTORY();
 }
 
-Class::fields_type const &Class::fields() const {
+Class::fields_type const &Class::fields() const
+{
     return d_ptr->fields;
 }
 
-Class::functions_type const &Class::functions() const {
+Class::functions_type const &Class::functions() const
+{
     return d_ptr->functions;
 }
 
-Class &Class::singleton(string const &_name, Singleton::ini_type _init, Singleton::ini_type _fini) {
+Class &Class::singleton(string const &_name, Singleton::ini_type &&_init, Singleton::ini_type &&_fini)
+{
     auto t = make_shared<Singleton>();
     t->name = _name;
     t->init = move(_init);
@@ -690,39 +723,48 @@ Class &Class::singleton(string const &_name, Singleton::ini_type _init, Singleto
     return *this;
 }
 
-Class::singleton_type Class::singleton() const {
+Class::singleton_type Class::singleton() const
+{
     return d_ptr->singleton;
 }
 
-Class &Class::inherit(Any const &par) {
+Class &Class::inherit(Any const &par)
+{
     d_ptr->supers.emplace_back(par);
     return *this;
 }
 
-Class &Class::inherit(::std::initializer_list<Any> const &pars) {
+Class &Class::inherit(::std::initializer_list<Any> const &pars)
+{
     for (auto &e : pars) {
         d_ptr->supers.emplace_back(e);
     }
     return *this;
 }
 
-Class &Class::init(Function::basefunc_type func, size_t args) {
+Class &Class::init(Function::basefunc_type &&func, size_t args)
+{
     auto f = make_shared<Function>();
+
     ostringstream oss;
     oss << "__init" << args << "__";
     f->name = oss.str();
-    f->classfunc = [=](self_type &self, args_type const &args) -> return_type {
+    f->classfunc = [=](self_type &self, args_type const &args) -> return_type
+    {
         func(self, args);
         return nullptr;
     };
+
     d_ptr->inits.emplace_back(f);
     return *this;
 }
 
-Class &Class::init(Function::basefunc0_type func) {
-    return init([=](self_type &self, args_type const &args) {
-        return func(self);
-        }, 0);
+Class &Class::init(Function::basefunc0_type &&func)
+{
+    return init([=](self_type &self, args_type const &args)
+                {
+                    return func(self);
+                }, 0);
 }
 
 #define IMPFUNC_CHECK_ARGS(count)        \
@@ -732,73 +774,93 @@ Class &Class::init(Function::basefunc0_type func) {
             throw error(-1, "缺少参数"); \
     } while (0)
 
-Class &Class::init(Function::basefunc1_type func) {
-    return init([=](self_type &self, args_type const &args) {
-        IMPFUNC_CHECK_ARGS(1);
-        return func(self, COMXX_PPARGS_1(**, args));
-        }, 1);
+Class &Class::init(Function::basefunc1_type &&func)
+{
+    return init([=](self_type &self, args_type const &args)
+                {
+                    IMPFUNC_CHECK_ARGS(1);
+                    return func(self, COMXX_PPARGS_1(**, args));
+                }, 1);
 }
 
-Class &Class::init(Function::basefunc2_type func) {
-    return init([=](self_type &self, args_type const &args) {
-        IMPFUNC_CHECK_ARGS(2);
-        return func(self, COMXX_PPARGS_2(**, args));
-        }, 2);
+Class &Class::init(Function::basefunc2_type &&func)
+{
+    return init([=](self_type &self, args_type const &args)
+                {
+                    IMPFUNC_CHECK_ARGS(2);
+                    return func(self, COMXX_PPARGS_2(**, args));
+                }, 2);
 }
 
-Class &Class::init(Function::basefunc3_type func) {
-    return init([=](self_type &self, args_type const &args) {
-        IMPFUNC_CHECK_ARGS(3);
-        return func(self, COMXX_PPARGS_3(**, args));
-        }, 3);
+Class &Class::init(Function::basefunc3_type &&func)
+{
+    return init([=](self_type &self, args_type const &args)
+                {
+                    IMPFUNC_CHECK_ARGS(3);
+                    return func(self, COMXX_PPARGS_3(**, args));
+                }, 3);
 }
 
-Class &Class::init(Function::basefunc4_type func) {
-    return init([=](self_type &self, args_type const &args) {
-        IMPFUNC_CHECK_ARGS(4);
-        return func(self, COMXX_PPARGS_4(**, args));
-        }, 4);
+Class &Class::init(Function::basefunc4_type &&func)
+{
+    return init([=](self_type &self, args_type const &args)
+                {
+                    IMPFUNC_CHECK_ARGS(4);
+                    return func(self, COMXX_PPARGS_4(**, args));
+                }, 4);
 }
 
-Class &Class::init(Function::basefunc5_type func) {
-    return init([=](self_type &self, args_type const &args) {
-        IMPFUNC_CHECK_ARGS(5);
-        return func(self, COMXX_PPARGS_5(**, args));
-        }, 5);
+Class &Class::init(Function::basefunc5_type &&func)
+{
+    return init([=](self_type &self, args_type const &args)
+                {
+                    IMPFUNC_CHECK_ARGS(5);
+                    return func(self, COMXX_PPARGS_5(**, args));
+                }, 5);
 }
 
-Class &Class::init(Function::basefunc6_type func) {
-    return init([=](self_type &self, args_type const &args) {
-        IMPFUNC_CHECK_ARGS(6);
-        return func(self, COMXX_PPARGS_6(**, args));
-        }, 6);
+Class &Class::init(Function::basefunc6_type &&func)
+{
+    return init([=](self_type &self, args_type const &args)
+                {
+                    IMPFUNC_CHECK_ARGS(6);
+                    return func(self, COMXX_PPARGS_6(**, args));
+                }, 6);
 }
 
-Class &Class::init(Function::basefunc7_type func) {
-    return init([=](self_type &self, args_type const &args) {
-        IMPFUNC_CHECK_ARGS(7);
-        return func(self, COMXX_PPARGS_7(**, args));
-        }, 7);
+Class &Class::init(Function::basefunc7_type &&func)
+{
+    return init([=](self_type &self, args_type const &args)
+                {
+                    IMPFUNC_CHECK_ARGS(7);
+                    return func(self, COMXX_PPARGS_7(**, args));
+                }, 7);
 }
 
-Class &Class::init(Function::basefunc8_type func) {
-    return init([=](self_type &self, args_type const &args) {
-        IMPFUNC_CHECK_ARGS(8);
-        return func(self, COMXX_PPARGS_8(**, args));
-        }, 8);
+Class &Class::init(Function::basefunc8_type &&func)
+{
+    return init([=](self_type &self, args_type const &args)
+                {
+                    IMPFUNC_CHECK_ARGS(8);
+                    return func(self, COMXX_PPARGS_8(**, args));
+                }, 8);
 }
 
-Class &Class::init(Function::basefunc9_type func) {
-    return init([=](self_type &self, args_type const &args) {
-        IMPFUNC_CHECK_ARGS(9);
-        return func(self, COMXX_PPARGS_9(**, args));
-        }, 9);
+Class &Class::init(Function::basefunc9_type &&func)
+{
+    return init([=](self_type &self, args_type const &args)
+                {
+                    IMPFUNC_CHECK_ARGS(9);
+                    return func(self, COMXX_PPARGS_9(**, args));
+                }, 9);
 }
 
-Class &Class::fini(Function::basefunc0_type func) {
+Class &Class::fini(Function::basefunc0_type &&func)
+{
     auto f = make_shared<Function>();
     f->name = "__fini__";
-    f->classfunc = [=](self_type &self, args_type const &args) -> return_type {
+    f->classfunc = [=](self_type &self, args_type const &args) -> return_type
+    {
         func(self);
         return nullptr;
     };
@@ -806,7 +868,8 @@ Class &Class::fini(Function::basefunc0_type func) {
     return *this;
 }
 
-Class &Class::add(string const &fname, Function::classfunc_type func) {
+Class &Class::add(string const &fname, Function::classfunc_type &&func)
+{
     auto f = make_shared<Function>();
     f->name = fname;
     f->classfunc = move(func);
@@ -814,76 +877,97 @@ Class &Class::add(string const &fname, Function::classfunc_type func) {
     return *this;
 }
 
-Class &Class::add(string const &fname, Function::classfunc0_type func) {
-    return add(fname, [=](self_type &self, args_type const &args) -> return_type {
+Class &Class::add(string const &fname, Function::classfunc0_type &&func)
+{
+    return add(fname, [=](self_type &self, args_type const &args) -> return_type
+    {
         return func(self);
-        });
+    });
 }
 
-Class &Class::add(string const &fname, Function::classfunc1_type func) {
-    return add(fname, [=](self_type &self, args_type const &args) -> return_type {
+Class &Class::add(string const &fname, Function::classfunc1_type &&func)
+{
+    return add(fname, [=](self_type &self, args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(1);
         return func(self, COMXX_PPARGS_1(**, args));
-        });
+    });
 }
 
-Class &Class::add(string const &fname, Function::classfunc2_type func) {
-    return add(fname, [=](self_type &self, args_type const &args) -> return_type {
+Class &Class::add(string const &fname, Function::classfunc2_type &&func)
+{
+    return add(fname, [=](self_type &self, args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(2);
         return func(self, COMXX_PPARGS_2(**, args));
-        });
+    });
 }
 
-Class &Class::add(string const &fname, Function::classfunc3_type func) {
-    return add(fname, [=](self_type &self, args_type const &args) -> return_type {
+Class &Class::add(string const &fname, Function::classfunc3_type &&func)
+{
+    return add(fname, [=](self_type &self, args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(3);
         return func(self, COMXX_PPARGS_3(**, args));
-        });
+    });
 }
 
-Class &Class::add(string const &fname, Function::classfunc4_type func) {
-    return add(fname, [=](self_type &self, args_type const &args) -> return_type {
+Class &Class::add(string const &fname, Function::classfunc4_type &&func)
+{
+    return add(fname, [=](self_type &self, args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(4);
         return func(self, COMXX_PPARGS_4(**, args));
-        });
+    });
 }
 
-Class &Class::add(string const &fname, Function::classfunc5_type func) {
-    return add(fname, [=](self_type &self, args_type const &args) -> return_type {
+Class &Class::add(string const &fname, Function::classfunc5_type &&func)
+{
+    return add(fname, [=](self_type &self, args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(5);
         return func(self, COMXX_PPARGS_5(**, args));
-        });
+    });
 }
 
-Class &Class::add(string const &fname, Function::classfunc6_type func) {
-    return add(fname, [=](self_type &self, args_type const &args) -> return_type {
+Class &Class::add(string const &fname, Function::classfunc6_type &&func)
+{
+    return add(fname, [=](self_type &self, args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(6);
         return func(self, COMXX_PPARGS_6(**, args));
-        });
+    });
 }
 
-Class &Class::add(string const &fname, Function::classfunc7_type func) {
-    return add(fname, [=](self_type &self, args_type const &args) -> return_type {
+Class &Class::add(string const &fname, Function::classfunc7_type &&func)
+{
+    return add(fname, [=](self_type &self, args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(7);
         return func(self, COMXX_PPARGS_7(**, args));
-        });
+    });
 }
 
-Class &Class::add(string const &fname, Function::classfunc8_type func) {
-    return add(fname, [=](self_type &self, args_type const &args) -> return_type {
+Class &Class::add(string const &fname, Function::classfunc8_type &&func)
+{
+    return add(fname, [=](self_type &self, args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(8);
         return func(self, COMXX_PPARGS_8(**, args));
-        });
+    });
 }
 
-Class &Class::add(string const &fname, Function::classfunc9_type func) {
-    return add(fname, [=](self_type &self, args_type const &args) -> return_type {
+Class &Class::add(string const &fname, Function::classfunc9_type &&func)
+{
+    return add(fname, [=](self_type &self, args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(9);
         return func(self, COMXX_PPARGS_9(**, args));
-        });
+    });
 }
 
-Class &Class::add_static(string const &fname, Function::func_type func) {
+Class &Class::add_static(string const &fname, Function::func_type &&func)
+{
     auto f = make_shared<Function>();
     f->name = fname;
     f->func = move(func);
@@ -891,81 +975,103 @@ Class &Class::add_static(string const &fname, Function::func_type func) {
     return *this;
 }
 
-Class &Class::add_static(string const &fname, Function::func0_type func) {
-    return add_static(fname, [=](args_type const &args) -> return_type {
+Class &Class::add_static(string const &fname, Function::func0_type &&func)
+{
+    return add_static(fname, [=](args_type const &args) -> return_type
+    {
         return func();
-        });
+    });
 }
 
-Class &Class::add_static(string const &fname, Function::func1_type func) {
-    return add_static(fname, [=](args_type const &args) -> return_type {
+Class &Class::add_static(string const &fname, Function::func1_type &&func)
+{
+    return add_static(fname, [=](args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(1);
         return func(COMXX_PPARGS_1(**, args));
-        });
+    });
 }
 
-Class &Class::add_static(string const &fname, Function::func2_type func) {
-    return add_static(fname, [=](args_type const &args) -> return_type {
+Class &Class::add_static(string const &fname, Function::func2_type &&func)
+{
+    return add_static(fname, [=](args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(2);
         return func(COMXX_PPARGS_2(**, args));
-        });
+    });
 }
 
-Class &Class::add_static(string const &fname, Function::func3_type func) {
-    return add_static(fname, [=](args_type const &args) -> return_type {
+Class &Class::add_static(string const &fname, Function::func3_type &&func)
+{
+    return add_static(fname, [=](args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(3);
         return func(COMXX_PPARGS_3(**, args));
-        });
+    });
 }
 
-Class &Class::add_static(string const &fname, Function::func4_type func) {
-    return add_static(fname, [=](args_type const &args) -> return_type {
+Class &Class::add_static(string const &fname, Function::func4_type &&func)
+{
+    return add_static(fname, [=](args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(4);
         return func(COMXX_PPARGS_4(**, args));
-        });
+    });
 }
 
-Class &Class::add_static(string const &fname, Function::func5_type func) {
-    return add_static(fname, [=](args_type const &args) -> return_type {
+Class &Class::add_static(string const &fname, Function::func5_type &&func)
+{
+    return add_static(fname, [=](args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(5);
         return func(COMXX_PPARGS_5(**, args));
-        });
+    });
 }
 
-Class &Class::add_static(string const &fname, Function::func6_type func) {
-    return add_static(fname, [=](args_type const &args) -> return_type {
+Class &Class::add_static(string const &fname, Function::func6_type &&func)
+{
+    return add_static(fname, [=](args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(6);
         return func(COMXX_PPARGS_6(**, args));
-        });
+    });
 }
 
-Class &Class::add_static(string const &fname, Function::func7_type func) {
-    return add_static(fname, [=](args_type const &args) -> return_type {
+Class &Class::add_static(string const &fname, Function::func7_type &&func)
+{
+    return add_static(fname, [=](args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(7);
         return func(COMXX_PPARGS_7(**, args));
-        });
+    });
 }
 
-Class &Class::add_static(string const &fname, Function::func8_type func) {
-    return add_static(fname, [=](args_type const &args) -> return_type {
+Class &Class::add_static(string const &fname, Function::func8_type &&func)
+{
+    return add_static(fname, [=](args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(8);
         return func(COMXX_PPARGS_8(**, args));
-        });
+    });
 }
 
-Class &Class::add_static(string const &fname, Function::func9_type func) {
-    return add_static(fname, [=](args_type const &args) -> return_type {
+Class &Class::add_static(string const &fname, Function::func9_type &&func)
+{
+    return add_static(fname, [=](args_type const &args) -> return_type
+    {
         IMPFUNC_CHECK_ARGS(9);
         return func(COMXX_PPARGS_9(**, args));
-        });
+    });
 }
 
-Class &Class::add(field_type const &f) {
+Class &Class::add(field_type const &f)
+{
     d_ptr->fields[f->name] = f;
     return *this;
 }
 
-void Singleton::declare_in(Context &ctx) const {
+void Singleton::declare_in(Context &ctx) const
+{
     auto pctx = &ctx.d();
     auto L = pctx->L;
     NLUA_AUTOSTACK(L);
@@ -973,14 +1079,14 @@ void Singleton::declare_in(Context &ctx) const {
     int clzid = lua_gettop(L);
 
     lua_pushstring(L, name.c_str());
-    lua_pushlightuserdata(L, (void *)this);
-    lua_pushlightuserdata(L, (void *)pctx);
+    lua_pushlightuserdata(L, (void *) this);
+    lua_pushlightuserdata(L, (void *) pctx);
     lua_pushcclosure(L, ClassPrivate::ImpGetSingleton, 2);
     lua_rawset(L, clzid);
 
     lua_pushstring(L, ("free_" + name).c_str());
-    lua_pushlightuserdata(L, (void *)this);
-    lua_pushlightuserdata(L, (void *)pctx);
+    lua_pushlightuserdata(L, (void *) this);
+    lua_pushlightuserdata(L, (void *) pctx);
     lua_pushcclosure(L, ClassPrivate::ImpFreeSingleton, 2);
     lua_rawset(L, clzid);
 
@@ -993,7 +1099,8 @@ void Singleton::declare_in(Context &ctx) const {
     lua_rawset(L, clzid);
 }
 
-void Class::declare_in(Context &ctx) const {
+void Class::declare_in(Context &ctx) const
+{
     auto L = ctx.d().L;
     NLUA_AUTOSTACK(L);
 
@@ -1026,9 +1133,10 @@ void Class::declare_in(Context &ctx) const {
 };
 
 // 获得module的定义栈id
-extern int DeclareModule(Module const&, Context &);
+extern int DeclareModule(Module const &, Context &);
 
-void Class::declare_in(Context &ctx, Module const &mod) const {
+void Class::declare_in(Context &ctx, Module const &mod) const
+{
     auto L = ctx.d().L;
     NLUA_AUTOSTACK(L);
 
@@ -1062,14 +1170,16 @@ void Class::declare_in(Context &ctx, Module const &mod) const {
     lua_rawset(L, modid);
 }
 
-class ModulePrivate {
+class ModulePrivate
+{
 public:
     Module *d_owner;
 
     Module::classes_type classes;
     Module::modules_type modules;
 
-    int declare_module(Context &ctx) const {
+    int declare_module(Context &ctx) const
+    {
         auto L = ctx.d().L;
         auto pars = d_owner->parents();
         pars.emplace_back(d_owner);
@@ -1114,7 +1224,8 @@ public:
         return modid;
     }
 
-    void body_declare_in(Context &ctx) {
+    void body_declare_in(Context &ctx)
+    {
         for (auto &e : classes) {
             e.second->declare_in(ctx, *d_owner);
         }
@@ -1125,21 +1236,25 @@ public:
     }
 };
 
-int DeclareModule(Module const& m, Context& ctx) {
+int DeclareModule(Module const &m, Context &ctx)
+{
     return m.d().declare_module(ctx);
 }
 
-Module::Module() {
+Module::Module()
+{
     NNT_CLASS_CONSTRUCT();
     d_ptr->d_owner = this;
 }
 
-Module::~Module() {
+Module::~Module()
+{
     d_ptr->d_owner = nullptr;
     NNT_CLASS_DESTORY()
 }
 
-bool Module::add(class_type const& c) {
+bool Module::add(class_type const &c)
+{
     auto fnd = d_ptr->classes.find(c->name);
     if (fnd != d_ptr->classes.end()) {
         NLUA_ERROR("模块中已经存在类 " << c->name);
@@ -1149,7 +1264,8 @@ bool Module::add(class_type const& c) {
     return true;
 }
 
-bool Module::add(module_type const& m) {
+bool Module::add(module_type const &m)
+{
     if (m->parent) {
         NLUA_ERROR(name << " 已经是 " << m->parent->name << " 的子模块");
         return false;
@@ -1165,7 +1281,8 @@ bool Module::add(module_type const& m) {
     return true;
 }
 
-void Module::declare_in(Context &ctx) const {
+void Module::declare_in(Context &ctx) const
+{
     auto L = ctx.d().L;
     NLUA_AUTOSTACK(L);
 
@@ -1173,7 +1290,8 @@ void Module::declare_in(Context &ctx) const {
     d_ptr->body_declare_in(ctx);
 }
 
-void Module::merge(Module const &r) {
+void Module::merge(Module const &r)
+{
     for (auto &e : r.d_ptr->classes) {
         d_ptr->classes[e.first] = e.second;
     }
@@ -1190,7 +1308,8 @@ void Module::merge(Module const &r) {
     }
 }
 
-Module::parents_type Module::parents() const {
+Module::parents_type Module::parents() const
+{
     parents_type r;
     auto p = parent;
     while (p) {
@@ -1200,15 +1319,18 @@ Module::parents_type Module::parents() const {
     return parents_type(r.rbegin(), r.rend());
 }
 
-Object::Object() {
+Object::Object()
+{
     NNT_CLASS_CONSTRUCT()
 }
 
-Object::~Object() {
+Object::~Object()
+{
     NNT_CLASS_DESTORY()
 }
 
-void *Object::payload() const {
+void *Object::payload() const
+{
 #if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
 #else
@@ -1236,7 +1358,8 @@ void *Object::payload() const {
     return ud->data;
 }
 
-void Object::payload(void *data) {
+void Object::payload(void *data)
+{
 #if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
 #else
@@ -1264,7 +1387,8 @@ void Object::payload(void *data) {
     ud->data = data;
 }
 
-return_type Object::get(string const &name) const {
+return_type Object::get(string const &name) const
+{
 #if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
 #else
@@ -1285,7 +1409,8 @@ return_type Object::get(string const &name) const {
     return at(L, -1);
 }
 
-void Object::set(string const &name, value_type const &val) {
+void Object::set(string const &name, value_type const &val)
+{
 #if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
 #else
@@ -1314,7 +1439,8 @@ void Object::set(string const &name, value_type const &val) {
     lua_rawset(L, -3);
 }
 
-self_type Context::global(string const &name) const {
+self_type Context::global(string const &name) const
+{
 #if NLUA_MT
     // 放到工作线程上
     auto GL = d_ptr->pvd_worker->L;
@@ -1369,7 +1495,8 @@ self_type Context::global(string const &name) const {
     return r;
 }
 
-self_type Context::singleton(string const& name) const {
+self_type Context::singleton(string const &name) const
+{
     auto obj = global(name);
     if (!obj)
         return nullptr;
@@ -1377,7 +1504,8 @@ self_type Context::singleton(string const& name) const {
     return obj->get("__shared")->toObject();
 }
 
-void Object::setfor(Object &r) const {
+void Object::setfor(Object &r) const
+{
     auto L = d_ptr->L;
     NLUA_AUTOSTACK(L);
 
@@ -1417,7 +1545,8 @@ void Object::setfor(Object &r) const {
     }
 }
 
-bool Object::has(string const &name) const {
+bool Object::has(string const &name) const
+{
 #if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
 #else
@@ -1446,11 +1575,13 @@ bool Object::has(string const &name) const {
     return true;
 }
 
-bool Object::isnil() const {
+bool Object::isnil() const
+{
     return !d_ptr->L || !d_ptr->id || d_ptr->name.empty();
 }
 
-self_type Object::instance() const {
+self_type Object::instance() const
+{
 #if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
 #else
@@ -1501,7 +1632,8 @@ self_type Object::instance() const {
     return r;
 }
 
-void Object::grab() {
+void Object::grab()
+{
 #if NLUA_MT
     if (!d_ptr->GL) {
         // grab后的操作均位于独立L上进行，此时可以使用Resrouce的锁避免冲突
@@ -1552,7 +1684,8 @@ void Object::grab() {
     lua_setfield(L, selfid, "__refs");
 }
 
-bool Object::drop() {
+bool Object::drop()
+{
     if (d_ptr->id) {
         NLUA_ERROR("该变量是局部变量，不支持drop");
         return false;
@@ -1595,7 +1728,8 @@ bool Object::drop() {
     return false;
 }
 
-return_type Object::invoke(string const &name, args_type const &args) {
+return_type Object::invoke(string const &name, args_type const &args)
+{
 #if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
 #else
@@ -1653,51 +1787,109 @@ return_type Object::invoke(string const &name, args_type const &args) {
     return at(L, -1);
 }
 
-return_type Object::invoke(string const &name) {
+return_type Object::invoke(string const &name)
+{
     return invoke(name, {});
 }
 
-return_type Object::invoke(string const &name, Variant const &v0) {
-    return invoke(name, { &v0 });
+return_type Object::invoke(string const &name, arg_type const &v0)
+{
+    return invoke(name, {&v0});
 }
 
-return_type Object::invoke(string const &name, Variant const &v0, Variant const &v1) {
-    return invoke(name, { &v0, &v1 });
+return_type Object::invoke(string const &name, arg_type const &v0, arg_type const &v1)
+{
+    return invoke(name, {&v0, &v1});
 }
 
-return_type Object::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2) {
-    return invoke(name, { &v0, &v1, &v2 });
+return_type Object::invoke(string const &name, arg_type const &v0, arg_type const &v1, arg_type const &v2)
+{
+    return invoke(name, {&v0, &v1, &v2});
 }
 
-return_type Object::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3) {
-    return invoke(name, { &v0, &v1, &v2, &v3 });
+return_type
+Object::invoke(string const &name, arg_type const &v0, arg_type const &v1, arg_type const &v2, arg_type const &v3)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3});
 }
 
-return_type Object::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4) {
-    return invoke(name, { &v0, &v1, &v2, &v3, &v4 });
+return_type Object::invoke(string const &name,
+                           arg_type const &v0,
+                           arg_type const &v1,
+                           arg_type const &v2,
+                           arg_type const &v3,
+                           arg_type const &v4)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3, &v4});
 }
 
-return_type Object::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5) {
-    return invoke(name, { &v0, &v1, &v2, &v3, &v4, &v5 });
+return_type Object::invoke(string const &name,
+                           arg_type const &v0,
+                           arg_type const &v1,
+                           arg_type const &v2,
+                           arg_type const &v3,
+                           arg_type const &v4,
+                           arg_type const &v5)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3, &v4, &v5});
 }
 
-return_type Object::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5, Variant const &v6) {
-    return invoke(name, { &v0, &v1, &v2, &v3, &v4, &v5, &v6 });
+return_type Object::invoke(string const &name,
+                           arg_type const &v0,
+                           arg_type const &v1,
+                           arg_type const &v2,
+                           arg_type const &v3,
+                           arg_type const &v4,
+                           arg_type const &v5,
+                           arg_type const &v6)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3, &v4, &v5, &v6});
 }
 
-return_type Object::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5, Variant const &v6, Variant const &v7) {
-    return invoke(name, { &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7 });
+return_type Object::invoke(string const &name,
+                           arg_type const &v0,
+                           arg_type const &v1,
+                           arg_type const &v2,
+                           arg_type const &v3,
+                           arg_type const &v4,
+                           arg_type const &v5,
+                           arg_type const &v6,
+                           arg_type const &v7)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7});
 }
 
-return_type Object::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5, Variant const &v6, Variant const &v7, Variant const &v8) {
-    return invoke(name, { &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8 });
+return_type Object::invoke(string const &name,
+                           arg_type const &v0,
+                           arg_type const &v1,
+                           arg_type const &v2,
+                           arg_type const &v3,
+                           arg_type const &v4,
+                           arg_type const &v5,
+                           arg_type const &v6,
+                           arg_type const &v7,
+                           arg_type const &v8)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8});
 }
 
-return_type Object::invoke(string const &name, Variant const &v0, Variant const &v1, Variant const &v2, Variant const &v3, Variant const &v4, Variant const &v5, Variant const &v6, Variant const &v7, Variant const &v8, Variant const &v9) {
-    return invoke(name, { &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9 });
+return_type Object::invoke(string const &name,
+                           arg_type const &v0,
+                           arg_type const &v1,
+                           arg_type const &v2,
+                           arg_type const &v3,
+                           arg_type const &v4,
+                           arg_type const &v5,
+                           arg_type const &v6,
+                           arg_type const &v7,
+                           arg_type const &v8,
+                           arg_type const &v9)
+{
+    return invoke(name, {&v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9});
 }
 
-return_type Object::call(args_type const& args) {
+return_type Object::call(args_type const &args)
+{
 #if NLUA_MT
     auto L = d_ptr->GL ? d_ptr->GL : d_ptr->L;
 #else
@@ -1726,7 +1918,7 @@ return_type Object::call(args_type const& args) {
         }
     }
 
-    for (auto& e : args) {
+    for (auto &e : args) {
         push(e, L);
     }
 
@@ -1738,48 +1930,95 @@ return_type Object::call(args_type const& args) {
     return at(L, -1);
 }
 
-return_type Object::call() {
+return_type Object::call()
+{
     return call({});
 }
 
-return_type Object::call(Variant const& v0) {
-    return call({ &v0 });
+return_type Object::call(arg_type const &v0)
+{
+    return call({&v0});
 }
 
-return_type Object::call(Variant const& v0, Variant const& v1) {
-    return call({ &v0, &v1 });
+return_type Object::call(arg_type const &v0, arg_type const &v1)
+{
+    return call({&v0, &v1});
 }
 
-return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2) {
-    return call({ &v0, &v1, &v2 });
+return_type Object::call(arg_type const &v0, arg_type const &v1, arg_type const &v2)
+{
+    return call({&v0, &v1, &v2});
 }
 
-return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3) {
-    return call({ &v0, &v1, &v2, &v3 });
+return_type Object::call(arg_type const &v0, arg_type const &v1, arg_type const &v2, arg_type const &v3)
+{
+    return call({&v0, &v1, &v2, &v3});
 }
 
-return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3, Variant const& v4) {
-    return call({ &v0, &v1, &v2, &v3, &v4 });
+return_type
+Object::call(arg_type const &v0, arg_type const &v1, arg_type const &v2, arg_type const &v3, arg_type const &v4)
+{
+    return call({&v0, &v1, &v2, &v3, &v4});
 }
 
-return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3, Variant const& v4, Variant const& v5) {
-    return call({ &v0, &v1, &v2, &v3, &v4, &v5 });
+return_type Object::call(arg_type const &v0,
+                         arg_type const &v1,
+                         arg_type const &v2,
+                         arg_type const &v3,
+                         arg_type const &v4,
+                         arg_type const &v5)
+{
+    return call({&v0, &v1, &v2, &v3, &v4, &v5});
 }
 
-return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3, Variant const& v4, Variant const& v5, Variant const& v6) {
-    return call({ &v0, &v1, &v2, &v3, &v4, &v5, &v6 });
+return_type Object::call(arg_type const &v0,
+                         arg_type const &v1,
+                         arg_type const &v2,
+                         arg_type const &v3,
+                         arg_type const &v4,
+                         arg_type const &v5,
+                         arg_type const &v6)
+{
+    return call({&v0, &v1, &v2, &v3, &v4, &v5, &v6});
 }
 
-return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3, Variant const& v4, Variant const& v5, Variant const& v6, Variant const& v7) {
-    return call({ &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7 });
+return_type Object::call(arg_type const &v0,
+                         arg_type const &v1,
+                         arg_type const &v2,
+                         arg_type const &v3,
+                         arg_type const &v4,
+                         arg_type const &v5,
+                         arg_type const &v6,
+                         arg_type const &v7)
+{
+    return call({&v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7});
 }
 
-return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3, Variant const& v4, Variant const& v5, Variant const& v6, Variant const& v7, Variant const& v8) {
-    return call({ &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8 });
+return_type Object::call(arg_type const &v0,
+                         arg_type const &v1,
+                         arg_type const &v2,
+                         arg_type const &v3,
+                         arg_type const &v4,
+                         arg_type const &v5,
+                         arg_type const &v6,
+                         arg_type const &v7,
+                         arg_type const &v8)
+{
+    return call({&v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8});
 }
 
-return_type Object::call(Variant const& v0, Variant const& v1, Variant const& v2, Variant const& v3, Variant const& v4, Variant const& v5, Variant const& v6, Variant const& v7, Variant const& v8, Variant const& v9) {
-    return call({ &v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9 });
+return_type Object::call(arg_type const &v0,
+                         arg_type const &v1,
+                         arg_type const &v2,
+                         arg_type const &v3,
+                         arg_type const &v4,
+                         arg_type const &v5,
+                         arg_type const &v6,
+                         arg_type const &v7,
+                         arg_type const &v8,
+                         arg_type const &v9)
+{
+    return call({&v0, &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9});
 }
 
 shared_ptr<Variant> Object::toVariant() const
@@ -1809,8 +2048,8 @@ shared_ptr<Variant> Object::toVariant() const
     }
 #endif
 
-    auto r = make_shared<Variant>((integer)d_ptr->id);
-    const_cast<Variant::VT&>(r->vt) = Variant::VT::OBJECT;
+    auto r = make_shared<Variant>((integer) d_ptr->id);
+    const_cast<Variant::VT &>(r->vt) = Variant::VT::OBJECT;
     return r;
 }
 
@@ -1821,10 +2060,10 @@ shared_ptr<Variant::com_variant_type> Object::toComVariant() const
     return make_shared<Variant::com_variant_type>(d_ptr->name);
 }
 
-self_type to_object(lua_State* L, int n)
+self_type to_object(lua_State *L, int n)
 {
     auto r = make_shared<Object>();
-    auto& rd = r->d();
+    auto &rd = r->d();
     rd.L = L;
     rd.id = n;
     return r;

@@ -25,7 +25,12 @@ AJNI_API(jboolean)
 NLUA_FUNC(Context, jni_1loadbuffer)(JNIEnv *env, jobject thiz, jbyteArray arr)
 {
     auto bytes = JObject::Extract(arr)->toArray()->toBytes();
-    return Context::shared().load(&bytes->at(0), bytes->size());
+    auto const sz = bytes->size();
+    if (!sz) {
+        Logger::Warn("读取空缓存");
+        return true;
+    }
+    return Context::shared().load(&bytes->at(0), sz);
 }
 
 AJNI_API(jint)

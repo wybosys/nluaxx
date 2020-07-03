@@ -282,7 +282,8 @@ shared_ptr<JArray::bytes_type> JArray::toBytes() const
         r->resize(_sz);
         Env.ProcessBytes(*this, [&](jbyte const *bs)
         {
-            ::std::memcpy(&r->at(0), bs, _sz);
+            if (_sz)
+                ::std::memcpy(&r->at(0), bs, _sz);
         });
         return r;
     }
@@ -291,7 +292,8 @@ shared_ptr<JArray::bytes_type> JArray::toBytes() const
         r->resize(_sz);
         Env.ProcessChars(*this, [&](jchar const *cs)
         {
-            ::std::memcpy(&r->at(0), cs, _sz);
+            if (_sz)
+                ::std::memcpy(&r->at(0), cs, _sz);
         });
         return r;
     }

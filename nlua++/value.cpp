@@ -60,11 +60,15 @@ return_type at(lua_State *L, int n)
     auto const typ = lua_type(L, n);
     switch (typ) {
         case LUA_TSTRING:
+#if LUA_VERSION_NUM == 501
             return make_shared<Variant>(string(lua_tostring(L, n), lua_strlen(L, n)));
+#else
+            return make_shared<Variant>(string(lua_tostring(L, n)));
+#endif
         case LUA_TBOOLEAN:
             return make_shared<Variant>(!!lua_toboolean(L, n));
         case LUA_TNUMBER: {
-#if LUA_VERSION_NUM > 501
+#if LUA_VERSION_NUM > 502
             if (lua_isinteger(L, n)) {
                 return make_shared<Variant>((integer)lua_tointeger(L, n));
             }
