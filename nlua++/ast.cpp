@@ -568,7 +568,9 @@ public:
 
         auto ud = (ObjectPrivate::UserData *) lua_touserdata(L, -1);
         if (ud->freed) {
-            NLUA_INFO("ImpDestroy已经释放");
+#if LUA_VERSION_NUM == 501
+            NLUA_ERROR("ImpDestroy已经释放"); // lua52/53会重复调用
+#endif
             return 0; // 已经释放
         }
         // 弹出ud
