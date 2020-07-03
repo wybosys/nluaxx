@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.1)
 project(tester)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
+
 # 获得项目根目录
 get_filename_component(LIB_HOME ../../../ ABSOLUTE)
 get_filename_component(LIB_DIR ../../../nlua++/ ABSOLUTE)
