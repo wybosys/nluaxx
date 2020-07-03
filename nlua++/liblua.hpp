@@ -1,5 +1,6 @@
 ﻿#ifndef __NLUA_LIBLUA_H_INCLUDED
 #define __NLUA_LIBLUA_H_INCLUDED
+// @formatter:off
 
 #ifndef NLUA_LIBJIT
 #define NLUA_LIBJIT luajit-2.1
@@ -52,4 +53,5 @@ extern "C"
 }
 #endif
 
+// @formatter:on
 #endif
