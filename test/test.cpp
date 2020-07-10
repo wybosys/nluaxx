@@ -270,7 +270,7 @@ TEST (test6)
         NLUA_DEBUG("快速写a完成");
 
         // 测试长生命周期异步调用
-        Timer::SetTimeout(0, [=, &ctx]()
+        Timer::SetTimeout(0.1, [=, &ctx]()
         {
             NLUA_AUTOGUARD(ctx);
 
@@ -284,7 +284,7 @@ TEST (test6)
             }
             NLUA_DEBUG("写b完成");
 
-            Timer::SetTimeout(0, [=, &ctx]()
+            Timer::SetTimeout(0.1, [=, &ctx]()
             {
                 NLUA_AUTOGUARD(ctx);
 
