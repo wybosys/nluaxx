@@ -4,13 +4,14 @@ project(cross)
 set(CMAKE_CXX_STANDARD 11)
 
 set(CROSS_SRCS
-datetime.cpp
-fs.cpp
-str.cpp
-sys.cpp
-threads.cpp
-timer.cpp
-)
+    datetime.cpp
+    fs.cpp
+    str.cpp
+    sys.cpp
+    threads.cpp
+    timer.cpp
+    logger.cpp
+    )
 
 add_library(cross STATIC ${CROSS_SRCS})
 target_link_libraries(cross)

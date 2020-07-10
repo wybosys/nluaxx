@@ -61,6 +61,10 @@ extern shared_ptr<Variant> fromAjni(shared_ptr < ::AJNI_NS::JVariant >
 
 const&);
 
+// 减少头文件泄露
+extern void LOG_WARN(string const&);
+extern void LOG_ERROR(string const&);
+
 NLUA_END
 
 #endif
