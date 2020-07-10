@@ -8,12 +8,17 @@
 #include <cross/fs.hpp>
 #include <cross/stringbuilder.hpp>
 
-NLUA_BEGIN
-
 USE_STL;
 USE_CROSS;
 
+NLUA_BEGIN
+
 NNT_SINGLETON_IMPL(Context);
+
+void Context::_shared_init()
+{
+    // pass
+}
 
 Context::Context()
 {
@@ -22,7 +27,7 @@ Context::Context()
 
 Context::~Context()
 {
-    NNT_CLASS_DESTORY()
+    NNT_CLASS_DESTROY()
 }
 
 Context &Context::attach(void *_l)

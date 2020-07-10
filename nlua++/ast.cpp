@@ -314,7 +314,7 @@ Function::Function()
 
 Function::~Function()
 {
-    NNT_CLASS_DESTORY()
+    NNT_CLASS_DESTROY()
 }
 
 void Function::declare_in(Context &ctx) const
@@ -702,7 +702,7 @@ Class::Class()
 
 Class::~Class()
 {
-    NNT_CLASS_DESTORY();
+    NNT_CLASS_DESTROY();
 }
 
 Class::fields_type const &Class::fields() const
@@ -1252,7 +1252,7 @@ Module::Module()
 Module::~Module()
 {
     d_ptr->d_owner = nullptr;
-    NNT_CLASS_DESTORY()
+    NNT_CLASS_DESTROY()
 }
 
 bool Module::add(class_type const &c)
@@ -1323,12 +1323,12 @@ Module::parents_type Module::parents() const
 
 Object::Object()
 {
-    NNT_CLASS_CONSTRUCT()
+    NNT_CLASS_CONSTRUCT();
 }
 
 Object::~Object()
 {
-    NNT_CLASS_DESTORY()
+    NNT_CLASS_DESTROY();
 }
 
 void *Object::payload() const
