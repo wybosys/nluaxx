@@ -17,11 +17,12 @@ public:
 
     GsObject()
         : _cnt(0)
-    {}
+    {
+    }
 
     typedef shared_ptr<T> object_type;
 
-    size_t add(object_type const &v)
+    size_t add(object_type const& v)
     {
         NNT_AUTOGUARD(_mtx);
         size_t idx = ++_cnt;

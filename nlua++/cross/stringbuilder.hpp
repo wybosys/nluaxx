@@ -19,18 +19,32 @@ public:
     {}
 
     template <typename T>
-    inline stringbuilder& operator << (T const& v) {
+    stringbuilder& add(T const& v) {
         if (_newline) {
             _oss << _prefix;
             _newline = false;
+        }
+        else {
+            _oss << _space;
         }
         _oss << v;
         return *this;
     }
 
-    inline stringbuilder& operator << (eol const& v) {
+    template <typename T>
+    inline stringbuilder& operator << (T const& v) {
+        return add(v);
+    }
+
+    stringbuilder& operator << (eol const& v) {
         _oss << _suffix << v.endl;
         _newline = true;
+        return *this;
+    }
+    
+    stringbuilder& ln() {
+        static eol t;
+        *this << t;
         return *this;
     }
 
@@ -38,7 +52,23 @@ public:
         return _oss.str();
     }
 
+    inline ::std::string str() const {
+        return _oss.str();
+    }
+    
+    inline stringbuilder& space(::std::string const& s) {
+        _space = s;
+        return *this;
+    }
+    
+    inline stringbuilder& fix(::std::string const& pre, ::std::string const& suf) {
+        _prefix = pre;
+        _suffix = suf;
+        return *this;
+    }
+
 private:
+    
     bool _newline = true;
     ::std::string _prefix, _suffix, _space;
     ::std::ostringstream _oss;

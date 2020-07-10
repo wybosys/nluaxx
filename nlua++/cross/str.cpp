@@ -2,6 +2,8 @@
 #include "str.hpp"
 #include <sstream>
 #include <regex>
+#include <cctype>
+#include <algorithm>
 
 CROSS_BEGIN
 
@@ -68,6 +70,7 @@ double todouble(string const &str) {
 template<typename T>
 inline string tostr(T v) {
     ::std::ostringstream oss;
+    oss.setf(::std::ios::fixed);
     oss << v;
     return oss.str();
 }
@@ -80,12 +83,37 @@ string tostr(unsigned int v) {
     return tostr<unsigned int>(v);
 }
 
-string tostr(float v) {
-    return tostr<float>(v);
+string trim_decimal_string(string const& str)
+{
+    auto dotpos = str.find('.');
+    const size_t lr = str.length();
+    size_t dels = 0;
+    for (size_t p = lr - 1; p > dotpos; --p) {
+        if (str.at(p) == '0') {
+            ++dels;
+        }
+        else {
+            break;
+        }
+    }
+    if (dels) {
+        // 如果删除的和dotpos加起来等于总长，则需要删掉dot的位置
+        if (dotpos + dels + 1 == lr) {
+            ++dels;
+        }
+        return str.substr(0, lr - dels);
+    }
+    return str;
 }
 
-string tostr(double v) {
-    return tostr<double>(v);
+string tostr(float v, bool trim) {
+    auto r = tostr<float>(v);    
+    return trim ? trim_decimal_string(r) : r;
+}
+
+string tostr(double v, bool trim) {
+    auto r = tostr<double>(v);
+    return trim ? trim_decimal_string(r) : r;
 }
 
 string tostr(unsigned long long v) {
@@ -95,5 +123,20 @@ string tostr(unsigned long long v) {
 string replace(string const &str, string const &pat, string const &tgt) {
     return ::std::regex_replace(str, ::std::regex(pat), tgt);
 }
+
+string toupper(string const& str)
+{
+    string s = str;
+    ::std::transform(s.begin(), s.end(), s.begin(), ::toupper);
+    return s;
+}
+
+string tolower(string const& str)
+{
+    string s = str;
+    ::std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+    return s;
+}
+
 
 CROSS_END

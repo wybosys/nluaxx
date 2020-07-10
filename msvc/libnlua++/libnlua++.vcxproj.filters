@@ -72,6 +72,9 @@
     <ClInclude Include="..\..\nlua++\variant.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\nlua++\cross\logger.hpp">
+      <Filter>cross</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\nlua++\cross\datetime.cpp">
@@ -106,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="..\..\nlua++\variant.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\nlua++\cross\logger.cpp">
+      <Filter>cross</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
