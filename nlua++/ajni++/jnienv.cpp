@@ -6,7 +6,7 @@
 #include "variant.hpp"
 #include "android.hpp"
 #include "java-prv.hpp"
-#include "./android-prv.hpp"
+#include "android-prv.hpp"
 #include <mutex>
 
 #include <cross/cross.hpp>

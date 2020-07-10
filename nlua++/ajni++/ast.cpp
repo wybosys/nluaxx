@@ -5,7 +5,7 @@
 #include "jre.hpp"
 #include "variant.hpp"
 #include "java-prv.hpp"
-#include "./android-prv.hpp"
+#include "android-prv.hpp"
 #include <atomic>
 
 #include <cross/cross.hpp>

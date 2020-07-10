@@ -3,7 +3,7 @@
 #include "jnienv.hpp"
 #include "ast.hpp"
 #include "java-prv.hpp"
-#include "./android-prv.hpp"
+#include "android-prv.hpp"
 #include "jre.hpp"
 
 #include <cross/cross.hpp>
