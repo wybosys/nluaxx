@@ -1404,9 +1404,9 @@ return_type Object::get(string const &name) const
     else {
         lua_getglobal(L, d_ptr->name.c_str());
     }
-
-    lua_pushstring(L, name.c_str());
-    lua_rawget(L, -2);
+    
+    // 不能使用rawget，会导致忽略meta而取不到类的数据
+    lua_getfield(L, -1, name.c_str());
 
     return at(L, -1);
 }
@@ -1418,6 +1418,7 @@ void Object::set(string const &name, value_type const &val)
 #else
     auto L = d_ptr->L;
 #endif
+
     NLUA_AUTOSTACK(L);
 
     if (d_ptr->id) {
@@ -1427,18 +1428,19 @@ void Object::set(string const &name, value_type const &val)
     else {
         // 全局变量
         lua_getglobal(L, d_ptr->name.c_str());
-    } // -3
+    }
 
-    lua_pushstring(L, name.c_str()); // -2
-    push(val.get(), L); // -1
-
-    if (!lua_istable(L, -3)) {
+    // 必须是object
+    if (!lua_istable(L, -1)) {
         NLUA_ERROR("Object::set 可能遇到并发写冲突导致原始对象丢失");
         return;
     }
 
-    // obj[name] = val
-    lua_rawset(L, -3);
+    // -1 为数据， -2 为对象
+    push(val.get(), L);
+
+    // 设置 obj[name] = val
+    lua_setfield(L, -2, name.c_str());
 }
 
 self_type Context::global(string const &name) const

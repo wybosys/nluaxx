@@ -1,6 +1,7 @@
 function test0()
     local t = test.Test:new()
     assert(t:proc() == "c++", "proc failed")
+    assert(t.abc == 123, "设置参数错误")
     --assert(t:sproc(123) == 123, "sproc failed")
     --assert(test.Test:sproc("abc") == "abc", "sproc failed")
 

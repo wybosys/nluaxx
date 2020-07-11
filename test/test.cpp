@@ -32,9 +32,12 @@ TEST (test0)
 
     auto clz = make_shared<Class>();
     clz->name = "Test";
-
+    clz->add_field("abc", (integer)100);
     clz->add("proc", [=](self_type &self) -> return_type
     {
+        integer abc = self->get("abc")->toInteger();
+        UNITTEST_CHECK_EQUAL(abc, 100);
+        self->set("abc", (integer)123);
         return make_shared<Variant>("c++");
     });
 
