@@ -18,6 +18,7 @@
 		168B9DCE24BC605A00B0E221 /* test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9DCC24BC605A00B0E221 /* test.mm */; };
 		168B9DD024BC608600B0E221 /* cross.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168B9DCF24BC608600B0E221 /* cross.framework */; };
 		168B9DD124BC608600B0E221 /* cross.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 168B9DCF24BC608600B0E221 /* cross.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		168B9DE324BC633300B0E221 /* test.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 168B9DE224BC633300B0E221 /* test.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,6 +49,7 @@
 		168B9DCC24BC605A00B0E221 /* test.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = test.mm; path = ../../test.mm; sourceTree = "<group>"; };
 		168B9DCD24BC605A00B0E221 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test.h; path = ../../test.h; sourceTree = "<group>"; };
 		168B9DCF24BC608600B0E221 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		168B9DE224BC633300B0E221 /* test.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = test.bundle; path = ../../test.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 		168B9B5624BC4FA300B0E221 = {
 			isa = PBXGroup;
 			children = (
+				168B9DE224BC633300B0E221 /* test.bundle */,
 				168B9B6124BC4FA300B0E221 /* test-ios */,
 				168B9B6024BC4FA300B0E221 /* Products */,
 				168B9B7624BC50CD00B0E221 /* Frameworks */,
@@ -176,6 +179,7 @@
 				168B9B6F24BC4FAC00B0E221 /* LaunchScreen.storyboard in Resources */,
 				168B9B6C24BC4FAC00B0E221 /* Preview Assets.xcassets in Resources */,
 				168B9B6924BC4FAC00B0E221 /* Assets.xcassets in Resources */,
+				168B9DE324BC633300B0E221 /* test.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

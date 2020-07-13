@@ -25,8 +25,12 @@ void test_main()
 void Test()
 {
     Context::shared().create();
-    
+
+#if TARGET_OS_OSX
     string testdir = absolute(dirname(__FILE__) + "/../test.bundle");
+#else
+    string testdir = path_app() + "/test.bundle";
+#endif
     Context::shared().add_package_path(testdir);
     
     cd(path_home());
