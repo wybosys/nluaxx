@@ -13,7 +13,23 @@
 		168B9B6924BC4FAC00B0E221 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 168B9B6824BC4FAC00B0E221 /* Assets.xcassets */; };
 		168B9B6C24BC4FAC00B0E221 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 168B9B6B24BC4FAC00B0E221 /* Preview Assets.xcassets */; };
 		168B9B6F24BC4FAC00B0E221 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 168B9B6D24BC4FAC00B0E221 /* LaunchScreen.storyboard */; };
+		168B9B7824BC50CD00B0E221 /* nlua.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168B9B7724BC50CD00B0E221 /* nlua.framework */; };
+		168B9B7924BC50CD00B0E221 /* nlua.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 168B9B7724BC50CD00B0E221 /* nlua.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		168B9B7A24BC50CD00B0E221 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				168B9B7924BC50CD00B0E221 /* nlua.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		168B9B5F24BC4FA300B0E221 /* test-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "test-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -24,6 +40,7 @@
 		168B9B6B24BC4FAC00B0E221 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		168B9B6E24BC4FAC00B0E221 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		168B9B7024BC4FAC00B0E221 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		168B9B7724BC50CD00B0E221 /* nlua.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = nlua.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				168B9B7824BC50CD00B0E221 /* nlua.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +60,7 @@
 			children = (
 				168B9B6124BC4FA300B0E221 /* test-ios */,
 				168B9B6024BC4FA300B0E221 /* Products */,
+				168B9B7624BC50CD00B0E221 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -75,6 +94,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		168B9B7624BC50CD00B0E221 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				168B9B7724BC50CD00B0E221 /* nlua.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -85,6 +112,7 @@
 				168B9B5B24BC4FA300B0E221 /* Sources */,
 				168B9B5C24BC4FA300B0E221 /* Frameworks */,
 				168B9B5D24BC4FA300B0E221 /* Resources */,
+				168B9B7A24BC50CD00B0E221 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

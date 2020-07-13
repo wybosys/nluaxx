@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		168B9B5024BC4F8900B0E221 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168B9B4F24BC4F8900B0E221 /* main.swift */; };
+		168B9B7D24BC50D600B0E221 /* nlua.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168B9B7C24BC50D600B0E221 /* nlua.framework */; };
+		168B9B7E24BC50D600B0E221 /* nlua.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 168B9B7C24BC50D600B0E221 /* nlua.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -20,11 +22,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		168B9B7F24BC50D700B0E221 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				168B9B7E24BC50D600B0E221 /* nlua.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		168B9B4C24BC4F8900B0E221 /* test-macos */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "test-macos"; sourceTree = BUILT_PRODUCTS_DIR; };
 		168B9B4F24BC4F8900B0E221 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		168B9B7C24BC50D600B0E221 /* nlua.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = nlua.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				168B9B7D24BC50D600B0E221 /* nlua.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +58,7 @@
 			children = (
 				168B9B4E24BC4F8900B0E221 /* test-macos */,
 				168B9B4D24BC4F8900B0E221 /* Products */,
+				168B9B7B24BC50D600B0E221 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,6 +78,14 @@
 			path = "test-macos";
 			sourceTree = "<group>";
 		};
+		168B9B7B24BC50D600B0E221 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				168B9B7C24BC50D600B0E221 /* nlua.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -72,6 +96,7 @@
 				168B9B4824BC4F8900B0E221 /* Sources */,
 				168B9B4924BC4F8900B0E221 /* Frameworks */,
 				168B9B4A24BC4F8900B0E221 /* CopyFiles */,
+				168B9B7F24BC50D700B0E221 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
