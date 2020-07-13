@@ -7,13 +7,69 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		168B9D4724BC5E5E00B0E221 /* cross_ios.h in Headers */ = {isa = PBXBuildFile; fileRef = 168B9D4524BC5E5E00B0E221 /* cross_ios.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9D4724BC5E5E00B0E221 /* cross_ios.h in Headers */ = {isa = PBXBuildFile; fileRef = 168B9D4524BC5E5E00B0E221 /* cross_ios.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		168B9DAB24BC5FD700B0E221 /* objc.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9D8F24BC5FD600B0E221 /* objc.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DAC24BC5FD700B0E221 /* str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9D9024BC5FD600B0E221 /* str.cpp */; };
+		168B9DAD24BC5FD700B0E221 /* memory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9D9124BC5FD600B0E221 /* memory.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DAE24BC5FD700B0E221 /* property.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9D9224BC5FD600B0E221 /* property.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DAF24BC5FD700B0E221 /* datetime.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9D9324BC5FD600B0E221 /* datetime.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DB024BC5FD700B0E221 /* datetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9D9424BC5FD600B0E221 /* datetime.cpp */; };
+		168B9DB124BC5FD700B0E221 /* logger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9D9524BC5FD600B0E221 /* logger.mm */; };
+		168B9DB224BC5FD700B0E221 /* logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9D9624BC5FD600B0E221 /* logger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DB324BC5FD700B0E221 /* objc.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9D9724BC5FD600B0E221 /* objc.mm */; };
+		168B9DB424BC5FD700B0E221 /* swift-bridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9D9824BC5FD600B0E221 /* swift-bridge.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DB524BC5FD700B0E221 /* com++.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9D9924BC5FD600B0E221 /* com++.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DB624BC5FD700B0E221 /* sys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9D9A24BC5FD600B0E221 /* sys.cpp */; };
+		168B9DB724BC5FD700B0E221 /* str.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9D9B24BC5FD600B0E221 /* str.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DB824BC5FD700B0E221 /* fs.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9D9C24BC5FD600B0E221 /* fs.mm */; };
+		168B9DB924BC5FD700B0E221 /* threads.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9D9D24BC5FD600B0E221 /* threads.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DBA24BC5FD700B0E221 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9D9E24BC5FD600B0E221 /* timer.cpp */; };
+		168B9DBB24BC5FD700B0E221 /* sys.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9D9F24BC5FD600B0E221 /* sys.mm */; };
+		168B9DBC24BC5FD700B0E221 /* cross.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9DA024BC5FD600B0E221 /* cross.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DBD24BC5FD700B0E221 /* macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9DA124BC5FD700B0E221 /* macro.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DBE24BC5FD700B0E221 /* fs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9DA224BC5FD700B0E221 /* fs.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DBF24BC5FD700B0E221 /* logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9DA324BC5FD700B0E221 /* logger.cpp */; };
+		168B9DC024BC5FD700B0E221 /* sys.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9DA424BC5FD700B0E221 /* sys.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DC124BC5FD700B0E221 /* threads.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9DA524BC5FD700B0E221 /* threads.cpp */; };
+		168B9DC224BC5FD700B0E221 /* fs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9DA624BC5FD700B0E221 /* fs.cpp */; };
+		168B9DC324BC5FD700B0E221 /* stringbuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9DA724BC5FD700B0E221 /* stringbuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DC424BC5FD700B0E221 /* timer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9DA824BC5FD700B0E221 /* timer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9DC524BC5FD700B0E221 /* timer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9DA924BC5FD700B0E221 /* timer.mm */; };
+		168B9DC624BC5FD700B0E221 /* property.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9DAA24BC5FD700B0E221 /* property.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		168B9D4224BC5E5E00B0E221 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		168B9D4524BC5E5E00B0E221 /* cross_ios.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cross_ios.h; sourceTree = "<group>"; };
 		168B9D4624BC5E5E00B0E221 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		168B9D8F24BC5FD600B0E221 /* objc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = objc.hpp; path = "../../nlua++/cross/objc.hpp"; sourceTree = "<group>"; };
+		168B9D9024BC5FD600B0E221 /* str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = str.cpp; path = "../../nlua++/cross/str.cpp"; sourceTree = "<group>"; };
+		168B9D9124BC5FD600B0E221 /* memory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = memory.hpp; path = "../../nlua++/cross/memory.hpp"; sourceTree = "<group>"; };
+		168B9D9224BC5FD600B0E221 /* property.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = property.hpp; path = "../../nlua++/cross/property.hpp"; sourceTree = "<group>"; };
+		168B9D9324BC5FD600B0E221 /* datetime.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = datetime.hpp; path = "../../nlua++/cross/datetime.hpp"; sourceTree = "<group>"; };
+		168B9D9424BC5FD600B0E221 /* datetime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = datetime.cpp; path = "../../nlua++/cross/datetime.cpp"; sourceTree = "<group>"; };
+		168B9D9524BC5FD600B0E221 /* logger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = logger.mm; path = "../../nlua++/cross/logger.mm"; sourceTree = "<group>"; };
+		168B9D9624BC5FD600B0E221 /* logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = logger.hpp; path = "../../nlua++/cross/logger.hpp"; sourceTree = "<group>"; };
+		168B9D9724BC5FD600B0E221 /* objc.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = objc.mm; path = "../../nlua++/cross/objc.mm"; sourceTree = "<group>"; };
+		168B9D9824BC5FD600B0E221 /* swift-bridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "swift-bridge.hpp"; path = "../../nlua++/cross/swift-bridge.hpp"; sourceTree = "<group>"; };
+		168B9D9924BC5FD600B0E221 /* com++.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "com++.hpp"; path = "../../nlua++/cross/com++.hpp"; sourceTree = "<group>"; };
+		168B9D9A24BC5FD600B0E221 /* sys.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sys.cpp; path = "../../nlua++/cross/sys.cpp"; sourceTree = "<group>"; };
+		168B9D9B24BC5FD600B0E221 /* str.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = str.hpp; path = "../../nlua++/cross/str.hpp"; sourceTree = "<group>"; };
+		168B9D9C24BC5FD600B0E221 /* fs.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = fs.mm; path = "../../nlua++/cross/fs.mm"; sourceTree = "<group>"; };
+		168B9D9D24BC5FD600B0E221 /* threads.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = threads.hpp; path = "../../nlua++/cross/threads.hpp"; sourceTree = "<group>"; };
+		168B9D9E24BC5FD600B0E221 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cpp; path = "../../nlua++/cross/timer.cpp"; sourceTree = "<group>"; };
+		168B9D9F24BC5FD600B0E221 /* sys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = sys.mm; path = "../../nlua++/cross/sys.mm"; sourceTree = "<group>"; };
+		168B9DA024BC5FD600B0E221 /* cross.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = cross.hpp; path = "../../nlua++/cross/cross.hpp"; sourceTree = "<group>"; };
+		168B9DA124BC5FD700B0E221 /* macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = macro.hpp; path = "../../nlua++/cross/macro.hpp"; sourceTree = "<group>"; };
+		168B9DA224BC5FD700B0E221 /* fs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = fs.hpp; path = "../../nlua++/cross/fs.hpp"; sourceTree = "<group>"; };
+		168B9DA324BC5FD700B0E221 /* logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = logger.cpp; path = "../../nlua++/cross/logger.cpp"; sourceTree = "<group>"; };
+		168B9DA424BC5FD700B0E221 /* sys.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = sys.hpp; path = "../../nlua++/cross/sys.hpp"; sourceTree = "<group>"; };
+		168B9DA524BC5FD700B0E221 /* threads.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = threads.cpp; path = "../../nlua++/cross/threads.cpp"; sourceTree = "<group>"; };
+		168B9DA624BC5FD700B0E221 /* fs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fs.cpp; path = "../../nlua++/cross/fs.cpp"; sourceTree = "<group>"; };
+		168B9DA724BC5FD700B0E221 /* stringbuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = stringbuilder.hpp; path = "../../nlua++/cross/stringbuilder.hpp"; sourceTree = "<group>"; };
+		168B9DA824BC5FD700B0E221 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = timer.hpp; path = "../../nlua++/cross/timer.hpp"; sourceTree = "<group>"; };
+		168B9DA924BC5FD700B0E221 /* timer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = timer.mm; path = "../../nlua++/cross/timer.mm"; sourceTree = "<group>"; };
+		168B9DAA24BC5FD700B0E221 /* property.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = property.cpp; path = "../../nlua++/cross/property.cpp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,6 +86,7 @@
 		168B9D3824BC5E5E00B0E221 = {
 			isa = PBXGroup;
 			children = (
+				168B9D8E24BC5FBF00B0E221 /* src */,
 				168B9D4424BC5E5E00B0E221 /* cross-ios */,
 				168B9D4324BC5E5E00B0E221 /* Products */,
 			);
@@ -52,6 +109,41 @@
 			path = "cross-ios";
 			sourceTree = "<group>";
 		};
+		168B9D8E24BC5FBF00B0E221 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				168B9D9924BC5FD600B0E221 /* com++.hpp */,
+				168B9DA024BC5FD600B0E221 /* cross.hpp */,
+				168B9D9424BC5FD600B0E221 /* datetime.cpp */,
+				168B9D9324BC5FD600B0E221 /* datetime.hpp */,
+				168B9DA624BC5FD700B0E221 /* fs.cpp */,
+				168B9DA224BC5FD700B0E221 /* fs.hpp */,
+				168B9D9C24BC5FD600B0E221 /* fs.mm */,
+				168B9DA324BC5FD700B0E221 /* logger.cpp */,
+				168B9D9624BC5FD600B0E221 /* logger.hpp */,
+				168B9D9524BC5FD600B0E221 /* logger.mm */,
+				168B9DA124BC5FD700B0E221 /* macro.hpp */,
+				168B9D9124BC5FD600B0E221 /* memory.hpp */,
+				168B9D8F24BC5FD600B0E221 /* objc.hpp */,
+				168B9D9724BC5FD600B0E221 /* objc.mm */,
+				168B9DAA24BC5FD700B0E221 /* property.cpp */,
+				168B9D9224BC5FD600B0E221 /* property.hpp */,
+				168B9D9024BC5FD600B0E221 /* str.cpp */,
+				168B9D9B24BC5FD600B0E221 /* str.hpp */,
+				168B9DA724BC5FD700B0E221 /* stringbuilder.hpp */,
+				168B9D9824BC5FD600B0E221 /* swift-bridge.hpp */,
+				168B9D9A24BC5FD600B0E221 /* sys.cpp */,
+				168B9DA424BC5FD700B0E221 /* sys.hpp */,
+				168B9D9F24BC5FD600B0E221 /* sys.mm */,
+				168B9DA524BC5FD700B0E221 /* threads.cpp */,
+				168B9D9D24BC5FD600B0E221 /* threads.hpp */,
+				168B9D9E24BC5FD600B0E221 /* timer.cpp */,
+				168B9DA824BC5FD700B0E221 /* timer.hpp */,
+				168B9DA924BC5FD700B0E221 /* timer.mm */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -59,6 +151,21 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				168B9DC424BC5FD700B0E221 /* timer.hpp in Headers */,
+				168B9DC024BC5FD700B0E221 /* sys.hpp in Headers */,
+				168B9DBE24BC5FD700B0E221 /* fs.hpp in Headers */,
+				168B9DB724BC5FD700B0E221 /* str.hpp in Headers */,
+				168B9DAD24BC5FD700B0E221 /* memory.hpp in Headers */,
+				168B9DBC24BC5FD700B0E221 /* cross.hpp in Headers */,
+				168B9DAF24BC5FD700B0E221 /* datetime.hpp in Headers */,
+				168B9DAB24BC5FD700B0E221 /* objc.hpp in Headers */,
+				168B9DC324BC5FD700B0E221 /* stringbuilder.hpp in Headers */,
+				168B9DB524BC5FD700B0E221 /* com++.hpp in Headers */,
+				168B9DB424BC5FD700B0E221 /* swift-bridge.hpp in Headers */,
+				168B9DB224BC5FD700B0E221 /* logger.hpp in Headers */,
+				168B9DBD24BC5FD700B0E221 /* macro.hpp in Headers */,
+				168B9DB924BC5FD700B0E221 /* threads.hpp in Headers */,
+				168B9DAE24BC5FD700B0E221 /* property.hpp in Headers */,
 				168B9D4724BC5E5E00B0E221 /* cross_ios.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -131,6 +238,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				168B9DB824BC5FD700B0E221 /* fs.mm in Sources */,
+				168B9DC624BC5FD700B0E221 /* property.cpp in Sources */,
+				168B9DB024BC5FD700B0E221 /* datetime.cpp in Sources */,
+				168B9DBA24BC5FD700B0E221 /* timer.cpp in Sources */,
+				168B9DC124BC5FD700B0E221 /* threads.cpp in Sources */,
+				168B9DBF24BC5FD700B0E221 /* logger.cpp in Sources */,
+				168B9DB324BC5FD700B0E221 /* objc.mm in Sources */,
+				168B9DC224BC5FD700B0E221 /* fs.cpp in Sources */,
+				168B9DB124BC5FD700B0E221 /* logger.mm in Sources */,
+				168B9DBB24BC5FD700B0E221 /* sys.mm in Sources */,
+				168B9DC524BC5FD700B0E221 /* timer.mm in Sources */,
+				168B9DB624BC5FD700B0E221 /* sys.cpp in Sources */,
+				168B9DAC24BC5FD700B0E221 /* str.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

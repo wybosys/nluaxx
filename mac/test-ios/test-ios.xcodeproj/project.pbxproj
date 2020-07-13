@@ -15,6 +15,9 @@
 		168B9B6F24BC4FAC00B0E221 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 168B9B6D24BC4FAC00B0E221 /* LaunchScreen.storyboard */; };
 		168B9B7824BC50CD00B0E221 /* nlua.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168B9B7724BC50CD00B0E221 /* nlua.framework */; };
 		168B9B7924BC50CD00B0E221 /* nlua.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 168B9B7724BC50CD00B0E221 /* nlua.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		168B9DCE24BC605A00B0E221 /* test.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9DCC24BC605A00B0E221 /* test.mm */; };
+		168B9DD024BC608600B0E221 /* cross.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168B9DCF24BC608600B0E221 /* cross.framework */; };
+		168B9DD124BC608600B0E221 /* cross.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 168B9DCF24BC608600B0E221 /* cross.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +28,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				168B9B7924BC50CD00B0E221 /* nlua.framework in Embed Frameworks */,
+				168B9DD124BC608600B0E221 /* cross.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -41,6 +45,9 @@
 		168B9B6E24BC4FAC00B0E221 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		168B9B7024BC4FAC00B0E221 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		168B9B7724BC50CD00B0E221 /* nlua.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = nlua.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		168B9DCC24BC605A00B0E221 /* test.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = test.mm; path = ../../test.mm; sourceTree = "<group>"; };
+		168B9DCD24BC605A00B0E221 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test.h; path = ../../test.h; sourceTree = "<group>"; };
+		168B9DCF24BC608600B0E221 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +56,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				168B9B7824BC50CD00B0E221 /* nlua.framework in Frameworks */,
+				168B9DD024BC608600B0E221 /* cross.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +83,8 @@
 		168B9B6124BC4FA300B0E221 /* test-ios */ = {
 			isa = PBXGroup;
 			children = (
+				168B9DCD24BC605A00B0E221 /* test.h */,
+				168B9DCC24BC605A00B0E221 /* test.mm */,
 				168B9B6224BC4FA300B0E221 /* AppDelegate.swift */,
 				168B9B6424BC4FA300B0E221 /* SceneDelegate.swift */,
 				168B9B6624BC4FA300B0E221 /* ContentView.swift */,
@@ -97,6 +107,7 @@
 		168B9B7624BC50CD00B0E221 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				168B9DCF24BC608600B0E221 /* cross.framework */,
 				168B9B7724BC50CD00B0E221 /* nlua.framework */,
 			);
 			name = Frameworks;
@@ -135,6 +146,7 @@
 				TargetAttributes = {
 					168B9B5E24BC4FA300B0E221 = {
 						CreatedOnToolsVersion = 11.5;
+						LastSwiftMigration = 1150;
 					};
 				};
 			};
@@ -177,6 +189,7 @@
 				168B9B6324BC4FA300B0E221 /* AppDelegate.swift in Sources */,
 				168B9B6524BC4FA300B0E221 /* SceneDelegate.swift in Sources */,
 				168B9B6724BC4FA300B0E221 /* ContentView.swift in Sources */,
+				168B9DCE24BC605A00B0E221 /* test.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,6 +325,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"test-ios/Preview Content\"";
 				DEVELOPMENT_TEAM = 3RC2X964CN;
@@ -323,6 +337,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nnt.test-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/../test.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -332,6 +348,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"test-ios/Preview Content\"";
 				DEVELOPMENT_TEAM = 3RC2X964CN;
@@ -343,6 +360,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.nnt.test-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/../test.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
