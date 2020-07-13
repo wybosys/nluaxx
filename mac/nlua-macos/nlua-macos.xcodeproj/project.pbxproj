@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		168B9B2824BC4F1200B0E221 /* nlua_macos.h in Headers */ = {isa = PBXBuildFile; fileRef = 168B9B2624BC4F1200B0E221 /* nlua_macos.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9B2824BC4F1200B0E221 /* nlua_macos.h in Headers */ = {isa = PBXBuildFile; fileRef = 168B9B2624BC4F1200B0E221 /* nlua_macos.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		168B9BBF24BC598000B0E221 /* lbaselib.c in Sources */ = {isa = PBXBuildFile; fileRef = 168B9B8224BC597B00B0E221 /* lbaselib.c */; };
 		168B9BC024BC598000B0E221 /* ltable.c in Sources */ = {isa = PBXBuildFile; fileRef = 168B9B8324BC597B00B0E221 /* ltable.c */; };
 		168B9BC124BC598000B0E221 /* loadlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 168B9B8424BC597B00B0E221 /* loadlib.c */; };
@@ -67,49 +67,37 @@
 		168B9BF924BC598000B0E221 /* lgc.h in Headers */ = {isa = PBXBuildFile; fileRef = 168B9BBC24BC598000B0E221 /* lgc.h */; };
 		168B9BFA24BC598000B0E221 /* llimits.h in Headers */ = {isa = PBXBuildFile; fileRef = 168B9BBD24BC598000B0E221 /* llimits.h */; };
 		168B9BFB24BC598000B0E221 /* lctype.c in Sources */ = {isa = PBXBuildFile; fileRef = 168B9BBE24BC598000B0E221 /* lctype.c */; };
-		168B9C1424BC59EB00B0E221 /* datetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9BFD24BC59EA00B0E221 /* datetime.cpp */; };
-		168B9C1524BC59EB00B0E221 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9BFE24BC59EA00B0E221 /* timer.cpp */; };
-		168B9C1624BC59EB00B0E221 /* sys.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9BFF24BC59EA00B0E221 /* sys.mm */; };
-		168B9C1724BC59EB00B0E221 /* datetime.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C0024BC59EA00B0E221 /* datetime.hpp */; };
-		168B9C1824BC59EB00B0E221 /* macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C0124BC59EA00B0E221 /* macro.hpp */; };
-		168B9C1924BC59EB00B0E221 /* fs.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C0224BC59EA00B0E221 /* fs.hpp */; };
-		168B9C1A24BC59EB00B0E221 /* cross.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C0324BC59EA00B0E221 /* cross.hpp */; };
-		168B9C1B24BC59EB00B0E221 /* logger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9C0424BC59EA00B0E221 /* logger.mm */; };
-		168B9C1C24BC59EB00B0E221 /* fs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9C0524BC59EA00B0E221 /* fs.cpp */; };
-		168B9C1D24BC59EB00B0E221 /* str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9C0624BC59EA00B0E221 /* str.cpp */; };
-		168B9C1E24BC59EB00B0E221 /* logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9C0724BC59EA00B0E221 /* logger.cpp */; };
-		168B9C1F24BC59EB00B0E221 /* fs.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9C0824BC59EA00B0E221 /* fs.mm */; };
-		168B9C2024BC59EB00B0E221 /* logger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C0924BC59EA00B0E221 /* logger.hpp */; };
-		168B9C2124BC59EB00B0E221 /* str.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C0A24BC59EA00B0E221 /* str.hpp */; };
-		168B9C2224BC59EB00B0E221 /* swift-bridge.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C0B24BC59EA00B0E221 /* swift-bridge.hpp */; };
-		168B9C2324BC59EB00B0E221 /* threads.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9C0C24BC59EA00B0E221 /* threads.cpp */; };
-		168B9C2424BC59EB00B0E221 /* threads.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C0D24BC59EB00B0E221 /* threads.hpp */; };
-		168B9C2524BC59EB00B0E221 /* memory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C0E24BC59EB00B0E221 /* memory.hpp */; };
-		168B9C2624BC59EB00B0E221 /* stringbuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C0F24BC59EB00B0E221 /* stringbuilder.hpp */; };
-		168B9C2724BC59EB00B0E221 /* sys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9C1024BC59EB00B0E221 /* sys.cpp */; };
-		168B9C2824BC59EB00B0E221 /* timer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C1124BC59EB00B0E221 /* timer.hpp */; };
-		168B9C2924BC59EB00B0E221 /* timer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9C1224BC59EB00B0E221 /* timer.mm */; };
-		168B9C2A24BC59EB00B0E221 /* sys.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C1324BC59EB00B0E221 /* sys.hpp */; };
-		168B9C2D24BC5A2800B0E221 /* objc.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C2B24BC5A2700B0E221 /* objc.hpp */; };
-		168B9C2E24BC5A2800B0E221 /* objc.mm in Sources */ = {isa = PBXBuildFile; fileRef = 168B9C2C24BC5A2800B0E221 /* objc.mm */; };
-		168B9C3124BC5A4C00B0E221 /* property.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C2F24BC5A4C00B0E221 /* property.hpp */; };
-		168B9C3224BC5A4C00B0E221 /* property.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9C3024BC5A4C00B0E221 /* property.cpp */; };
-		168B9C3424BC5A7700B0E221 /* com++.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9C3324BC5A7700B0E221 /* com++.hpp */; };
 		168B9CE924BC5AE600B0E221 /* lua.h in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CE824BC5AE600B0E221 /* lua.h */; };
-		168B9CF824BC5BC500B0E221 /* nlua++.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CEB24BC5BC500B0E221 /* nlua++.hpp */; };
+		168B9CF824BC5BC500B0E221 /* nlua++.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CEB24BC5BC500B0E221 /* nlua++.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		168B9CF924BC5BC500B0E221 /* value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9CEC24BC5BC500B0E221 /* value.cpp */; };
-		168B9CFA24BC5BC500B0E221 /* ast.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CED24BC5BC500B0E221 /* ast.hpp */; };
-		168B9CFB24BC5BC500B0E221 /* macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CEE24BC5BC500B0E221 /* macro.hpp */; };
+		168B9CFA24BC5BC500B0E221 /* ast.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CED24BC5BC500B0E221 /* ast.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9CFB24BC5BC500B0E221 /* macro.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CEE24BC5BC500B0E221 /* macro.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		168B9CFC24BC5BC500B0E221 /* nlua++.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9CEF24BC5BC500B0E221 /* nlua++.cpp */; };
 		168B9CFD24BC5BC500B0E221 /* variant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9CF024BC5BC500B0E221 /* variant.cpp */; };
-		168B9CFE24BC5BC500B0E221 /* value.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CF124BC5BC500B0E221 /* value.hpp */; };
+		168B9CFE24BC5BC500B0E221 /* value.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CF124BC5BC500B0E221 /* value.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		168B9CFF24BC5BC500B0E221 /* liblua.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CF224BC5BC500B0E221 /* liblua.hpp */; };
-		168B9D0024BC5BC500B0E221 /* com++.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CF324BC5BC500B0E221 /* com++.hpp */; };
-		168B9D0124BC5BC500B0E221 /* variant.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CF424BC5BC500B0E221 /* variant.hpp */; };
+		168B9D0024BC5BC500B0E221 /* com++.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CF324BC5BC500B0E221 /* com++.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9D0124BC5BC500B0E221 /* variant.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CF424BC5BC500B0E221 /* variant.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		168B9D0224BC5BC500B0E221 /* private.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9CF524BC5BC500B0E221 /* private.cpp */; };
 		168B9D0324BC5BC500B0E221 /* private.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 168B9CF624BC5BC500B0E221 /* private.hpp */; };
 		168B9D0424BC5BC500B0E221 /* ast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 168B9CF724BC5BC500B0E221 /* ast.cpp */; };
+		168B9D8824BC5EE400B0E221 /* cross.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 168B9D8724BC5EE400B0E221 /* cross.framework */; };
+		168B9D8924BC5EE400B0E221 /* cross.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 168B9D8724BC5EE400B0E221 /* cross.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		168B9D8A24BC5EE400B0E221 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				168B9D8924BC5EE400B0E221 /* cross.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		168B9B2324BC4F1200B0E221 /* nlua.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = nlua.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -174,34 +162,6 @@
 		168B9BBC24BC598000B0E221 /* lgc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lgc.h; path = "../../../nlua++/lua/5.3/lgc.h"; sourceTree = "<group>"; };
 		168B9BBD24BC598000B0E221 /* llimits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = llimits.h; path = "../../../nlua++/lua/5.3/llimits.h"; sourceTree = "<group>"; };
 		168B9BBE24BC598000B0E221 /* lctype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lctype.c; path = "../../../nlua++/lua/5.3/lctype.c"; sourceTree = "<group>"; };
-		168B9BFD24BC59EA00B0E221 /* datetime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = datetime.cpp; path = "../../nlua++/cross/datetime.cpp"; sourceTree = "<group>"; };
-		168B9BFE24BC59EA00B0E221 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cpp; path = "../../nlua++/cross/timer.cpp"; sourceTree = "<group>"; };
-		168B9BFF24BC59EA00B0E221 /* sys.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = sys.mm; path = "../../nlua++/cross/sys.mm"; sourceTree = "<group>"; };
-		168B9C0024BC59EA00B0E221 /* datetime.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = datetime.hpp; path = "../../nlua++/cross/datetime.hpp"; sourceTree = "<group>"; };
-		168B9C0124BC59EA00B0E221 /* macro.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = macro.hpp; path = "../../nlua++/cross/macro.hpp"; sourceTree = "<group>"; };
-		168B9C0224BC59EA00B0E221 /* fs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = fs.hpp; path = "../../nlua++/cross/fs.hpp"; sourceTree = "<group>"; };
-		168B9C0324BC59EA00B0E221 /* cross.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = cross.hpp; path = "../../nlua++/cross/cross.hpp"; sourceTree = "<group>"; };
-		168B9C0424BC59EA00B0E221 /* logger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = logger.mm; path = "../../nlua++/cross/logger.mm"; sourceTree = "<group>"; };
-		168B9C0524BC59EA00B0E221 /* fs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fs.cpp; path = "../../nlua++/cross/fs.cpp"; sourceTree = "<group>"; };
-		168B9C0624BC59EA00B0E221 /* str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = str.cpp; path = "../../nlua++/cross/str.cpp"; sourceTree = "<group>"; };
-		168B9C0724BC59EA00B0E221 /* logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = logger.cpp; path = "../../nlua++/cross/logger.cpp"; sourceTree = "<group>"; };
-		168B9C0824BC59EA00B0E221 /* fs.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = fs.mm; path = "../../nlua++/cross/fs.mm"; sourceTree = "<group>"; };
-		168B9C0924BC59EA00B0E221 /* logger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = logger.hpp; path = "../../nlua++/cross/logger.hpp"; sourceTree = "<group>"; };
-		168B9C0A24BC59EA00B0E221 /* str.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = str.hpp; path = "../../nlua++/cross/str.hpp"; sourceTree = "<group>"; };
-		168B9C0B24BC59EA00B0E221 /* swift-bridge.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "swift-bridge.hpp"; path = "../../nlua++/cross/swift-bridge.hpp"; sourceTree = "<group>"; };
-		168B9C0C24BC59EA00B0E221 /* threads.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = threads.cpp; path = "../../nlua++/cross/threads.cpp"; sourceTree = "<group>"; };
-		168B9C0D24BC59EB00B0E221 /* threads.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = threads.hpp; path = "../../nlua++/cross/threads.hpp"; sourceTree = "<group>"; };
-		168B9C0E24BC59EB00B0E221 /* memory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = memory.hpp; path = "../../nlua++/cross/memory.hpp"; sourceTree = "<group>"; };
-		168B9C0F24BC59EB00B0E221 /* stringbuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = stringbuilder.hpp; path = "../../nlua++/cross/stringbuilder.hpp"; sourceTree = "<group>"; };
-		168B9C1024BC59EB00B0E221 /* sys.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sys.cpp; path = "../../nlua++/cross/sys.cpp"; sourceTree = "<group>"; };
-		168B9C1124BC59EB00B0E221 /* timer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = timer.hpp; path = "../../nlua++/cross/timer.hpp"; sourceTree = "<group>"; };
-		168B9C1224BC59EB00B0E221 /* timer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = timer.mm; path = "../../nlua++/cross/timer.mm"; sourceTree = "<group>"; };
-		168B9C1324BC59EB00B0E221 /* sys.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = sys.hpp; path = "../../nlua++/cross/sys.hpp"; sourceTree = "<group>"; };
-		168B9C2B24BC5A2700B0E221 /* objc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = objc.hpp; path = "../../nlua++/cross/objc.hpp"; sourceTree = "<group>"; };
-		168B9C2C24BC5A2800B0E221 /* objc.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = objc.mm; path = "../../nlua++/cross/objc.mm"; sourceTree = "<group>"; };
-		168B9C2F24BC5A4C00B0E221 /* property.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = property.hpp; path = "../../nlua++/cross/property.hpp"; sourceTree = "<group>"; };
-		168B9C3024BC5A4C00B0E221 /* property.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = property.cpp; path = "../../nlua++/cross/property.cpp"; sourceTree = "<group>"; };
-		168B9C3324BC5A7700B0E221 /* com++.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "com++.hpp"; path = "../../nlua++/cross/com++.hpp"; sourceTree = "<group>"; };
 		168B9CE824BC5AE600B0E221 /* lua.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lua.h; path = "../../../nlua++/lua/5.3/lua.h"; sourceTree = "<group>"; };
 		168B9CEB24BC5BC500B0E221 /* nlua++.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = "nlua++.hpp"; path = "../../nlua++/nlua++.hpp"; sourceTree = "<group>"; };
 		168B9CEC24BC5BC500B0E221 /* value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = value.cpp; path = "../../nlua++/value.cpp"; sourceTree = "<group>"; };
@@ -216,6 +176,7 @@
 		168B9CF524BC5BC500B0E221 /* private.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = private.cpp; path = "../../nlua++/private.cpp"; sourceTree = "<group>"; };
 		168B9CF624BC5BC500B0E221 /* private.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = private.hpp; path = "../../nlua++/private.hpp"; sourceTree = "<group>"; };
 		168B9CF724BC5BC500B0E221 /* ast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ast.cpp; path = "../../nlua++/ast.cpp"; sourceTree = "<group>"; };
+		168B9D8724BC5EE400B0E221 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +184,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				168B9D8824BC5EE400B0E221 /* cross.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,10 +195,10 @@
 			isa = PBXGroup;
 			children = (
 				168B9CEA24BC5BA800B0E221 /* src */,
-				168B9BFC24BC59CB00B0E221 /* cross */,
 				168B9B8024BC594400B0E221 /* lua */,
 				168B9B2524BC4F1200B0E221 /* nlua-macos */,
 				168B9B2424BC4F1200B0E221 /* Products */,
+				168B9D8624BC5EE400B0E221 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -332,41 +294,6 @@
 			path = 5.3;
 			sourceTree = "<group>";
 		};
-		168B9BFC24BC59CB00B0E221 /* cross */ = {
-			isa = PBXGroup;
-			children = (
-				168B9C3324BC5A7700B0E221 /* com++.hpp */,
-				168B9C3024BC5A4C00B0E221 /* property.cpp */,
-				168B9C2F24BC5A4C00B0E221 /* property.hpp */,
-				168B9C2B24BC5A2700B0E221 /* objc.hpp */,
-				168B9C2C24BC5A2800B0E221 /* objc.mm */,
-				168B9C0324BC59EA00B0E221 /* cross.hpp */,
-				168B9BFD24BC59EA00B0E221 /* datetime.cpp */,
-				168B9C0024BC59EA00B0E221 /* datetime.hpp */,
-				168B9C0524BC59EA00B0E221 /* fs.cpp */,
-				168B9C0224BC59EA00B0E221 /* fs.hpp */,
-				168B9C0824BC59EA00B0E221 /* fs.mm */,
-				168B9C0724BC59EA00B0E221 /* logger.cpp */,
-				168B9C0924BC59EA00B0E221 /* logger.hpp */,
-				168B9C0424BC59EA00B0E221 /* logger.mm */,
-				168B9C0124BC59EA00B0E221 /* macro.hpp */,
-				168B9C0E24BC59EB00B0E221 /* memory.hpp */,
-				168B9C0624BC59EA00B0E221 /* str.cpp */,
-				168B9C0A24BC59EA00B0E221 /* str.hpp */,
-				168B9C0F24BC59EB00B0E221 /* stringbuilder.hpp */,
-				168B9C0B24BC59EA00B0E221 /* swift-bridge.hpp */,
-				168B9C1024BC59EB00B0E221 /* sys.cpp */,
-				168B9C1324BC59EB00B0E221 /* sys.hpp */,
-				168B9BFF24BC59EA00B0E221 /* sys.mm */,
-				168B9C0C24BC59EA00B0E221 /* threads.cpp */,
-				168B9C0D24BC59EB00B0E221 /* threads.hpp */,
-				168B9BFE24BC59EA00B0E221 /* timer.cpp */,
-				168B9C1124BC59EB00B0E221 /* timer.hpp */,
-				168B9C1224BC59EB00B0E221 /* timer.mm */,
-			);
-			name = cross;
-			sourceTree = "<group>";
-		};
 		168B9CEA24BC5BA800B0E221 /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -387,6 +314,14 @@
 			name = src;
 			sourceTree = "<group>";
 		};
+		168B9D8624BC5EE400B0E221 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				168B9D8724BC5EE400B0E221 /* cross.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -395,18 +330,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				168B9CFB24BC5BC500B0E221 /* macro.hpp in Headers */,
+				168B9CFA24BC5BC500B0E221 /* ast.hpp in Headers */,
+				168B9CF824BC5BC500B0E221 /* nlua++.hpp in Headers */,
+				168B9D0024BC5BC500B0E221 /* com++.hpp in Headers */,
+				168B9D0124BC5BC500B0E221 /* variant.hpp in Headers */,
+				168B9CFE24BC5BC500B0E221 /* value.hpp in Headers */,
+				168B9B2824BC4F1200B0E221 /* nlua_macos.h in Headers */,
+				168B9D0324BC5BC500B0E221 /* private.hpp in Headers */,
 				168B9BC924BC598000B0E221 /* lua.hpp in Headers */,
 				168B9BCD24BC598000B0E221 /* ltable.h in Headers */,
 				168B9BD124BC598000B0E221 /* lzio.h in Headers */,
-				168B9C1A24BC59EB00B0E221 /* cross.hpp in Headers */,
 				168B9BF324BC598000B0E221 /* lfunc.h in Headers */,
-				168B9C2624BC59EB00B0E221 /* stringbuilder.hpp in Headers */,
-				168B9C3424BC5A7700B0E221 /* com++.hpp in Headers */,
-				168B9D0324BC5BC500B0E221 /* private.hpp in Headers */,
 				168B9BE824BC598000B0E221 /* lstate.h in Headers */,
 				168B9BC724BC598000B0E221 /* lundump.h in Headers */,
 				168B9BDE24BC598000B0E221 /* lobject.h in Headers */,
-				168B9C2D24BC5A2800B0E221 /* objc.hpp in Headers */,
 				168B9BF624BC598000B0E221 /* lualib.h in Headers */,
 				168B9BF824BC598000B0E221 /* lstring.h in Headers */,
 				168B9BD224BC598000B0E221 /* llex.h in Headers */,
@@ -415,34 +352,17 @@
 				168B9BED24BC598000B0E221 /* lvm.h in Headers */,
 				168B9BFA24BC598000B0E221 /* llimits.h in Headers */,
 				168B9BE924BC598000B0E221 /* lcode.h in Headers */,
-				168B9D0124BC5BC500B0E221 /* variant.hpp in Headers */,
-				168B9B2824BC4F1200B0E221 /* nlua_macos.h in Headers */,
-				168B9C2A24BC59EB00B0E221 /* sys.hpp in Headers */,
 				168B9BD924BC598000B0E221 /* lopcodes.h in Headers */,
 				168B9BE224BC598000B0E221 /* ltm.h in Headers */,
-				168B9CFE24BC5BC500B0E221 /* value.hpp in Headers */,
 				168B9BCF24BC598000B0E221 /* lparser.h in Headers */,
 				168B9BEA24BC598000B0E221 /* ldo.h in Headers */,
 				168B9BCE24BC598000B0E221 /* ldebug.h in Headers */,
-				168B9CF824BC5BC500B0E221 /* nlua++.hpp in Headers */,
-				168B9C2124BC59EB00B0E221 /* str.hpp in Headers */,
-				168B9C1824BC59EB00B0E221 /* macro.hpp in Headers */,
-				168B9CFA24BC5BC500B0E221 /* ast.hpp in Headers */,
-				168B9C2424BC59EB00B0E221 /* threads.hpp in Headers */,
 				168B9BDA24BC598000B0E221 /* luaconf.h in Headers */,
-				168B9C2224BC59EB00B0E221 /* swift-bridge.hpp in Headers */,
-				168B9C1724BC59EB00B0E221 /* datetime.hpp in Headers */,
-				168B9D0024BC5BC500B0E221 /* com++.hpp in Headers */,
-				168B9C3124BC5A4C00B0E221 /* property.hpp in Headers */,
 				168B9CE924BC5AE600B0E221 /* lua.h in Headers */,
-				168B9C2024BC59EB00B0E221 /* logger.hpp in Headers */,
-				168B9C2824BC59EB00B0E221 /* timer.hpp in Headers */,
 				168B9BDC24BC598000B0E221 /* lmem.h in Headers */,
-				168B9C2524BC59EB00B0E221 /* memory.hpp in Headers */,
 				168B9BF524BC598000B0E221 /* lauxlib.h in Headers */,
 				168B9CFF24BC5BC500B0E221 /* liblua.hpp in Headers */,
 				168B9BE524BC598000B0E221 /* lctype.h in Headers */,
-				168B9C1924BC59EB00B0E221 /* fs.hpp in Headers */,
 				168B9BF924BC598000B0E221 /* lgc.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -458,6 +378,7 @@
 				168B9B1F24BC4F1200B0E221 /* Sources */,
 				168B9B2024BC4F1200B0E221 /* Frameworks */,
 				168B9B2124BC4F1200B0E221 /* Resources */,
+				168B9D8A24BC5EE400B0E221 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -515,8 +436,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				168B9C1C24BC59EB00B0E221 /* fs.cpp in Sources */,
-				168B9C1E24BC59EB00B0E221 /* logger.cpp in Sources */,
 				168B9BFB24BC598000B0E221 /* lctype.c in Sources */,
 				168B9BDF24BC598000B0E221 /* luac.c in Sources */,
 				168B9BCC24BC598000B0E221 /* lgc.c in Sources */,
@@ -526,9 +445,6 @@
 				168B9BD324BC598000B0E221 /* lobject.c in Sources */,
 				168B9BD824BC598000B0E221 /* lstrlib.c in Sources */,
 				168B9BE324BC598000B0E221 /* lundump.c in Sources */,
-				168B9C1D24BC59EB00B0E221 /* str.cpp in Sources */,
-				168B9C2724BC59EB00B0E221 /* sys.cpp in Sources */,
-				168B9C1624BC59EB00B0E221 /* sys.mm in Sources */,
 				168B9BC824BC598000B0E221 /* lfunc.c in Sources */,
 				168B9BD024BC598000B0E221 /* ltm.c in Sources */,
 				168B9BBF24BC598000B0E221 /* lbaselib.c in Sources */,
@@ -543,30 +459,22 @@
 				168B9BC324BC598000B0E221 /* ldebug.c in Sources */,
 				168B9CFC24BC5BC500B0E221 /* nlua++.cpp in Sources */,
 				168B9BC624BC598000B0E221 /* ltablib.c in Sources */,
-				168B9C1F24BC59EB00B0E221 /* fs.mm in Sources */,
 				168B9BE124BC598000B0E221 /* lapi.c in Sources */,
 				168B9BF424BC598000B0E221 /* loslib.c in Sources */,
 				168B9BD524BC598000B0E221 /* lmathlib.c in Sources */,
 				168B9BD624BC598000B0E221 /* llex.c in Sources */,
-				168B9C1B24BC59EB00B0E221 /* logger.mm in Sources */,
 				168B9D0224BC5BC500B0E221 /* private.cpp in Sources */,
-				168B9C2324BC59EB00B0E221 /* threads.cpp in Sources */,
 				168B9BEE24BC598000B0E221 /* lcorolib.c in Sources */,
 				168B9BE024BC598000B0E221 /* lzio.c in Sources */,
-				168B9C1424BC59EB00B0E221 /* datetime.cpp in Sources */,
 				168B9BC124BC598000B0E221 /* loadlib.c in Sources */,
 				168B9BE424BC598000B0E221 /* lvm.c in Sources */,
 				168B9BC024BC598000B0E221 /* ltable.c in Sources */,
 				168B9BF224BC598000B0E221 /* lbitlib.c in Sources */,
-				168B9C2E24BC5A2800B0E221 /* objc.mm in Sources */,
 				168B9D0424BC5BC500B0E221 /* ast.cpp in Sources */,
-				168B9C2924BC59EB00B0E221 /* timer.mm in Sources */,
-				168B9C3224BC5A4C00B0E221 /* property.cpp in Sources */,
 				168B9BE724BC598000B0E221 /* lauxlib.c in Sources */,
 				168B9BF124BC598000B0E221 /* liolib.c in Sources */,
 				168B9BF724BC598000B0E221 /* lstate.c in Sources */,
 				168B9BC224BC598000B0E221 /* lcode.c in Sources */,
-				168B9C1524BC59EB00B0E221 /* timer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

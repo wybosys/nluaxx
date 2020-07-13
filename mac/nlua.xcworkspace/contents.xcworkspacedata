@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:cross-ios/cross-ios.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:cross-macos/cross-macos.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:test-ios/test-ios.xcodeproj">
    </FileRef>
    <FileRef
