@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		16EE23F424B07F0800C966A9 /* nlua.h in Headers */ = {isa = PBXBuildFile; fileRef = 16EE23F224B07F0800C966A9 /* nlua.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		168B9B2824BC4F1200B0E221 /* nlua_macos.h in Headers */ = {isa = PBXBuildFile; fileRef = 168B9B2624BC4F1200B0E221 /* nlua_macos.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		16EE23EF24B07F0800C966A9 /* nlua.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = nlua.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		16EE23F224B07F0800C966A9 /* nlua.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = nlua.h; sourceTree = "<group>"; };
-		16EE23F324B07F0800C966A9 /* Info-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-ios.plist"; sourceTree = "<group>"; };
+		168B9B2324BC4F1200B0E221 /* nlua.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = nlua.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		168B9B2624BC4F1200B0E221 /* nlua_macos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = nlua_macos.h; sourceTree = "<group>"; };
+		168B9B2724BC4F1200B0E221 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		16EE23EC24B07F0800C966A9 /* Frameworks */ = {
+		168B9B2024BC4F1200B0E221 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -27,78 +27,78 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		16EE23E524B07F0800C966A9 = {
+		168B9B1924BC4F1200B0E221 = {
 			isa = PBXGroup;
 			children = (
-				16EE23F124B07F0800C966A9 /* nlua */,
-				16EE23F024B07F0800C966A9 /* Products */,
+				168B9B2524BC4F1200B0E221 /* nlua-macos */,
+				168B9B2424BC4F1200B0E221 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		16EE23F024B07F0800C966A9 /* Products */ = {
+		168B9B2424BC4F1200B0E221 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				16EE23EF24B07F0800C966A9 /* nlua.framework */,
+				168B9B2324BC4F1200B0E221 /* nlua.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		16EE23F124B07F0800C966A9 /* nlua */ = {
+		168B9B2524BC4F1200B0E221 /* nlua-macos */ = {
 			isa = PBXGroup;
 			children = (
-				16EE23F224B07F0800C966A9 /* nlua.h */,
-				16EE23F324B07F0800C966A9 /* Info-ios.plist */,
+				168B9B2624BC4F1200B0E221 /* nlua_macos.h */,
+				168B9B2724BC4F1200B0E221 /* Info.plist */,
 			);
-			path = nlua;
+			path = "nlua-macos";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		16EE23EA24B07F0800C966A9 /* Headers */ = {
+		168B9B1E24BC4F1200B0E221 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16EE23F424B07F0800C966A9 /* nlua.h in Headers */,
+				168B9B2824BC4F1200B0E221 /* nlua_macos.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		16EE23EE24B07F0800C966A9 /* nlua */ = {
+		168B9B2224BC4F1200B0E221 /* nlua-macos */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 16EE23F724B07F0800C966A9 /* Build configuration list for PBXNativeTarget "nlua" */;
+			buildConfigurationList = 168B9B2B24BC4F1200B0E221 /* Build configuration list for PBXNativeTarget "nlua-macos" */;
 			buildPhases = (
-				16EE23EA24B07F0800C966A9 /* Headers */,
-				16EE23EB24B07F0800C966A9 /* Sources */,
-				16EE23EC24B07F0800C966A9 /* Frameworks */,
-				16EE23ED24B07F0800C966A9 /* Resources */,
+				168B9B1E24BC4F1200B0E221 /* Headers */,
+				168B9B1F24BC4F1200B0E221 /* Sources */,
+				168B9B2024BC4F1200B0E221 /* Frameworks */,
+				168B9B2124BC4F1200B0E221 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = nlua;
-			productName = nlua;
-			productReference = 16EE23EF24B07F0800C966A9 /* nlua.framework */;
+			name = "nlua-macos";
+			productName = "nlua-macos";
+			productReference = 168B9B2324BC4F1200B0E221 /* nlua.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		16EE23E624B07F0800C966A9 /* Project object */ = {
+		168B9B1A24BC4F1200B0E221 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1150;
 				ORGANIZATIONNAME = nnt;
 				TargetAttributes = {
-					16EE23EE24B07F0800C966A9 = {
+					168B9B2224BC4F1200B0E221 = {
 						CreatedOnToolsVersion = 11.5;
 					};
 				};
 			};
-			buildConfigurationList = 16EE23E924B07F0800C966A9 /* Build configuration list for PBXProject "nlua-ios" */;
+			buildConfigurationList = 168B9B1D24BC4F1200B0E221 /* Build configuration list for PBXProject "nlua-macos" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -106,18 +106,18 @@
 				en,
 				Base,
 			);
-			mainGroup = 16EE23E524B07F0800C966A9;
-			productRefGroup = 16EE23F024B07F0800C966A9 /* Products */;
+			mainGroup = 168B9B1924BC4F1200B0E221;
+			productRefGroup = 168B9B2424BC4F1200B0E221 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				16EE23EE24B07F0800C966A9 /* nlua */,
+				168B9B2224BC4F1200B0E221 /* nlua-macos */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		16EE23ED24B07F0800C966A9 /* Resources */ = {
+		168B9B2124BC4F1200B0E221 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -127,7 +127,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		16EE23EB24B07F0800C966A9 /* Sources */ = {
+		168B9B1F24BC4F1200B0E221 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -137,7 +137,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		16EE23F524B07F0800C966A9 /* Debug */ = {
+		168B9B2924BC4F1200B0E221 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -188,11 +188,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -200,7 +200,7 @@
 			};
 			name = Debug;
 		};
-		16EE23F624B07F0800C966A9 /* Release */ = {
+		168B9B2A24BC4F1200B0E221 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -245,86 +245,85 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
-		16EE23F824B07F0800C966A9 /* Debug */ = {
+		168B9B2C24BC4F1200B0E221 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "nlua/Info-ios.plist";
+				INFOPLIST_FILE = "nlua-macos/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/Frameworks",
+					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.nnt.nlua;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = nlua;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		16EE23F924B07F0800C966A9 /* Release */ = {
+		168B9B2D24BC4F1200B0E221 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "nlua/Info-ios.plist";
+				INFOPLIST_FILE = "nlua-macos/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/Frameworks",
+					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.nnt.nlua;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = nlua;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		16EE23E924B07F0800C966A9 /* Build configuration list for PBXProject "nlua-ios" */ = {
+		168B9B1D24BC4F1200B0E221 /* Build configuration list for PBXProject "nlua-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				16EE23F524B07F0800C966A9 /* Debug */,
-				16EE23F624B07F0800C966A9 /* Release */,
+				168B9B2924BC4F1200B0E221 /* Debug */,
+				168B9B2A24BC4F1200B0E221 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		16EE23F724B07F0800C966A9 /* Build configuration list for PBXNativeTarget "nlua" */ = {
+		168B9B2B24BC4F1200B0E221 /* Build configuration list for PBXNativeTarget "nlua-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				16EE23F824B07F0800C966A9 /* Debug */,
-				16EE23F924B07F0800C966A9 /* Release */,
+				168B9B2C24BC4F1200B0E221 /* Debug */,
+				168B9B2D24BC4F1200B0E221 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 16EE23E624B07F0800C966A9 /* Project object */;
+	rootObject = 168B9B1A24BC4F1200B0E221 /* Project object */;
 }
