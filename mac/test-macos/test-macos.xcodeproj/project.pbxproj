@@ -46,6 +46,7 @@
 		168B9D2024BC5CE100B0E221 /* test.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = test.mm; path = ../../test.mm; sourceTree = "<group>"; };
 		168B9D2124BC5CE100B0E221 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test.h; path = ../../test.h; sourceTree = "<group>"; };
 		168B9D8B24BC5F7D00B0E221 /* cross.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cross.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		168B9DE124BC62E600B0E221 /* test.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = test.bundle; path = ../../test.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +65,7 @@
 		168B9B4324BC4F8900B0E221 = {
 			isa = PBXGroup;
 			children = (
+				168B9DE124BC62E600B0E221 /* test.bundle */,
 				168B9B4E24BC4F8900B0E221 /* test-macos */,
 				168B9B4D24BC4F8900B0E221 /* Products */,
 				168B9B7B24BC50D600B0E221 /* Frameworks */,

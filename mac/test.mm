@@ -7,16 +7,28 @@
 
 USE_NNT;
 USE_CROSS;
+USE_NLUA;
 
 #define UNITTEST_CHECK_EQUAL(a, b) assert(a == b)
 
 void test_main()
 {
-    
+    //::std::mutex mtx;
+
+    // 测试原始lua
+    auto &ctx = Context::shared();
+
+    ctx.load("main.lua");
+    ctx.invoke("main");
 }
 
 void Test()
 {
+    Context::shared().create();
+    
+    string testdir = absolute(dirname(__FILE__) + "/../test.bundle");
+    Context::shared().add_package_path(testdir);
+    
     cd(path_home());
     
     test_main();
