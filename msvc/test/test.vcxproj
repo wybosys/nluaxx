@@ -161,32 +161,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\test\test.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\..\test.bundle\test.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\test\main.lua" />
-    <None Include="..\..\test\signalslots.lua" />
-    <None Include="..\..\test\test.lua" />
-    <None Include="..\..\test\test0.lua" />
-    <None Include="..\..\test\test1.lua" />
-    <None Include="..\..\test\test2.lua" />
-    <None Include="..\..\test\test3.lua" />
-    <None Include="..\..\test\test4.lua" />
-    <None Include="..\..\test\test5.lua" />
-    <None Include="..\..\test\test6.lua" />
-    <None Include="..\..\test\test7.lua" />
-    <None Include="..\..\test\test8.lua" />
-    <None Include="..\..\test\test999.lua" />
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h" />
+    <None Include="..\..\test.bundle\main.lua" />
+    <None Include="..\..\test.bundle\signalslots.lua" />
+    <None Include="..\..\test.bundle\test.lua" />
+    <None Include="..\..\test.bundle\test0.lua" />
+    <None Include="..\..\test.bundle\test1.lua" />
+    <None Include="..\..\test.bundle\test2.lua" />
+    <None Include="..\..\test.bundle\test3.lua" />
+    <None Include="..\..\test.bundle\test4.lua" />
+    <None Include="..\..\test.bundle\test5.lua" />
+    <None Include="..\..\test.bundle\test6.lua" />
+    <None Include="..\..\test.bundle\test7.lua" />
+    <None Include="..\..\test.bundle\test8.lua" />
+    <None Include="..\..\test.bundle\test999.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,62 +13,62 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="lua">
+    <Filter Include="lua.bundle">
       <UniqueIdentifier>{a75c296a-42a4-4bc6-93de-5a6e088026d5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\test\test.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\test\signalslots.lua">
-      <Filter>lua</Filter>
-    </None>
-    <None Include="..\..\test\test.lua">
-      <Filter>lua</Filter>
-    </None>
-    <None Include="..\..\test\test0.lua">
-      <Filter>lua</Filter>
-    </None>
-    <None Include="..\..\test\test1.lua">
-      <Filter>lua</Filter>
-    </None>
-    <None Include="..\..\test\test2.lua">
-      <Filter>lua</Filter>
-    </None>
-    <None Include="..\..\test\test3.lua">
-      <Filter>lua</Filter>
-    </None>
-    <None Include="..\..\test\test4.lua">
-      <Filter>lua</Filter>
-    </None>
-    <None Include="..\..\test\test5.lua">
-      <Filter>lua</Filter>
-    </None>
-    <None Include="..\..\test\test6.lua">
-      <Filter>lua</Filter>
-    </None>
-    <None Include="..\..\test\test999.lua">
-      <Filter>lua</Filter>
-    </None>
-    <None Include="..\..\test\main.lua">
-      <Filter>lua</Filter>
-    </None>
-    <None Include="..\..\test\test7.lua">
-      <Filter>lua</Filter>
-    </None>
-    <None Include="..\..\test\test8.lua">
-      <Filter>lua</Filter>
-    </None>
+    <ClCompile Include="..\..\test.bundle\test.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\test.bundle\main.lua">
+      <Filter>lua.bundle</Filter>
+    </None>
+    <None Include="..\..\test.bundle\signalslots.lua">
+      <Filter>lua.bundle</Filter>
+    </None>
+    <None Include="..\..\test.bundle\test.lua">
+      <Filter>lua.bundle</Filter>
+    </None>
+    <None Include="..\..\test.bundle\test0.lua">
+      <Filter>lua.bundle</Filter>
+    </None>
+    <None Include="..\..\test.bundle\test1.lua">
+      <Filter>lua.bundle</Filter>
+    </None>
+    <None Include="..\..\test.bundle\test2.lua">
+      <Filter>lua.bundle</Filter>
+    </None>
+    <None Include="..\..\test.bundle\test3.lua">
+      <Filter>lua.bundle</Filter>
+    </None>
+    <None Include="..\..\test.bundle\test4.lua">
+      <Filter>lua.bundle</Filter>
+    </None>
+    <None Include="..\..\test.bundle\test5.lua">
+      <Filter>lua.bundle</Filter>
+    </None>
+    <None Include="..\..\test.bundle\test6.lua">
+      <Filter>lua.bundle</Filter>
+    </None>
+    <None Include="..\..\test.bundle\test7.lua">
+      <Filter>lua.bundle</Filter>
+    </None>
+    <None Include="..\..\test.bundle\test8.lua">
+      <Filter>lua.bundle</Filter>
+    </None>
+    <None Include="..\..\test.bundle\test999.lua">
+      <Filter>lua.bundle</Filter>
+    </None>
   </ItemGroup>
 </Project>
