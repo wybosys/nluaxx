@@ -1695,6 +1695,11 @@ bool Object::drop()
         return false;
     }
 
+    if (d_ptr->name.empty()) {
+        NLUA_ERROR("nil变量执行drop操作"); // 已经释放或者本身就是空对象
+        return false;
+    }
+
 #if NLUA_MT
     auto L = d_ptr->GL;
 #else
@@ -1708,6 +1713,7 @@ bool Object::drop()
         // 需要释放
         lua_pushnil(L);
         lua_setglobal(L, d_ptr->name.c_str());
+        d_ptr->name.clear();
         return true;
     }
 
@@ -1724,6 +1730,7 @@ bool Object::drop()
         // 需要释放
         lua_pushnil(L);
         lua_setglobal(L, d_ptr->name.c_str());
+        d_ptr->name.clear();
         return true;
     }
 
